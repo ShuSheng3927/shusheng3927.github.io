@@ -1,0 +1,17 @@
+---
+title: "Notes"
+---
+
+### Expository
+
+1.  [Multiple Testing Problem](_doc/MTP.pdf)
+
+2.  [Markov chain Monte Carlo Method](_doc/MCMC.pdf)
+
+3.  [Univariate Extreme Value Modelling](_doc/EVT.pdf)
+
+### Course notes
+
+1.  [Spectral Theory](_doc/spectral.pdf)
+
+2.  [Probability Theory](_doc/probability.pdf)

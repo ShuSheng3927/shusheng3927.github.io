@@ -1,0 +1,26 @@
+---
+title: "Zhang Rui-Yang"
+about:
+  id: heading-1
+  template: solana
+  image: self.png
+  image-shape: round
+  links: 
+    - icon: envelop
+      text: Email
+      href: mailto:ruiyang.zhang.20@ucl.ac.uk
+---
+
+:::{#heading-1}
+
+![](_doc/London.jpeg){fig-align="center" style="align: centre" width="442"}
+
+:::
+
+I am currently in the first year of [STOR-i CDT](https://www.lancaster.ac.uk/stor-i/) at Lancaster University. Previously, I did BSc Mathematics and Statistical Science at [University College London](https://www.ucl.ac.uk/maths/) where I was mentored by [Sam Livingstone](https://samueljlivingstone.wixsite.com/webpage).
+
+I am broadly interested in computational statistics, especially the methodological aspect of it.
+
+I write texts from time to time. They are placed under [notes](notes.qmd).
+
+Very interesting article by E Weinan: "[The Dawning of a New Era in Applied Mathematics](_doc/new_era.pdf)".
