@@ -16,4 +16,4 @@ I am broadly interested in computational statistics, especially the methodologic
 
 I write texts from time to time. They are placed under [notes](notes.qmd).
 
-Very interesting article by E Weinan: "[The Dawning of a New Era in Applied Mathematics](_doc/new_era.pdf)".
+Very interesting article by E Weinan: "[The Dawning of a New Era in Applied Mathematics](files/new_era.pdf)".
