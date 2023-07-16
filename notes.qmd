@@ -4,7 +4,7 @@ title: "Notes"
 
 ### Expository
 
-1.  [Multiple Testing Problem](_doc/MTP.pdf)
+1.  [Multiple Testing Problem](_doc/MTP.pdf) 
 
 2.  [Markov chain Monte Carlo Method](_doc/MCMC.pdf)
 
