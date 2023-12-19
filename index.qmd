@@ -1,5 +1,5 @@
 ---
-title: "Zhang Rui-Yang"
+title: "Rui-Yang Zhang"
 about:
   template: solana
   image: self.png
@@ -10,8 +10,7 @@ about:
       href: mailto:r.zhang26@lancaster.ac.uk
 ---
 
-I am currently in the first year of [STOR-i CDT](https://www.lancaster.ac.uk/stor-i/) at Lancaster University. Previously, I did BSc Mathematics and Statistical Science at [University College London](https://www.ucl.ac.uk/maths/) where I was mentored by [Sam Livingstone](https://samueljlivingstone.wixsite.com/webpage).
+I am currently in the first year of [STOR-i CDT](https://www.lancaster.ac.uk/stor-i/) at Lancaster University. Previously, I did BSc Mathematics and Statistical Science at [University College London](https://www.ucl.ac.uk/maths/) where I was mentored by [Sam Livingstone](https://samueljlivingstone.wixsite.com/webpage). 
 
 I am broadly interested in computational statistics.
 
-Very interesting article by E Weinan: "[The Dawning of a New Era in Applied Mathematics](files/new_era.pdf)".

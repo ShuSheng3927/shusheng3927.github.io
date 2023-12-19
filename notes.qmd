@@ -4,11 +4,13 @@ title: "Notes"
 
 ### Expository
 
-1.  [Multiple Testing Problem](files/MTP.pdf) 
+1.  [Multiple Testing Problem](files/MTP.pdf)
 
-2.  [Markov chain Monte Carlo Method](files/MCMC.pdf)
+2.  [Basic Markov chain Monte Carlo Method](files/MCMC.pdf)
 
 3.  [Univariate Extreme Value Modelling](files/EVT.pdf)
+
+4.  [PDMP and MCMC](files/PDMP.pdf)
 
 ### Course notes
 

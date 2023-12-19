@@ -3,13 +3,14 @@ project:
   output-dir: docs
 
 website:
-  title: "Zhang Rui-Yang"
+  title: "Rui-Yang Zhang"
   navbar:
     left:
       - href: index.qmd
         text: Home
       - href: notes.qmd
         text: Notes
+      
 
 format:
   html:
