@@ -12,6 +12,8 @@ title: "Notes"
 
 4.  [PDMP and MCMC](files/PDMP.pdf)
 
+5.  Response-Adaptive Randomisation ([code1](files/ecmo.R)) ([code2](files/dp.R))
+
 ### Course notes
 
 1.  [Spectral Theory](files/spectral.pdf)
