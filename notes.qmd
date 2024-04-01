@@ -8,6 +8,8 @@ title: "Notes"
 
 2.  [PDMP and MCMC](files/PDMP.pdf)
 
+3.  [Introduction to Particle Filters](files/intro_pf.pdf)
+
 ### Machine Learning
 
 1.  [Wasserstein Gradient Flow](files/grad_flow.pdf)
