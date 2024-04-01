@@ -20,12 +20,12 @@ title: "Notes"
 
 2.  [Response-Adaptive Randomisation](files/RAR.pdf) ([code1](files/ecmo.R)) ([code2](files/dp.R))
 
-### Uncategorised
-
-1.  [Univariate Extreme Value Modelling](files/EVT.pdf)
-
 ### Course notes
 
 1.  [Spectral Theory](files/spectral.pdf)
 
 2.  [Probability Theory](files/probability.pdf)
+
+### Uncategorised
+
+1.  [Univariate Extreme Value Modelling](files/EVT.pdf)
