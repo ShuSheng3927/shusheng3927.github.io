@@ -10,7 +10,7 @@ title: "Notes"
 
 ### Machine Learning
 
-1. [Wasserstein Gradient Flow](files/grad_flow.pdf)
+1.  [Wasserstein Gradient Flow](files/grad_flow.pdf)
 
 ### Biostatistics
 
@@ -18,7 +18,7 @@ title: "Notes"
 
 2.  [Response-Adaptive Randomisation](files/RAR.pdf) ([code1](files/ecmo.R)) ([code2](files/dp.R))
 
-### Uncategorised 
+### Uncategorised
 
 1.  [Univariate Extreme Value Modelling](files/EVT.pdf)
 
