@@ -2,17 +2,25 @@
 title: "Notes"
 ---
 
-### Expository
+### Computational Statistics
+
+1.  [Basic Markov chain Monte Carlo Method](files/MCMC.pdf)
+
+2.  [PDMP and MCMC](files/PDMP.pdf)
+
+### Machine Learning
+
+1. [Wasserstein Gradient Flow](files/grad_flow.pdf)
+
+### Biostatistics
 
 1.  [Multiple Testing Problem](files/MTP.pdf)
 
-2.  [Basic Markov chain Monte Carlo Method](files/MCMC.pdf)
+2.  [Response-Adaptive Randomisation](files/RAR.pdf) ([code1](files/ecmo.R)) ([code2](files/dp.R))
 
-3.  [Univariate Extreme Value Modelling](files/EVT.pdf)
+### Uncategorised 
 
-4.  [PDMP and MCMC](files/PDMP.pdf)
-
-5.  [Response-Adaptive Randomisation](files/RAR.pdf) ([code1](files/ecmo.R)) ([code2](files/dp.R))
+1.  [Univariate Extreme Value Modelling](files/EVT.pdf)
 
 ### Course notes
 
