@@ -8,7 +8,7 @@ title: "Notes"
 
 2.  [PDMP and MCMC](files/PDMP.pdf)
 
-3.  [Introduction to Particle Filters](files/intro_pf.pdf)
+3.  [Introduction to Sequential Monte Carlo](files/intro_smc.pdf)
 
 ### Machine Learning
 
