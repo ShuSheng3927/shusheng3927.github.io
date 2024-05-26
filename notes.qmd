@@ -8,7 +8,9 @@ title: "Notes"
 
 2.  [PDMP and MCMC](files/PDMP.pdf)
 
-3.  [Introduction to Sequential Monte Carlo](files/intro_smc.pdf)
+3.  [Geometric Ergodicities of Langevin and Barker Algorithms](files/ug_thesis.pdf)
+
+4.  [Introduction to Sequential Monte Carlo](files/intro_smc.pdf)
 
 ### Machine Learning
 

@@ -11,7 +11,7 @@
     "href": "notes.html",
     "title": "Notes",
     "section": "",
-    "text": "Computational Statistics\n\nBasic Markov chain Monte Carlo Method\nPDMP and MCMC\nIntroduction to Sequential Monte Carlo\n\n\n\nMachine Learning\n\nWasserstein Gradient Flow\n\n\n\nBiostatistics\n\nMultiple Testing Problem\nResponse-Adaptive Randomisation (code1) (code2)\n\n\n\nCourse notes\n\nSpectral Theory\nProbability Theory\n\n\n\nUncategorised\n\nUnivariate Extreme Value Modelling"
+    "text": "Computational Statistics\n\nBasic Markov chain Monte Carlo Method\nPDMP and MCMC\nGeometric Ergodicities of Langevin and Barker Algorithms\nIntroduction to Sequential Monte Carlo\n\n\n\nMachine Learning\n\nWasserstein Gradient Flow\n\n\n\nBiostatistics\n\nMultiple Testing Problem\nResponse-Adaptive Randomisation (code1) (code2)\n\n\n\nCourse notes\n\nSpectral Theory\nProbability Theory\n\n\n\nUncategorised\n\nUnivariate Extreme Value Modelling"
   },
   {
     "objectID": "research.html",
