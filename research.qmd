@@ -2,4 +2,17 @@
 title: "Research"
 ---
 
-Research
+I am broadly interested in computational statistics and machine learning methodologies, and their applications in science and health related topics. In particular, I am interested in developing methodologies with strong relevance to applications, as well as advancing our understandings of the underlying mechanisms behind existing, commonly used algorithms. Below are some of the keywords that interest me: 
+
+- MCMC, SMC, Variational Bayes
+- Gaussian Processes
+- Bayesian Optimisation, Active Learning
+- Diffusion Models, Computational Optimal Transport
+
+Currently, I am investigating how Bayesian optimisation and active learning, in combination with physics-informed Gaussian processes surrogate models, can help engineers and oceanographers to better understand ocean currents and inform their exploration strategies. 
+
+## Publication
+
+### Preprint
+
+- Livingstone, S., Nüsken, N., Vasdekis, G., & Zhang, R. Y. (2024). *Skew-symmetric schemes for stochastic differential equations with non-Lipschitz drift: an unadjusted Barker algorithm.* [[arxiv]](https://arxiv.org/pdf/2405.14373) (submitted)
