@@ -13,7 +13,9 @@ about:
       href: https://scholar.google.co.uk/citations?user=iSgEv0cAAAAJ&hl=en
 ---
 
-I am currently in the first year of [STOR-i CDT](https://www.lancaster.ac.uk/stor-i/) at Lancaster University. Previously, I did BSc Mathematics and Statistical Science at [University College London](https://www.ucl.ac.uk/maths/) where I was mentored by [Sam Livingstone](https://samueljlivingstone.wixsite.com/webpage).
+I am currently in the first year of [STOR-i CDT](https://www.lancaster.ac.uk/stor-i/) at Lancaster University. My PhD project looks at Bayesian experiment design for ocean currents predictions, and is in collaboration with [TIDE](https://tide.edu.au). My supervisors are [Henry Moss](https://henrymoss.github.io) and [David Leslie](https://www.lancaster.ac.uk/maths/people/david-leslie) at [Lancaster](https://www.lancaster.ac.uk/maths/), as well as [Lachlan Astfalck](https://astfalckl.github.io) and [Edward Cripps](https://research-repository.uwa.edu.au/en/persons/edward-cripps) at [UWA](https://www.uwa.edu.au/schools/physics-mathematics-computing/mathematics-and-stats). 
+
+Previously, I did BSc Mathematics and Statistical Science at [UCL](https://www.ucl.ac.uk/maths/) where I was mentored by [Sam Livingstone](https://samueljlivingstone.wixsite.com/webpage) and received a [Royal Statistical Society](https://rss.org.uk) Award. 
 
 I am broadly interested in computational statistics and machine learning methodologies, and their applications in science and health related topics. See [here](./research.html) for more information. 
 
