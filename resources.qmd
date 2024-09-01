@@ -1,0 +1,56 @@
+---
+title: "Resources"
+---
+
+## Academic Groups and Organisations
+
+### Groups
+
+- [Lancaster CSML](https://lu-csml.github.io)
+
+- [Lancaster AI Reading Group](https://lai-reading-group.github.io)
+
+- [UCL Fundamentals of Statistical Machine Learning](https://fsml-ucl.github.io)
+
+- [GP Seminar Series](https://gp-seminar-series.github.io)
+
+
+### Organisations
+
+- [Prob_AI Hub](https://www.probai.uk)
+
+- [STOR-i](https://www.lancaster.ac.uk/stor-i/)
+
+- [TIDE](https://tide.edu.au)
+
+
+## Links
+
+### LaTeX Tools
+
+- [BibTeX Tidy](https://flamingtempura.github.io/bibtex-tidy/index.html), tidy up .bib files
+
+- [LaTeX Table Generator](https://www.tablesgenerator.com), make a table as if you are in excel then convert to LaTeX codes
+
+- [Quiver](https://q.uiver.app), draw commuative diagrams using drags and pulls
+
+
+### Statistics / ML 
+
+- [MCMC Interactive Gallery](https://chi-feng.github.io/mcmc-demo/app.html), live demo of common MCMC algorithms on interesting targets 
+
+
+### Hobbies
+
+- [WikiArt](https://www.wikiart.org), online archive for art work 
+
+- [Xu Bing 徐冰](https://www.xubing.com), contemporary artist
+
+- [Lucien Freud](http://lucianfreud.com/index.html), painter
+
+- [Max Planck Institute for Social Anthropology](https://www.eth.mpg.de/molab-inventory)
+
+
+
+
+

@@ -26,5 +26,40 @@
     "title": "Research",
     "section": "Publication",
     "text": "Publication\n\nPreprint\n\nLivingstone, S., Nüsken, N., Vasdekis, G., & Zhang, R. Y. (2024). Skew-symmetric schemes for stochastic differential equations with non-Lipschitz drift: an unadjusted Barker algorithm. [arxiv] (submitted)"
+  },
+  {
+    "objectID": "research.html#links",
+    "href": "research.html#links",
+    "title": "Resources",
+    "section": "",
+    "text": "BibTeX Tidy"
+  },
+  {
+    "objectID": "resources.html",
+    "href": "resources.html",
+    "title": "Resources",
+    "section": "",
+    "text": "Lancaster CSML\nLancaster AI Reading Group\nUCL Fundamentals of Statistical Machine Learning\nGP Seminar Series\n\n\n\n\n\nProb_AI Hub\nSTOR-i\nTIDE"
+  },
+  {
+    "objectID": "resources.html#links",
+    "href": "resources.html#links",
+    "title": "Resources",
+    "section": "Links",
+    "text": "Links\n\nLaTeX Tools\n\nBibTeX Tidy, tidy up .bib files\nLaTeX Table Generator, make a table as if you are in excel then convert to LaTeX codes\nQuiver, draw commuative diagrams using drags and pulls\n\n\n\nStatistics / ML\n\nMCMC Interactive Gallery, live demo of common MCMC algorithms on interesting targets\n\n\n\nHobbies\n\nWikiArt, online archive for art work\nXu Bing 徐冰, contemporary artist\nLucien Freud, painter\nMax Planck Institute for Social Anthropology"
+  },
+  {
+    "objectID": "resources.html#academic-groups-organisations",
+    "href": "resources.html#academic-groups-organisations",
+    "title": "Resources",
+    "section": "",
+    "text": "Lancaster CSML\nLancaster AI Reading Group\nUCL Fundamentals of Statistical Machine Learning\nGP Seminar Series\n\n\n\n\n\nProb_AI Hub\nSTOR-i\nTIDE"
+  },
+  {
+    "objectID": "resources.html#academic-groups-and-organisations",
+    "href": "resources.html#academic-groups-and-organisations",
+    "title": "Resources",
+    "section": "",
+    "text": "Lancaster CSML\nLancaster AI Reading Group\nUCL Fundamentals of Statistical Machine Learning\nGP Seminar Series\n\n\n\n\n\nProb_AI Hub\nSTOR-i\nTIDE"
   }
 ]
