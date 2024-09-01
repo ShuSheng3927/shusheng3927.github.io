@@ -63,3 +63,6 @@ title: "Resources"
 - [Xiang Biao 项飙](https://www.eth.mpg.de/xiang), sociologist. Global Body Shopping, Self as Methods
 
 - [Chen Jia-Ying 陈嘉映](https://zh.wikipedia.org/zh-hans/陈嘉映), philosopher. 哲学·科学·常识, 何为良好生活, 走出唯一真理观 
+
+
+![[Enlightenment Gallery, British Museum](./enlightenment_gallery.qmd)](enlightenment_gallery.jpg "Enlightenment Gallery, British Museum")
