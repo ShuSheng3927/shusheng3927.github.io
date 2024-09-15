@@ -16,7 +16,7 @@ title: "Notes"
 
 1.  [Wasserstein Gradient Flow](files/grad_flow.pdf)
 
-2. [Introduction to Gaussian Processes](files/intro_to_gp.pdf)
+2.  [Introduction to Gaussian Processes](files/intro_to_gp.pdf)
 
 ### Biostatistics
 
