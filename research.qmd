@@ -15,4 +15,4 @@ Currently, I am investigating how Bayesian optimisation and active learning, in 
 
 ### Preprint
 
-- Livingstone, S., Nüsken, N., Vasdekis, G., & Zhang, R. Y. (2024). *Skew-symmetric schemes for stochastic differential equations with non-Lipschitz drift: an unadjusted Barker algorithm.* [[arxiv]](https://arxiv.org/pdf/2405.14373) (submitted)
+- Livingstone, S., Nüsken, N., Vasdekis, G., & Zhang, R. Y. (2024). *Skew-symmetric schemes for stochastic differential equations with non-Lipschitz drift: an unadjusted Barker algorithm.* [[arxiv]](https://arxiv.org/abs/2405.14373) (submitted)
