@@ -18,6 +18,8 @@ title: "Notes"
 
 2.  [Introduction to Gaussian Processes](files/intro_to_gp.pdf)
 
+3.  [Introduction to Bayesian Optimisation](files/intro_to_bo.pdf)
+
 ### Biostatistics
 
 1.  [Multiple Testing Problem](files/MTP.pdf)
