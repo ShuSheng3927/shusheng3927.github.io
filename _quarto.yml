@@ -4,6 +4,7 @@ project:
 
 website:
   title: "Rui-Yang Zhang"
+  favicon: rui.svg
   navbar:
     logo: rui.svg
     left:
