@@ -5,6 +5,7 @@ project:
 website:
   title: "Rui-Yang Zhang"
   navbar:
+    logo: rui.svg
     left:
       - href: index.qmd
         text: Home
@@ -14,7 +15,8 @@ website:
         text: Notes
       - href: resources.qmd
         text: Resources
-
+  
+    
 format:
   html:
     theme: cosmo
