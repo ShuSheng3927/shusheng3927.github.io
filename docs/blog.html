@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Rui-Yang Zhang - Notes</title>
+<title>Rui-Yang Zhang - Blog</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -31,6 +31,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
 <link href="./rui.svg" rel="icon" type="image/svg+xml">
+<script src="site_libs/quarto-listing/list.min.js"></script>
+<script src="site_libs/quarto-listing/quarto-listing.js"></script>
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -60,7 +62,38 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<script>
 
+  window.document.addEventListener("DOMContentLoaded", function (_event) {
+    const listingTargetEl = window.document.querySelector('#listing-listing .list');
+    if (!listingTargetEl) {
+      // No listing discovered, do not attach.
+      return; 
+    }
+
+    const options = {
+      valueNames: ['listing-date','listing-title','listing-author','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
+      
+      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description","listing-categories"],
+    };
+
+    window['quarto-listings'] = window['quarto-listings'] || {};
+    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
+
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  });
+
+  window.addEventListener('hashchange',() => {
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  })
+  </script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -94,7 +127,7 @@ ul.task-list li input[type="checkbox"] {
  <span class="menu-text">Research</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="./notes.html" rel="" target="" aria-current="page">
+    <a class="nav-link" href="./notes.html" rel="" target="">
  <span class="menu-text">Notes</span></a>
   </li>  
   <li class="nav-item">
@@ -102,7 +135,7 @@ ul.task-list li input[type="checkbox"] {
  <span class="menu-text">Resources</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./blog.html" rel="" target="">
+    <a class="nav-link active" href="./blog.html" rel="" target="" aria-current="page">
  <span class="menu-text">Blog</span></a>
   </li>  
 </ul>
@@ -113,83 +146,127 @@ ul.task-list li input[type="checkbox"] {
     </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-page-left">
+      <h1 class="title">Blog</h1>
+                      </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul>
-  <li><a href="#computational-statistics" id="toc-computational-statistics" class="nav-link active" data-scroll-target="#computational-statistics">Computational Statistics</a></li>
-  <li><a href="#machine-learning" id="toc-machine-learning" class="nav-link" data-scroll-target="#machine-learning">Machine Learning</a></li>
-  <li><a href="#biostatistics" id="toc-biostatistics" class="nav-link" data-scroll-target="#biostatistics">Biostatistics</a></li>
-  <li><a href="#course-notes" id="toc-course-notes" class="nav-link" data-scroll-target="#course-notes">Course notes</a></li>
-  <li><a href="#uncategorised" id="toc-uncategorised" class="nav-link" data-scroll-target="#uncategorised">Uncategorised</a></li>
-  </ul>
-</nav>
-    </div>
+        
+    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(2)</span></div><div class="category" data-category="Active Learning">Active Learning <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Bayesian Optimisation">Bayesian Optimisation <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Gaussian Process">Gaussian Process <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Gradient Flows">Gradient Flows <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Reading Notes">Reading Notes <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Sequential Experiment Design">Sequential Experiment Design <span class="quarto-category-count">(1)</span></div></div></div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content quarto-banner-title-block column-page-left" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title">Notes</h1>
+
+
+
+
+
+
+
+<div class="quarto-listing quarto-listing-container-default" id="listing-listing">
+<div class="list quarto-listing-default">
+<div class="quarto-post image-right" data-index="0" data-categories="Bayesian Optimisation,Gaussian Process,Active Learning,Sequential Experiment Design,Reading Notes" data-listing-date-sort="1727564400000" data-listing-file-modified-sort="1727612500290" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3">
+<div class="thumbnail">
+<p><a href="./posts/2024-09-29-pretrain-GP-BO/index.html"> <p class="card-img-top"><img src="posts/2024-09-29-pretrain-GP-BO/pretrain-gp.png"  class="thumbnail-image card-img"/></p> </a></p>
 </div>
+<div class="body">
+<a href="./posts/2024-09-29-pretrain-GP-BO/index.html">
+<h3 class="no-anchor listing-title">
+Reading Notes: Pre-trained Gaussian Processes for Bayesian Optimization
+</h3>
+<div class="listing-subtitle">
 
+</div>
+</a>
+<div class="listing-categories">
+<div class="listing-category" onclick="window.quartoListingCategory('Bayesian Optimisation'); return false;">
+Bayesian Optimisation
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('Gaussian Process'); return false;">
+Gaussian Process
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('Active Learning'); return false;">
+Active Learning
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('Sequential Experiment Design'); return false;">
+Sequential Experiment Design
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('Reading Notes'); return false;">
+Reading Notes
+</div>
+</div>
+<a href="./posts/2024-09-29-pretrain-GP-BO/index.html">
+<div class="listing-description">
+<p>Reading Notes on Pre-trained Gaussian Processes for Bayesian Optimization</p>
+</div>
+</a>
+</div>
+<div class="metadata">
+<a href="./posts/2024-09-29-pretrain-GP-BO/index.html">
+<div class="listing-date">
+Sep 29, 2024
+</div>
+<div class="listing-author">
+Rui-Yang Zhang
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="1" data-categories="Gradient Flows" data-listing-date-sort="1726182000000" data-listing-file-modified-sort="1727613083266" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="11">
+<div class="thumbnail">
+<p><a href="./posts/2024-09-13-WGF/index.html"> <p class="card-img-top"><img src="posts/2024-09-13-WGF/WGF.gif"  class="thumbnail-image card-img"/></p> </a></p>
+</div>
+<div class="body">
+<a href="./posts/2024-09-13-WGF/index.html">
+<h3 class="no-anchor listing-title">
+Why Should We Care About Gradient Flows?
+</h3>
+<div class="listing-subtitle">
 
-
-<div class="quarto-title-meta">
-
-    
-  
-    
-  </div>
-  
-
-</header>
-
-<section id="computational-statistics" class="level3">
-<h3 class="anchored" data-anchor-id="computational-statistics">Computational Statistics</h3>
-<ol type="1">
-<li><p><a href="files/MCMC.pdf">Basic Markov chain Monte Carlo Method</a></p></li>
-<li><p><a href="files/PDMP.pdf">PDMP and MCMC</a></p></li>
-<li><p><a href="files/ug_thesis.pdf">Geometric Ergodicities of Langevin and Barker Algorithms</a></p></li>
-<li><p><a href="files/intro_smc.pdf">Introduction to Sequential Monte Carlo</a></p></li>
-</ol>
-</section>
-<section id="machine-learning" class="level3">
-<h3 class="anchored" data-anchor-id="machine-learning">Machine Learning</h3>
-<ol type="1">
-<li><p><a href="files/grad_flow.pdf">Wasserstein Gradient Flow</a></p></li>
-<li><p><a href="files/intro_to_gp.pdf">Introduction to Gaussian Processes</a></p></li>
-<li><p><a href="files/intro_to_bo.pdf">Introduction to Bayesian Optimisation</a></p></li>
-</ol>
-</section>
-<section id="biostatistics" class="level3">
-<h3 class="anchored" data-anchor-id="biostatistics">Biostatistics</h3>
-<ol type="1">
-<li><p><a href="files/MTP.pdf">Multiple Testing Problem</a></p></li>
-<li><p><a href="files/RAR.pdf">Response-Adaptive Randomisation</a> (<a href="files/ecmo.R">code1</a>) (<a href="files/dp.R">code2</a>)</p></li>
-</ol>
-</section>
-<section id="course-notes" class="level3">
-<h3 class="anchored" data-anchor-id="course-notes">Course notes</h3>
-<ol type="1">
-<li><p><a href="files/spectral.pdf">Spectral Theory</a></p></li>
-<li><p><a href="files/probability.pdf">Probability Theory</a></p></li>
-</ol>
-</section>
-<section id="uncategorised" class="level3">
-<h3 class="anchored" data-anchor-id="uncategorised">Uncategorised</h3>
-<ol type="1">
-<li><a href="files/EVT.pdf">Univariate Extreme Value Modelling</a></li>
-</ol>
-
-
-</section>
-
-</main> <!-- /main -->
+</div>
+</a>
+<div class="listing-categories">
+<div class="listing-category" onclick="window.quartoListingCategory('Gradient Flows'); return false;">
+Gradient Flows
+</div>
+</div>
+<a href="./posts/2024-09-13-WGF/index.html">
+<div class="listing-description">
+<p>Blog post on gradient flows in Euclidean and Wasserstein spaces.</p>
+</div>
+</a>
+</div>
+<div class="metadata">
+<a href="./posts/2024-09-13-WGF/index.html">
+<div class="listing-date">
+Sep 13, 2024
+</div>
+<div class="listing-author">
+Rui-Yang Zhang, Christopher Nemeth
+</div>
+</a>
+</div>
+</div>
+</div>
+<div class="listing-no-matching d-none">
+No matching items
+</div>
+</div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
