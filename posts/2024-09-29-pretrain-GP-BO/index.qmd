@@ -6,7 +6,7 @@ categories:
   - Bayesian Optimisation
   - Gaussian Process
   - Active Learning
-  - Sequential Experiment Design
+  - Experiment Design
   - Reading Notes
 ---
 > **Paper Link**: [https://www.jmlr.org/papers/volume25/23-0269/23-0269.pdf](https://www.jmlr.org/papers/volume25/23-0269/23-0269.pdf) 
