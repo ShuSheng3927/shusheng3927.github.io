@@ -15,6 +15,11 @@ Currently, I am investigating how Bayesian optimisation and active learning, in 
 
 [Google Scholar](https://scholar.google.co.uk/citations?user=iSgEv0cAAAAJ&hl=en)
       
-### Preprint
+### Preprints
 
 - Livingstone, S., Nüsken, N., Vasdekis, G., & Zhang, R. Y. (2024). *Skew-symmetric schemes for stochastic differential equations with non-Lipschitz drift: an unadjusted Barker algorithm.* [[arxiv]](https://arxiv.org/abs/2405.14373) (submitted)
+
+
+### Publications and Workshop Papers
+
+- Zhang, R. Y., Moss, H. B., Astfalck, L. C., Cripps, E. J., and Leslie, D. S. (2024). *BALLAST: Bayesian Active Learning with Look-ahead Amendment for Sea-drifter Trajectories*. **NeurIPS 2024 Workshop on Bayesian Decision-making and Uncertainty**. (accepted)

@@ -20,6 +20,8 @@ title: "Notes"
 
 3.  [Introduction to Bayesian Optimisation](files/intro_to_bo.pdf)
 
+4.  [Introduction to Kernel Stein Discrepancy](files/intro_to_ksd.pdf) (with Lanya Yang)
+
 ### Biostatistics
 
 1.  [Multiple Testing Problem](files/MTP.pdf)
