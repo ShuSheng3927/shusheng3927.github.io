@@ -1,6 +1,6 @@
 ---
 title: "Derivation Scribbles: Basic Gaussian Process Regression Formula"
-description: "Derivations for Gaussian process predictive distribution. Single-output GP, observation with additive Gaussian noise."
+description: "Derivations for the Gaussian process predictive distribution. Single-output GP, observe with additive Gaussian noise."
 date: "13 October 2024"
 categories:
   - Gaussian Process
