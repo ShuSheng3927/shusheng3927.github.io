@@ -57,3 +57,5 @@ There is clear difference and benefits of directly including time into our GP mo
 We can see more stable performance for our temporal model, especially at $t=0.56$ where the independent model overfits the data. 
 
 Another key benefits of having a temporal GP is that we can extrapolate our model to time stamps that we have not observed. This interpolation is not possible for the without-time model.
+
+A natural extension of the independent across time stamps modelling approach is to consider a multi-output Gaussian process model where we jointly model the functions at different times. It turns out that, if we assume a separable kernel for the multi-output GP, then it will be (roughly) equivalent to include time in the input space. 
