@@ -1,6 +1,6 @@
 ---
 title: "Spatial-Temporal GP (1)"
-description: "A series of blog posts on spatial-temporal Gaussian processes."
+description: "A series of blog posts on spatial-temporal Gaussian processes. Temporal GP regression with 1d space."
 date: "23 October 2024"
 categories:
   - Gaussian Process
