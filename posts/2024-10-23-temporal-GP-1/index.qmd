@@ -59,3 +59,7 @@ We can see more stable performance for our temporal model, especially at $t=0.56
 Another key benefits of having a temporal GP is that we can extrapolate our model to time stamps that we have not observed. This interpolation is not possible for the without-time model.
 
 A natural extension of the independent across time stamps modelling approach is to consider a multi-output Gaussian process model where we jointly model the functions at different times. It turns out that, if we assume a separable kernel for the multi-output GP, then it will be (roughly) equivalent to include time in the input space. 
+
+Finally, the information borrowing across different time stamps help with the model's robustness against missing data. In the following comparison plot, we sensor the left half and the right half of the observations at time $t = 0.33$ and $t = 0.56$ respectively. The independent version of the model fails immediately, while the performance of the temporal GP was not influenced by it. 
+
+![Comparisons of GP Fits with Missing Data](./comparison_missing.png)
