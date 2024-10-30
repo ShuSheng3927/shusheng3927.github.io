@@ -1,5 +1,5 @@
 ---
-title: "Reading Notes: Pre-trained Gaussian Processes for Bayesian Optimization"
+title: "[Reading Notes] Pre-trained Gaussian Processes for Bayesian Optimization"
 description: "Reading Notes on Pre-trained Gaussian Processes for Bayesian Optimization"
 date: "29 September 2024"
 categories:
