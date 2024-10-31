@@ -108,6 +108,18 @@ $$
 
 Consider we have a single-output Gaussian process $f \sim \mathcal{GP}(\mu, k)$ where $\mu$ is the mean function and $k$ is the kernel function. The support of this GP is assumed to be $\mathbb{R}^d$. Consider we have made $m$ observations of this GP $f$ where the observations are made at locations $X \in \mathbb{R}^m$ with values $y \in \mathbb{R}^m$ and the observations are noisy with independent additive Gaussian noise of variance $\sigma^2$, i.e. $y = f(X) + \xi$ with $\xi_i \sim N(0, \sigma^2) ~\forall i = 1, 2, \ldots, m$. Denote the existing observations as $\mathcal{D} = \{ X, y \}$.
 
+Under our modelling assumptions, we could write down the (log) likelihood of the $m$ observations $y$ under our GP prior $f \sim \mathcal{GP}(\mu, k)$. Since $y = f(X) + \xi$, we have 
+
+$$
+y | X \sim N_m \left( \mu(X), k(X, X) + \sigma^2 I_m \right) 
+$$
+paramerised by $\theta$ (e.g. observation noise $\sigma$, lengthscale and variance of the kernel $k$) which gives us the following log likelihood
+
+$$
+\log p(y|X) = - \frac{m}{2}\log(2\pi) - \log | k(X, X) + \sigma^2 I_m | - \frac{1}{2} \left( y - \mu(X) \right)^T ( k(X, X) + \sigma^2 I_m)^{-1}\left( y - \mu(X) \right)
+$$
+that we maximise w.r.t. $\theta$ to obtain the maximum likelihood estimators of the (hyper)parameters. 
+
 Next, conditional on these observations, we wish to know the distributions of the GP at test points $X_* \in \mathbb{R}^n$, i.e. the conditional distribution $y_* = f(X_*) ~| \mathcal{D}$. This can be achieved by first model $y_*$ and $y$ jointly, then condition on $y$. Using the conditional distribution formula above, we denote for simplicity the Gram matrices
 
 $$
