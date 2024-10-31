@@ -1,0 +1,127 @@
+---
+title: "Spatial-Temporal GP (2)"
+description: "A series of blog posts on spatial-temporal Gaussian processes. Exploiting the Kronecker structure of temporal GP regression with 1d space."
+date: "31 October 2024"
+categories:
+  - Gaussian Process
+---
+
+In this blog post, I will walk through how one could exploit the Kronecker structure of the temporal Gaussian process (GP) regression with one-dimensional space + one-dimensional time inputs and one-dimensional output. This is the second of a series of blog posts on spatial-temporal Gaussian processes. 
+
+### Separable Kernels
+
+Recall from the [last post](https://shusheng3927.github.io/posts/2024-10-23-temporal-GP-1/) that we have fitted a temporal GP on an one-dimensional spatial and one-dimensional temporal grid. Since we define the overall kernel as a product of the spatial and temporal component of the kernel, i.e. $k = k_s \times k_t$, we have the **Kronecker structure** of the Gram matrices $K = K_s \otimes K_t$, visually shown below. 
+
+![Gram Matrices](./gram_matrix_krnonecker_1d.png)
+
+Such kernels are known as **separable** kernels, and in this post we will explore how one could exploit this structure to obtain significant computational speed ups. 
+
+### Kronecker Facts
+
+Before describing how one could leverage the Kronecker structure, first we state several relevant and helpful facts about matrices with a [Kronecker structure](https://en.wikipedia.org/wiki/Kronecker_product). 
+
+Consider two matrices $A \in \mathbb{R}^{n_1 \times n2}$, $B \in \mathbb{R}^{m_1 \times m_2}$. The Kronecker product $K = A \otimes B \in \mathbb{R}^{n_1 m_1 \times n_2 m_2}$ is defined by 
+
+$$
+A \otimes B = \begin{bmatrix}
+a_{11} B & \cdots & a_{1 n_2} B \\
+\vdots & \ddots & \vdots \\
+a_{n_1 1} B & \cdots & a_{n_1 n_2} B 
+\end{bmatrix}.
+$$
+
+The Kronecker product operator $\otimes$ is bi-linear and associative, so we have 
+
+$$
+\begin{split}
+A \otimes (B+C) &= A \otimes B + A \otimes C \\
+(B+C) \otimes A &= B \otimes A + C \otimes A \\
+(k A) \otimes B &= A \otimes (k B) = k (A \otimes B) \\
+A \otimes (B \otimes C) &= (A \otimes B ) \otimes C. \\
+\end{split}
+$$
+More interesting (and relevant here) properties are the ones related to inverse, Cholesky decomposition, and determinant.
+
+First, we have the <u>inverse property</u>
+
+$$
+(A \otimes B)^{-1} = A^{-1} \otimes B^{-1}
+$$
+for any invertible $A, B$. 
+
+Next, we have the <u>mixed-product property</u>
+
+$$
+(A_1 \otimes B_1) (A_2 \otimes B_2) = (A_1 A_2) \otimes (B_1 B_2).
+$$
+Note that if we have <u>Cholesky decomposition</u> $A = LL^*$ for lower triangular matrix $L$ and its conjugate transpose $L^*$, we have 
+
+$$
+A \otimes B = (L_A L_A^*) \otimes (L_B L_B^*) = (L_A \otimes L_B) (L_A^* \otimes L_B^*).
+$$
+Similarly, if we have <u>eigendecomposition</u> $A = Q_A \Lambda_A Q_A^T$ for diagonal matrix $\Lambda_A$, we have 
+
+$$
+A \otimes B = (Q_A \Lambda_A Q_A^T) \otimes (Q_B \Lambda_B Q_B^T) = (Q_A \otimes Q_B) (\Lambda_A \otimes \Lambda_B) (Q_A^T \otimes Q_B^T).
+$$
+
+Finally, if we have square matrices $A \in \mathbb{R}^{n \times n}$ and $B \in \mathbb{R}^{m \times m}$, then 
+
+$$
+| A \otimes B | = | A |^m | B |^n
+$$
+for matrix <u>determinants</u>. 
+
+### Gaussian Process Sampling, Training, and Prediction
+
+For a Gaussian process $f \sim \mathcal{GP}(\mu, k)$ where $\mu$ is the mean function and $k$ is the kernel function, we can draw a <u>sample</u> of $f$ at test locations $X_* = (x_1^*, x_2^*, \ldots, x_k^*)$ 
+
+$$
+f_* = \mu(X_*) + \sqrt{k(X_*, X_*)} \cdot \xi, \qquad \xi \sim N_k(0, I_k) 
+$$
+where $k(X_*, X_*)$ is the Gram matrix and the square root denotes the lower Cholesky factor. 
+
+Consider we have made $m$ observations of this GP $f$ where the observations are made at locations $X \in \mathbb{R}^m$ with values $y \in \mathbb{R}^m$ and the observations are noisy with independent additive Gaussian noise of variance $\sigma^2$, i.e. $y = f(X) + \xi$ with $\xi_i \sim N(0, \sigma^2) ~\forall i = 1, 2, \ldots, m$. Denote the existing observations as $\mathcal{D} = \{ X, y \}$.
+
+To train the model using data (or conduct MLE), we need to optimise the log likelihood 
+
+$$
+\log p(y|X) = - \frac{m}{2}\log(2\pi) - \log | k(X, X) + \sigma^2 I_m | - \frac{1}{2} \left( y - \mu(X) \right)^T ( k(X, X) + \sigma^2 I_m)^{-1}\left( y - \mu(X) \right).
+$$
+In addition, we have the predictive distribution 
+
+$$
+\begin{split} 
+y_* ~|X_*, \mathcal{D}, \sigma^2 &\sim N_{n}(\mu_{y_* | \mathcal{D}}, K_{y_* | \mathcal{D}}), \\
+\mu_{y_* | \mathcal{D}} &= K_*^T (K + \sigma^2 I_n)^{-1} y,\\
+K_{y_* | \mathcal{D}} &= K_{**} - K_*^T (K + \sigma^2 I_n)^{-1}K_*.
+\end{split}
+$$
+
+which also implies that if we wish to draw a posterior sample we would have 
+
+$$
+f_* = \mu_{y_* | \mathcal{D}}(X_*) + \sqrt{k_{y_* | \mathcal{D}}(X_*, X_*)} \cdot \xi, \qquad \xi \sim N_k(0, I_k). 
+$$
+
+### "GP Does Not Scale"
+
+It is a consensus / folklore that GP does not scale. This is mostly due to the fact that the training and sampling of GP involves inversions and Cholesky decomposition of $m \times m$ matrices where $m$ is the number of observations. Most commonly used algorithms for matrix inversion and Cholesky decomposition are of $O(m^3)$ time complexity and are serial in natural (so do not enjoy the GPU speed-ups that are prevalent in machine learning) -- even a moderately sized data set will induce prohibitive costs. 
+
+It is still ongoing research to device tricks and algorithms to make GP more scalable. Some notable approaches includes: 
+
+- [Inducing Points](https://arxiv.org/abs/2012.13962)
+- [Vecchia Approximations](https://arxiv.org/abs/1708.06302)
+- [SPDE Approach](https://arxiv.org/abs/2111.01084)
+- [Efficiently Posterior Sampling](https://arxiv.org/abs/2002.09309)
+- [Conjugate Gradients](https://geoffpleiss.com/static/media/gpleiss_thesis.d218bc00.pdf).
+
+Here, we will look at one such approach - Kronecker structure exploiting method. To obtain some intuitive, assume we have a 1D space + 1D time temporal GP with $N_s$ spatial grid points and $N_t$ temporal grid points. The naive implementation will have a time complexity of $O((N_s + N_t)^3)$, whereas a Kronecker-aware implementation will only have a time complexity of $O(\max\{N_s, N_t\}^3)$. <span style="color: red;">(check!)</span> Below, we will clarify the precise ways we can leverage the matrix structure to achieve computational speed-ups. 
+
+### Kronecker Product Gaussian Process
+
+*The contents here are largely based on [Saatchi (2011)](https://mlg.eng.cam.ac.uk/pub/pdf/Saa11.pdf).*
+
+
+
+
