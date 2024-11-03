@@ -6,6 +6,8 @@ categories:
   - Gaussian Process
 ---
 
+\newcommand{\vec}{\operatorname{vec}}
+
 In this blog post, I will walk through how one could exploit the Kronecker structure of the temporal Gaussian process (GP) regression with one-dimensional space + one-dimensional time inputs and one-dimensional output. This is the second of a series of blog posts on spatial-temporal Gaussian processes. 
 
 ### Separable Kernels
@@ -72,12 +74,50 @@ $$
 $$
 for matrix <u>determinants</u>. 
 
-### Gaussian Process Sampling, Training, and Prediction
+#### Kronecker Matrix-Vector Product
+
+We will first show a useful algorithm to compute matrix-vector product of the form $(A \otimes B) z$ where $A, B$ are square matrices of size $N_A \times N_A$ and $N_B \times N_B$ respectively and $z \in \mathbb{R}^{N}$ with $N = N_A N_B$. Note that this algorithm can be generalised to matrix-vector product with matrix being a Kronecker product of $D$ square matrices. 
+
+We will use the $\vec$ operator where it stacks the columns of a matrix vertically to obtain a single column vector, i.e. for $A = [a_1, a_2, \ldots, a_k]$ with $a_i$ being column vectors, we have 
+
+$$
+\vec(A) = \begin{bmatrix}
+a_1 \\
+\vdots \\
+a_k
+\end{bmatrix}.
+$$
+
+A property about the $\vec$ operator and Kronecker product is the following: 
+
+$$
+(A \otimes B) \vec(z) = \vec [B z A^T] = \vec [B (A z^T)^T]
+$$
+Back to the product of interest $(A \otimes B) z$, we have $z$ as a column vector. To apply the $\vec$ formula above, we need to reshape $z$ to enable sensible matrix products. So, we have, using JAX (and JAX Numpy) notations, 
+
+```{r, tidy=FALSE, eval=FALSE }
+
+step1 = z.reshape(N_A, N_B)
+step2 = A @ step1
+step3 = step2.T
+step4 = B @ step3
+result = step4.T.flatten()
+
+```
+
+where the `.reshape` in JAX Numpy is practically transpose then reshape - which is also why we transpose before flatten to get the final result. 
+In terms of computational time, the naive implementation of $(A \otimes B) z$ will be $O( (N_A N_B)^2)$ whereas the Kronecker implementation is only $O(N_A N_B)$. The Kronecker implementation will be used whenever it is applicable. 
+
+#### Kronecker Matrix-Matrix Product
+
+One could also easily extend the above Kronecker matrix-vector product to Kronecker matrix-matrix product in the following way. Consider the matrix-matrix product $(A \otimes B) Z$ where $A, B$ are square matrices of size $N_A \times N_A$ and $N_B \times N_B$ respectively and $Z \in \mathbb{R}^{N \times M}$. We will break matrix $Z$ down in to $M$ columns and perform Kronecker matrix-vector product to each of the columns. This gives a computational time of $O(N_A N_B M)$ as opposed to the $(N_A N_B)^2M$ of naive implementation. We could also exploit the vectorisation functionalities to further speed up this product using methods such as `jax.vmap`.
+
+### Standard GP Sampling, Training, and Prediction
 
 For a Gaussian process $f \sim \mathcal{GP}(\mu, k)$ where $\mu$ is the mean function and $k$ is the kernel function, we can draw a <u>sample</u> of $f$ at test locations $X_* = (x_1^*, x_2^*, \ldots, x_k^*)$ 
 
 $$
-f_* = \mu(X_*) + \sqrt{k(X_*, X_*)} \cdot \xi, \qquad \xi \sim N_k(0, I_k) 
+f_* = \mu(X_*) + \sqrt{k(X_*, X_*)} ~\xi, \qquad \xi \sim N_k(0, I_k) 
 $$
 where $k(X_*, X_*)$ is the Gram matrix and the square root denotes the lower Cholesky factor. 
 
@@ -86,7 +126,7 @@ Consider we have made $m$ observations of this GP $f$ where the observations are
 To train the model using data (or conduct MLE), we need to optimise the log likelihood 
 
 $$
-\log p(y|X) = - \frac{m}{2}\log(2\pi) - \log | k(X, X) + \sigma^2 I_m | - \frac{1}{2} \left( y - \mu(X) \right)^T ( k(X, X) + \sigma^2 I_m)^{-1}\left( y - \mu(X) \right).
+\log p(y|X) = - \frac{m}{2}\log(2\pi) - \log | k(X, X) + \sigma^2 I_m | - \frac{1}{2} y ^T ( k(X, X) + \sigma^2 I_m)^{-1} y .
 $$
 In addition, we have the predictive distribution 
 
@@ -101,7 +141,7 @@ $$
 which also implies that if we wish to draw a posterior sample we would have 
 
 $$
-f_* = \mu_{y_* | \mathcal{D}}(X_*) + \sqrt{k_{y_* | \mathcal{D}}(X_*, X_*)} \cdot \xi, \qquad \xi \sim N_k(0, I_k). 
+f_* = \mu_{y_* | \mathcal{D}}(X_*) + \sqrt{k_{y_* | \mathcal{D}}(X_*, X_*)} ~\xi, \qquad \xi \sim N_k(0, I_k). 
 $$
 
 ### "GP Does Not Scale"
@@ -116,11 +156,66 @@ It is still ongoing research to device tricks and algorithms to make GP more sca
 - [Efficiently Posterior Sampling](https://arxiv.org/abs/2002.09309)
 - [Conjugate Gradients](https://geoffpleiss.com/static/media/gpleiss_thesis.d218bc00.pdf).
 
-Here, we will look at one such approach - Kronecker structure exploiting method. To obtain some intuitive, assume we have a 1D space + 1D time temporal GP with $N_s$ spatial grid points and $N_t$ temporal grid points. The naive implementation will have a time complexity of $O((N_s + N_t)^3)$, whereas a Kronecker-aware implementation will only have a time complexity of $O(\max\{N_s, N_t\}^3)$. <span style="color: red;">(check!)</span> Below, we will clarify the precise ways we can leverage the matrix structure to achieve computational speed-ups. 
+Here, we will look at one such approach - Kronecker structure exploiting method. To obtain some intuitive, assume we have a 1D space + 1D time temporal GP with $N_s$ spatial grid points and $N_t$ temporal grid points. The naive implementation will have a time complexity of $O((N_s N_t)^3)$, whereas a Kronecker-aware implementation will only have a time complexity of $O(\max\{N_s, N_t\}^3)$. Below, we will clarify the precise ways we can leverage the matrix structure to achieve computational speed-ups. 
 
 ### Kronecker Product Gaussian Process
 
 *The contents here are largely based on [Saatchi (2011)](https://mlg.eng.cam.ac.uk/pub/pdf/Saa11.pdf).*
+
+#### Sampling from a GP
+
+**Naive**
+
+$$
+f_* = \mu(X_*) + \sqrt{K_s \otimes K_t}  ~\xi, \qquad \xi \sim N_k(0, I_k) 
+$$
+
+**Kronecker**
+
+$$
+f_* = \mu(X_*) + \left( \sqrt{K_s} \otimes \sqrt{K_t} \right) ~\xi, \qquad \xi \sim N_k(0, I_k) 
+$$
+
+where we can use the Kronecker matrix-vector product. 
+
+#### GP Likelihood
+
+**Naive**
+
+$$
+\log p(y|X) = - \frac{m}{2}\log(2\pi) - \log | K_s \otimes K_t + \sigma^2 I_m | - \frac{1}{2}  y^T ( K_s \otimes K_t + \sigma^2 I_m)^{-1}y.
+$$
+
+**Kronecker**
+
+There are two places where we need to use: 
+
+- determinant $| K_s \otimes K_t + \sigma^2 I_m |$
+- inverse $( K_s \otimes K_t + \sigma^2 I_m )^{-1}$.
+
+Consider eigendecompositions $K = Q \Lambda Q^T$, $K_s = Q_s \Lambda_s Q_s^T$, and $K_t = Q_t \Lambda_t Q_t^T$. We know that $QQ^T = I$ and $|Q|=1$, so since
+
+$$
+\begin{split}
+K + \sigma^2 I_m  &= Q \Lambda Q^T + Q (\sigma^2 I_m) Q^T = Q (\Lambda + \sigma^2 I_m) Q^T \\
+K_s \otimes K_t + \sigma^2 I_m &= (Q_s \otimes Q_t) (\Lambda_s \otimes \Lambda_t + \sigma^2 I_m) (Q_s^T \otimes Q_t^T)
+\end{split}
+$$
+
+we have 
+
+$$
+\begin{split}
+| K + \sigma^2 I_m | &= |Q| \cdot |\Lambda + \sigma^2 I_m| \cdot |Q^T| = |\Lambda_s \otimes \Lambda_t + \sigma^2 I_m| \\
+( K + \sigma^2 I_m)^{-1} &= Q^{-T} (\Lambda + \sigma^2 I_m)^{-1} Q^{-1} = Q (\Lambda_s \otimes \Lambda_t + \sigma^2 I_m)^{-1} Q^{T}
+\end{split}
+$$
+
+where the remaining term $\Lambda_s \otimes \Lambda_t + \sigma^2 I_m$ is a diagonal matrix, and we can leverage Kronecker matrix-vector (and matrix-matrix) product whenever necessary. 
+
+
+
+
 
 
 

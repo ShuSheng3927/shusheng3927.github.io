@@ -23,6 +23,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -164,7 +198,7 @@ ul.task-list li input[type="checkbox"] {
   <ul>
   <li><a href="#separable-kernels" id="toc-separable-kernels" class="nav-link active" data-scroll-target="#separable-kernels">Separable Kernels</a></li>
   <li><a href="#kronecker-facts" id="toc-kronecker-facts" class="nav-link" data-scroll-target="#kronecker-facts">Kronecker Facts</a></li>
-  <li><a href="#gaussian-process-sampling-training-and-prediction" id="toc-gaussian-process-sampling-training-and-prediction" class="nav-link" data-scroll-target="#gaussian-process-sampling-training-and-prediction">Gaussian Process Sampling, Training, and Prediction</a></li>
+  <li><a href="#standard-gp-sampling-training-and-prediction" id="toc-standard-gp-sampling-training-and-prediction" class="nav-link" data-scroll-target="#standard-gp-sampling-training-and-prediction">Standard GP Sampling, Training, and Prediction</a></li>
   <li><a href="#gp-does-not-scale" id="toc-gp-does-not-scale" class="nav-link" data-scroll-target="#gp-does-not-scale">“GP Does Not Scale”</a></li>
   <li><a href="#kronecker-product-gaussian-process" id="toc-kronecker-product-gaussian-process" class="nav-link" data-scroll-target="#kronecker-product-gaussian-process">Kronecker Product Gaussian Process</a></li>
   </ul>
@@ -226,17 +260,45 @@ A \otimes B = (Q_A \Lambda_A Q_A^T) \otimes (Q_B \Lambda_B Q_B^T) = (Q_A \otimes
 <p><span class="math display">\[
 | A \otimes B | = | A |^m | B |^n
 \]</span> for matrix <u>determinants</u>.</p>
+<section id="kronecker-matrix-vector-product" class="level4">
+<h4 class="anchored" data-anchor-id="kronecker-matrix-vector-product">Kronecker Matrix-Vector Product</h4>
+<p>We will first show a useful algorithm to compute matrix-vector product of the form <span class="math inline">\((A \otimes B) z\)</span> where <span class="math inline">\(A, B\)</span> are square matrices of size <span class="math inline">\(N_A \times N_A\)</span> and <span class="math inline">\(N_B \times N_B\)</span> respectively and <span class="math inline">\(z \in \mathbb{R}^{N}\)</span> with <span class="math inline">\(N = N_A N_B\)</span>. Note that this algorithm can be generalised to matrix-vector product with matrix being a Kronecker product of <span class="math inline">\(D\)</span> square matrices.</p>
+<p>We will use the <span class="math inline">\(\operatorname{vec}\)</span> operator where it stacks the columns of a matrix vertically to obtain a single column vector, i.e.&nbsp;for <span class="math inline">\(A = [a_1, a_2, \ldots, a_k]\)</span> with <span class="math inline">\(a_i\)</span> being column vectors, we have</p>
+<p><span class="math display">\[
+\operatorname{vec}(A) = \begin{bmatrix}
+a_1 \\
+\vdots \\
+a_k
+\end{bmatrix}.
+\]</span></p>
+<p>A property about the <span class="math inline">\(\operatorname{vec}\)</span> operator and Kronecker product is the following:</p>
+<p><span class="math display">\[
+(A \otimes B) \operatorname{vec}(z) = \operatorname{vec}[B z A^T] = \operatorname{vec}[B (A z^T)^T]
+\]</span> Back to the product of interest <span class="math inline">\((A \otimes B) z\)</span>, we have <span class="math inline">\(z\)</span> as a column vector. To apply the <span class="math inline">\(\operatorname{vec}\)</span> formula above, we need to reshape <span class="math inline">\(z\)</span> to enable sensible matrix products. So, we have, using JAX (and JAX Numpy) notations,</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>step1 <span class="ot">=</span> <span class="fu">z.reshape</span>(N_A, N_B)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>step2 <span class="ot">=</span> A <span class="sc">@</span> step1</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>step3 <span class="ot">=</span> step2.T</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>step4 <span class="ot">=</span> B <span class="sc">@</span> step3</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>result <span class="ot">=</span> <span class="fu">step4.T.flatten</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>where the <code>.reshape</code> in JAX Numpy is practically transpose then reshape - which is also why we transpose before flatten to get the final result. In terms of computational time, the naive implementation of <span class="math inline">\((A \otimes B) z\)</span> will be <span class="math inline">\(O( (N_A N_B)^2)\)</span> whereas the Kronecker implementation is only <span class="math inline">\(O(N_A N_B)\)</span>. The Kronecker implementation will be used whenever it is applicable.</p>
 </section>
-<section id="gaussian-process-sampling-training-and-prediction" class="level3">
-<h3 class="anchored" data-anchor-id="gaussian-process-sampling-training-and-prediction">Gaussian Process Sampling, Training, and Prediction</h3>
+<section id="kronecker-matrix-matrix-product" class="level4">
+<h4 class="anchored" data-anchor-id="kronecker-matrix-matrix-product">Kronecker Matrix-Matrix Product</h4>
+<p>One could also easily extend the above Kronecker matrix-vector product to Kronecker matrix-matrix product in the following way. Consider the matrix-matrix product <span class="math inline">\((A \otimes B) Z\)</span> where <span class="math inline">\(A, B\)</span> are square matrices of size <span class="math inline">\(N_A \times N_A\)</span> and <span class="math inline">\(N_B \times N_B\)</span> respectively and <span class="math inline">\(Z \in \mathbb{R}^{N \times M}\)</span>. We will break matrix <span class="math inline">\(Z\)</span> down in to <span class="math inline">\(M\)</span> columns and perform Kronecker matrix-vector product to each of the columns. This gives a computational time of <span class="math inline">\(O(N_A N_B M)\)</span> as opposed to the <span class="math inline">\((N_A N_B)^2M\)</span> of naive implementation. We could also exploit the vectorisation functionalities to further speed up this product using methods such as <code>jax.vmap</code>.</p>
+</section>
+</section>
+<section id="standard-gp-sampling-training-and-prediction" class="level3">
+<h3 class="anchored" data-anchor-id="standard-gp-sampling-training-and-prediction">Standard GP Sampling, Training, and Prediction</h3>
 <p>For a Gaussian process <span class="math inline">\(f \sim \mathcal{GP}(\mu, k)\)</span> where <span class="math inline">\(\mu\)</span> is the mean function and <span class="math inline">\(k\)</span> is the kernel function, we can draw a <u>sample</u> of <span class="math inline">\(f\)</span> at test locations <span class="math inline">\(X_* = (x_1^*, x_2^*, \ldots, x_k^*)\)</span></p>
 <p><span class="math display">\[
-f_* = \mu(X_*) + \sqrt{k(X_*, X_*)} \cdot \xi, \qquad \xi \sim N_k(0, I_k)
+f_* = \mu(X_*) + \sqrt{k(X_*, X_*)} ~\xi, \qquad \xi \sim N_k(0, I_k)
 \]</span> where <span class="math inline">\(k(X_*, X_*)\)</span> is the Gram matrix and the square root denotes the lower Cholesky factor.</p>
 <p>Consider we have made <span class="math inline">\(m\)</span> observations of this GP <span class="math inline">\(f\)</span> where the observations are made at locations <span class="math inline">\(X \in \mathbb{R}^m\)</span> with values <span class="math inline">\(y \in \mathbb{R}^m\)</span> and the observations are noisy with independent additive Gaussian noise of variance <span class="math inline">\(\sigma^2\)</span>, i.e.&nbsp;<span class="math inline">\(y = f(X) + \xi\)</span> with <span class="math inline">\(\xi_i \sim N(0, \sigma^2) ~\forall i = 1, 2, \ldots, m\)</span>. Denote the existing observations as <span class="math inline">\(\mathcal{D} = \{ X, y \}\)</span>.</p>
 <p>To train the model using data (or conduct MLE), we need to optimise the log likelihood</p>
 <p><span class="math display">\[
-\log p(y|X) = - \frac{m}{2}\log(2\pi) - \log | k(X, X) + \sigma^2 I_m | - \frac{1}{2} \left( y - \mu(X) \right)^T ( k(X, X) + \sigma^2 I_m)^{-1}\left( y - \mu(X) \right).
+\log p(y|X) = - \frac{m}{2}\log(2\pi) - \log | k(X, X) + \sigma^2 I_m | - \frac{1}{2} y ^T ( k(X, X) + \sigma^2 I_m)^{-1} y .
 \]</span> In addition, we have the predictive distribution</p>
 <p><span class="math display">\[
 \begin{split}
@@ -247,7 +309,7 @@ K_{y_* | \mathcal{D}} &amp;= K_{**} - K_*^T (K + \sigma^2 I_n)^{-1}K_*.
 \]</span></p>
 <p>which also implies that if we wish to draw a posterior sample we would have</p>
 <p><span class="math display">\[
-f_* = \mu_{y_* | \mathcal{D}}(X_*) + \sqrt{k_{y_* | \mathcal{D}}(X_*, X_*)} \cdot \xi, \qquad \xi \sim N_k(0, I_k).
+f_* = \mu_{y_* | \mathcal{D}}(X_*) + \sqrt{k_{y_* | \mathcal{D}}(X_*, X_*)} ~\xi, \qquad \xi \sim N_k(0, I_k).
 \]</span></p>
 </section>
 <section id="gp-does-not-scale" class="level3">
@@ -261,13 +323,53 @@ f_* = \mu_{y_* | \mathcal{D}}(X_*) + \sqrt{k_{y_* | \mathcal{D}}(X_*, X_*)} \cdo
 <li><a href="https://arxiv.org/abs/2002.09309">Efficiently Posterior Sampling</a></li>
 <li><a href="https://geoffpleiss.com/static/media/gpleiss_thesis.d218bc00.pdf">Conjugate Gradients</a>.</li>
 </ul>
-<p>Here, we will look at one such approach - Kronecker structure exploiting method. To obtain some intuitive, assume we have a 1D space + 1D time temporal GP with <span class="math inline">\(N_s\)</span> spatial grid points and <span class="math inline">\(N_t\)</span> temporal grid points. The naive implementation will have a time complexity of <span class="math inline">\(O((N_s + N_t)^3)\)</span>, whereas a Kronecker-aware implementation will only have a time complexity of <span class="math inline">\(O(\max\{N_s, N_t\}^3)\)</span>. <span style="color: red;">(check!)</span> Below, we will clarify the precise ways we can leverage the matrix structure to achieve computational speed-ups.</p>
+<p>Here, we will look at one such approach - Kronecker structure exploiting method. To obtain some intuitive, assume we have a 1D space + 1D time temporal GP with <span class="math inline">\(N_s\)</span> spatial grid points and <span class="math inline">\(N_t\)</span> temporal grid points. The naive implementation will have a time complexity of <span class="math inline">\(O((N_s N_t)^3)\)</span>, whereas a Kronecker-aware implementation will only have a time complexity of <span class="math inline">\(O(\max\{N_s, N_t\}^3)\)</span>. Below, we will clarify the precise ways we can leverage the matrix structure to achieve computational speed-ups.</p>
 </section>
 <section id="kronecker-product-gaussian-process" class="level3">
 <h3 class="anchored" data-anchor-id="kronecker-product-gaussian-process">Kronecker Product Gaussian Process</h3>
 <p><em>The contents here are largely based on <a href="https://mlg.eng.cam.ac.uk/pub/pdf/Saa11.pdf">Saatchi (2011)</a>.</em></p>
+<section id="sampling-from-a-gp" class="level4">
+<h4 class="anchored" data-anchor-id="sampling-from-a-gp">Sampling from a GP</h4>
+<p><strong>Naive</strong></p>
+<p><span class="math display">\[
+f_* = \mu(X_*) + \sqrt{K_s \otimes K_t}  ~\xi, \qquad \xi \sim N_k(0, I_k)
+\]</span></p>
+<p><strong>Kronecker</strong></p>
+<p><span class="math display">\[
+f_* = \mu(X_*) + \left( \sqrt{K_s} \otimes \sqrt{K_t} \right) ~\xi, \qquad \xi \sim N_k(0, I_k)
+\]</span></p>
+<p>where we can use the Kronecker matrix-vector product.</p>
+</section>
+<section id="gp-likelihood" class="level4">
+<h4 class="anchored" data-anchor-id="gp-likelihood">GP Likelihood</h4>
+<p><strong>Naive</strong></p>
+<p><span class="math display">\[
+\log p(y|X) = - \frac{m}{2}\log(2\pi) - \log | K_s \otimes K_t + \sigma^2 I_m | - \frac{1}{2}  y^T ( K_s \otimes K_t + \sigma^2 I_m)^{-1}y.
+\]</span></p>
+<p><strong>Kronecker</strong></p>
+<p>There are two places where we need to use:</p>
+<ul>
+<li>determinant <span class="math inline">\(| K_s \otimes K_t + \sigma^2 I_m |\)</span></li>
+<li>inverse <span class="math inline">\(( K_s \otimes K_t + \sigma^2 I_m )^{-1}\)</span>.</li>
+</ul>
+<p>Consider eigendecompositions <span class="math inline">\(K = Q \Lambda Q^T\)</span>, <span class="math inline">\(K_s = Q_s \Lambda_s Q_s^T\)</span>, and <span class="math inline">\(K_t = Q_t \Lambda_t Q_t^T\)</span>. We know that <span class="math inline">\(QQ^T = I\)</span> and <span class="math inline">\(|Q|=1\)</span>, so since</p>
+<p><span class="math display">\[
+\begin{split}
+K + \sigma^2 I_m  &amp;= Q \Lambda Q^T + Q (\sigma^2 I_m) Q^T = Q (\Lambda + \sigma^2 I_m) Q^T \\
+K_s \otimes K_t + \sigma^2 I_m &amp;= (Q_s \otimes Q_t) (\Lambda_s \otimes \Lambda_t + \sigma^2 I_m) (Q_s^T \otimes Q_t^T)
+\end{split}
+\]</span></p>
+<p>we have</p>
+<p><span class="math display">\[
+\begin{split}
+| K + \sigma^2 I_m | &amp;= |Q| \cdot |\Lambda + \sigma^2 I_m| \cdot |Q^T| = |\Lambda_s \otimes \Lambda_t + \sigma^2 I_m| \\
+( K + \sigma^2 I_m)^{-1} &amp;= Q^{-T} (\Lambda + \sigma^2 I_m)^{-1} Q^{-1} = Q (\Lambda_s \otimes \Lambda_t + \sigma^2 I_m)^{-1} Q^{T}
+\end{split}
+\]</span></p>
+<p>where the remaining term <span class="math inline">\(\Lambda_s \otimes \Lambda_t + \sigma^2 I_m\)</span> is a diagonal matrix, and we can leverage Kronecker matrix-vector (and matrix-matrix) product whenever necessary.</p>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
