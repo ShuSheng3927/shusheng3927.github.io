@@ -225,7 +225,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="kronecker-facts" class="level3">
 <h3 class="anchored" data-anchor-id="kronecker-facts">Kronecker Facts</h3>
 <p>Before describing how one could leverage the Kronecker structure, first we state several relevant and helpful facts about matrices with a <a href="https://en.wikipedia.org/wiki/Kronecker_product">Kronecker structure</a>.</p>
-<p>Consider two matrices <span class="math inline">\(A \in \mathbb{R}^{n_1 \times n2}\)</span>, <span class="math inline">\(B \in \mathbb{R}^{m_1 \times m_2}\)</span>. The Kronecker product <span class="math inline">\(K = A \otimes B \in \mathbb{R}^{n_1 m_1 \times n_2 m_2}\)</span> is defined by</p>
+<p>Consider two matrices <span class="math inline">\(A \in \mathbb{R}^{n_1 \times n_2}\)</span>, <span class="math inline">\(B \in \mathbb{R}^{m_1 \times m_2}\)</span>. The Kronecker product <span class="math inline">\(K = A \otimes B \in \mathbb{R}^{n_1 m_1 \times n_2 m_2}\)</span> is defined by</p>
 <p><span class="math display">\[
 A \otimes B = \begin{bmatrix}
 a_{11} B &amp; \cdots &amp; a_{1 n_2} B \\
@@ -296,10 +296,10 @@ a_k
 f_* = \mu(X_*) + \sqrt{k(X_*, X_*)} ~\xi, \qquad \xi \sim N_k(0, I_k)
 \]</span> where <span class="math inline">\(k(X_*, X_*)\)</span> is the Gram matrix and the square root denotes the lower Cholesky factor.</p>
 <p>Consider we have made <span class="math inline">\(m\)</span> observations of this GP <span class="math inline">\(f\)</span> where the observations are made at locations <span class="math inline">\(X \in \mathbb{R}^m\)</span> with values <span class="math inline">\(y \in \mathbb{R}^m\)</span> and the observations are noisy with independent additive Gaussian noise of variance <span class="math inline">\(\sigma^2\)</span>, i.e.&nbsp;<span class="math inline">\(y = f(X) + \xi\)</span> with <span class="math inline">\(\xi_i \sim N(0, \sigma^2) ~\forall i = 1, 2, \ldots, m\)</span>. Denote the existing observations as <span class="math inline">\(\mathcal{D} = \{ X, y \}\)</span>.</p>
-<p>To train the model using data (or conduct MLE), we need to optimise the log likelihood</p>
+<p>To train the model using data (or conduct MLE), we need to optimise the <u>log likelihood</u></p>
 <p><span class="math display">\[
 \log p(y|X) = - \frac{m}{2}\log(2\pi) - \log | k(X, X) + \sigma^2 I_m | - \frac{1}{2} y ^T ( k(X, X) + \sigma^2 I_m)^{-1} y .
-\]</span> In addition, we have the predictive distribution</p>
+\]</span> In addition, we have the <u>predictive</u> distribution</p>
 <p><span class="math display">\[
 \begin{split}
 y_* ~|X_*, \mathcal{D}, \sigma^2 &amp;\sim N_{n}(\mu_{y_* | \mathcal{D}}, K_{y_* | \mathcal{D}}), \\
@@ -323,7 +323,7 @@ f_* = \mu_{y_* | \mathcal{D}}(X_*) + \sqrt{k_{y_* | \mathcal{D}}(X_*, X_*)} ~\xi
 <li><a href="https://arxiv.org/abs/2002.09309">Efficiently Posterior Sampling</a></li>
 <li><a href="https://geoffpleiss.com/static/media/gpleiss_thesis.d218bc00.pdf">Conjugate Gradients</a>.</li>
 </ul>
-<p>Here, we will look at one such approach - Kronecker structure exploiting method. To obtain some intuitive, assume we have a 1D space + 1D time temporal GP with <span class="math inline">\(N_s\)</span> spatial grid points and <span class="math inline">\(N_t\)</span> temporal grid points. The naive implementation will have a time complexity of <span class="math inline">\(O((N_s N_t)^3)\)</span>, whereas a Kronecker-aware implementation will only have a time complexity of <span class="math inline">\(O(\max\{N_s, N_t\}^3)\)</span>. Below, we will clarify the precise ways we can leverage the matrix structure to achieve computational speed-ups.</p>
+<p>Here, we will look at one such approach: Kronecker structure exploiting method. Assume we have a 1D space + 1D time temporal GP with <span class="math inline">\(N_s\)</span> spatial grid points and <span class="math inline">\(N_t\)</span> temporal grid points. The naive implementation will have a time complexity of <span class="math inline">\(O((N_s N_t)^3)\)</span>, whereas a Kronecker-aware implementation will only have a time complexity of <span class="math inline">\(O(\max\{N_s, N_t\}^3)\)</span>. Below, we will clarify the precise ways we can leverage the matrix structure to achieve computational speed-ups.</p>
 </section>
 <section id="kronecker-product-gaussian-process" class="level3">
 <h3 class="anchored" data-anchor-id="kronecker-product-gaussian-process">Kronecker Product Gaussian Process</h3>
@@ -347,7 +347,7 @@ f_* = \mu(X_*) + \left( \sqrt{K_s} \otimes \sqrt{K_t} \right) ~\xi, \qquad \xi \
 \log p(y|X) = - \frac{m}{2}\log(2\pi) - \log | K_s \otimes K_t + \sigma^2 I_m | - \frac{1}{2}  y^T ( K_s \otimes K_t + \sigma^2 I_m)^{-1}y.
 \]</span></p>
 <p><strong>Kronecker</strong></p>
-<p>There are two places where we need to use:</p>
+<p>There are two places where we need to leverage the Kronecker structure:</p>
 <ul>
 <li>determinant <span class="math inline">\(| K_s \otimes K_t + \sigma^2 I_m |\)</span></li>
 <li>inverse <span class="math inline">\(( K_s \otimes K_t + \sigma^2 I_m )^{-1}\)</span>.</li>

@@ -22,7 +22,7 @@ Such kernels are known as **separable** kernels, and in this post we will explor
 
 Before describing how one could leverage the Kronecker structure, first we state several relevant and helpful facts about matrices with a [Kronecker structure](https://en.wikipedia.org/wiki/Kronecker_product). 
 
-Consider two matrices $A \in \mathbb{R}^{n_1 \times n2}$, $B \in \mathbb{R}^{m_1 \times m_2}$. The Kronecker product $K = A \otimes B \in \mathbb{R}^{n_1 m_1 \times n_2 m_2}$ is defined by 
+Consider two matrices $A \in \mathbb{R}^{n_1 \times n_2}$, $B \in \mathbb{R}^{m_1 \times m_2}$. The Kronecker product $K = A \otimes B \in \mathbb{R}^{n_1 m_1 \times n_2 m_2}$ is defined by 
 
 $$
 A \otimes B = \begin{bmatrix}
@@ -123,12 +123,12 @@ where $k(X_*, X_*)$ is the Gram matrix and the square root denotes the lower Cho
 
 Consider we have made $m$ observations of this GP $f$ where the observations are made at locations $X \in \mathbb{R}^m$ with values $y \in \mathbb{R}^m$ and the observations are noisy with independent additive Gaussian noise of variance $\sigma^2$, i.e. $y = f(X) + \xi$ with $\xi_i \sim N(0, \sigma^2) ~\forall i = 1, 2, \ldots, m$. Denote the existing observations as $\mathcal{D} = \{ X, y \}$.
 
-To train the model using data (or conduct MLE), we need to optimise the log likelihood 
+To train the model using data (or conduct MLE), we need to optimise the <u>log likelihood</u> 
 
 $$
 \log p(y|X) = - \frac{m}{2}\log(2\pi) - \log | k(X, X) + \sigma^2 I_m | - \frac{1}{2} y ^T ( k(X, X) + \sigma^2 I_m)^{-1} y .
 $$
-In addition, we have the predictive distribution 
+In addition, we have the <u>predictive</u> distribution 
 
 $$
 \begin{split} 
@@ -156,7 +156,7 @@ It is still ongoing research to device tricks and algorithms to make GP more sca
 - [Efficiently Posterior Sampling](https://arxiv.org/abs/2002.09309)
 - [Conjugate Gradients](https://geoffpleiss.com/static/media/gpleiss_thesis.d218bc00.pdf).
 
-Here, we will look at one such approach - Kronecker structure exploiting method. To obtain some intuitive, assume we have a 1D space + 1D time temporal GP with $N_s$ spatial grid points and $N_t$ temporal grid points. The naive implementation will have a time complexity of $O((N_s N_t)^3)$, whereas a Kronecker-aware implementation will only have a time complexity of $O(\max\{N_s, N_t\}^3)$. Below, we will clarify the precise ways we can leverage the matrix structure to achieve computational speed-ups. 
+Here, we will look at one such approach: Kronecker structure exploiting method. Assume we have a 1D space + 1D time temporal GP with $N_s$ spatial grid points and $N_t$ temporal grid points. The naive implementation will have a time complexity of $O((N_s N_t)^3)$, whereas a Kronecker-aware implementation will only have a time complexity of $O(\max\{N_s, N_t\}^3)$. Below, we will clarify the precise ways we can leverage the matrix structure to achieve computational speed-ups. 
 
 ### Kronecker Product Gaussian Process
 
@@ -188,7 +188,7 @@ $$
 
 **Kronecker**
 
-There are two places where we need to use: 
+There are two places where we need to leverage the Kronecker structure: 
 
 - determinant $| K_s \otimes K_t + \sigma^2 I_m |$
 - inverse $( K_s \otimes K_t + \sigma^2 I_m )^{-1}$.
