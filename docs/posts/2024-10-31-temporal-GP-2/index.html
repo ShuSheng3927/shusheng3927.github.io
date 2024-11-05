@@ -273,7 +273,7 @@ a_k
 \]</span></p>
 <p>A property about the <span class="math inline">\(\operatorname{vec}\)</span> operator and Kronecker product is the following:</p>
 <p><span class="math display">\[
-(A \otimes B) \operatorname{vec}(z) = \operatorname{vec}[B z A^T] = \operatorname{vec}[B (A z^T)^T]
+(A \otimes B) \operatorname{vec}(Z) = \operatorname{vec}[B Z A^T] = \operatorname{vec}[B (A Z^T)^T]
 \]</span> Back to the product of interest <span class="math inline">\((A \otimes B) z\)</span>, we have <span class="math inline">\(z\)</span> as a column vector. To apply the <span class="math inline">\(\operatorname{vec}\)</span> formula above, we need to reshape <span class="math inline">\(z\)</span> to enable sensible matrix products. So, we have, using JAX (and JAX Numpy) notations,</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>step1 <span class="ot">=</span> <span class="fu">z.reshape</span>(N_A, N_B)</span>
@@ -286,7 +286,7 @@ a_k
 </section>
 <section id="kronecker-matrix-matrix-product" class="level4">
 <h4 class="anchored" data-anchor-id="kronecker-matrix-matrix-product">Kronecker Matrix-Matrix Product</h4>
-<p>One could also easily extend the above Kronecker matrix-vector product to Kronecker matrix-matrix product in the following way. Consider the matrix-matrix product <span class="math inline">\((A \otimes B) Z\)</span> where <span class="math inline">\(A, B\)</span> are square matrices of size <span class="math inline">\(N_A \times N_A\)</span> and <span class="math inline">\(N_B \times N_B\)</span> respectively and <span class="math inline">\(Z \in \mathbb{R}^{N \times M}\)</span>. We will break matrix <span class="math inline">\(Z\)</span> down in to <span class="math inline">\(M\)</span> columns and perform Kronecker matrix-vector product to each of the columns. This gives a computational time of <span class="math inline">\(O(N_A N_B M)\)</span> as opposed to the <span class="math inline">\((N_A N_B)^2M\)</span> of naive implementation. We could also exploit the vectorisation functionalities to further speed up this product using methods such as <code>jax.vmap</code>.</p>
+<p>One could also easily extend the above Kronecker matrix-vector product to Kronecker matrix-matrix product in the following way. Consider the matrix-matrix product <span class="math inline">\((A \otimes B) Z\)</span> where <span class="math inline">\(A, B\)</span> are square matrices of size <span class="math inline">\(N_A \times N_A\)</span> and <span class="math inline">\(N_B \times N_B\)</span> respectively and <span class="math inline">\(Z \in \mathbb{R}^{N \times M}\)</span>. We will break matrix <span class="math inline">\(Z\)</span> down in to <span class="math inline">\(M\)</span> columns and perform Kronecker matrix-vector product to each of the columns. This gives a computational time of <span class="math inline">\(O(N_A N_B M)\)</span> as opposed to the <span class="math inline">\(O((N_A N_B)^2M)\)</span> of naive implementation. We could also exploit the vectorisation functionalities to further speed up this product using methods such as <code>jax.vmap</code>.</p>
 </section>
 </section>
 <section id="standard-gp-sampling-training-and-prediction" class="level3">
@@ -296,10 +296,10 @@ a_k
 f_* = \mu(X_*) + \sqrt{k(X_*, X_*)} ~\xi, \qquad \xi \sim N_k(0, I_k)
 \]</span> where <span class="math inline">\(k(X_*, X_*)\)</span> is the Gram matrix and the square root denotes the lower Cholesky factor.</p>
 <p>Consider we have made <span class="math inline">\(m\)</span> observations of this GP <span class="math inline">\(f\)</span> where the observations are made at locations <span class="math inline">\(X \in \mathbb{R}^m\)</span> with values <span class="math inline">\(y \in \mathbb{R}^m\)</span> and the observations are noisy with independent additive Gaussian noise of variance <span class="math inline">\(\sigma^2\)</span>, i.e.&nbsp;<span class="math inline">\(y = f(X) + \xi\)</span> with <span class="math inline">\(\xi_i \sim N(0, \sigma^2) ~\forall i = 1, 2, \ldots, m\)</span>. Denote the existing observations as <span class="math inline">\(\mathcal{D} = \{ X, y \}\)</span>.</p>
-<p>To train the model using data (or conduct MLE), we need to optimise the <u>log likelihood</u></p>
+<p>To train the model using data (or conduct MLE<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>), we need to optimise the <u>log likelihood</u></p>
 <p><span class="math display">\[
 \log p(y|X) = - \frac{m}{2}\log(2\pi) - \log | k(X, X) + \sigma^2 I_m | - \frac{1}{2} y ^T ( k(X, X) + \sigma^2 I_m)^{-1} y .
-\]</span> In addition, we have the <u>predictive</u> distribution</p>
+\]</span> In addition, we have the (conditional) <u>predictive<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></u> distribution</p>
 <p><span class="math display">\[
 \begin{split}
 y_* ~|X_*, \mathcal{D}, \sigma^2 &amp;\sim N_{n}(\mu_{y_* | \mathcal{D}}, K_{y_* | \mathcal{D}}), \\
@@ -372,7 +372,14 @@ K_s \otimes K_t + \sigma^2 I_m &amp;= (Q_s \otimes Q_t) (\Lambda_s \otimes \Lamb
 </section>
 </section>
 
-</main> <!-- /main -->
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>Frequentist MLE is equivalent to a Bayesian MAP with flat priors.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>since we are using only a summary statistic (MAP with flat prior) for the parameters in the posterior predictive, instead of the full marginal posterior.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {

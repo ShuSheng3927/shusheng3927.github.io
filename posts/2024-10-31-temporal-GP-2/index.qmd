@@ -91,7 +91,7 @@ $$
 A property about the $\vec$ operator and Kronecker product is the following: 
 
 $$
-(A \otimes B) \vec(z) = \vec [B z A^T] = \vec [B (A z^T)^T]
+(A \otimes B) \vec(Z) = \vec [B Z A^T] = \vec [B (A Z^T)^T]
 $$
 Back to the product of interest $(A \otimes B) z$, we have $z$ as a column vector. To apply the $\vec$ formula above, we need to reshape $z$ to enable sensible matrix products. So, we have, using JAX (and JAX Numpy) notations, 
 
@@ -110,7 +110,7 @@ In terms of computational time, the naive implementation of $(A \otimes B) z$ wi
 
 #### Kronecker Matrix-Matrix Product
 
-One could also easily extend the above Kronecker matrix-vector product to Kronecker matrix-matrix product in the following way. Consider the matrix-matrix product $(A \otimes B) Z$ where $A, B$ are square matrices of size $N_A \times N_A$ and $N_B \times N_B$ respectively and $Z \in \mathbb{R}^{N \times M}$. We will break matrix $Z$ down in to $M$ columns and perform Kronecker matrix-vector product to each of the columns. This gives a computational time of $O(N_A N_B M)$ as opposed to the $(N_A N_B)^2M$ of naive implementation. We could also exploit the vectorisation functionalities to further speed up this product using methods such as `jax.vmap`.
+One could also easily extend the above Kronecker matrix-vector product to Kronecker matrix-matrix product in the following way. Consider the matrix-matrix product $(A \otimes B) Z$ where $A, B$ are square matrices of size $N_A \times N_A$ and $N_B \times N_B$ respectively and $Z \in \mathbb{R}^{N \times M}$. We will break matrix $Z$ down in to $M$ columns and perform Kronecker matrix-vector product to each of the columns. This gives a computational time of $O(N_A N_B M)$ as opposed to the $O((N_A N_B)^2M)$ of naive implementation. We could also exploit the vectorisation functionalities to further speed up this product using methods such as `jax.vmap`.
 
 ### Standard GP Sampling, Training, and Prediction
 
@@ -123,12 +123,12 @@ where $k(X_*, X_*)$ is the Gram matrix and the square root denotes the lower Cho
 
 Consider we have made $m$ observations of this GP $f$ where the observations are made at locations $X \in \mathbb{R}^m$ with values $y \in \mathbb{R}^m$ and the observations are noisy with independent additive Gaussian noise of variance $\sigma^2$, i.e. $y = f(X) + \xi$ with $\xi_i \sim N(0, \sigma^2) ~\forall i = 1, 2, \ldots, m$. Denote the existing observations as $\mathcal{D} = \{ X, y \}$.
 
-To train the model using data (or conduct MLE), we need to optimise the <u>log likelihood</u> 
+To train the model using data (or conduct MLE^[Frequentist MLE is equivalent to a Bayesian MAP with flat priors.]), we need to optimise the <u>log likelihood</u> 
 
 $$
 \log p(y|X) = - \frac{m}{2}\log(2\pi) - \log | k(X, X) + \sigma^2 I_m | - \frac{1}{2} y ^T ( k(X, X) + \sigma^2 I_m)^{-1} y .
 $$
-In addition, we have the <u>predictive</u> distribution 
+In addition, we have the (conditional) <u>predictive^[since we are using only a summary statistic (MAP with flat prior) for the parameters in the posterior predictive, instead of the full marginal posterior.]</u> distribution 
 
 $$
 \begin{split} 
