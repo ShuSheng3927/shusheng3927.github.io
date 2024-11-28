@@ -1,0 +1,125 @@
+---
+title: "[Derivation Scribbles] Kalman Filter and Ensemble Kalman Filter"
+description: "Derivations for Kalman filters and Ensemble Kalman Filter."
+date: "28 November 2024"
+categories:
+  - Data Assimilation
+  - Derivation Scribbles
+---
+
+\newcommand{\cov}{\operatorname{Cov}}
+
+*This blog post is largely based on some notes written by [Chris Sherlock](https://chrisgsherlock.github.io/).*
+
+### Hidden Markov Model 
+
+The mathematical structure that allows one to do (Ensemble) Kalman filter is a [hidden Markov model](https://en.wikipedia.org/wiki/Hidden_Markov_model) (HMM) or a *state space model* (SSM). A hidden Markov model consists to two processes: a **latent process** $\{X_t\}$ and an **observation process** $\{Y_t\}$. The latent process is Markovian, and we assume we know the transition kernel $$X_t | X_{t-1} = x_{t-1} \sim P(x_{t-1}, \cdot)$$^[An implicit notation throughout this blog post is that capital letters such as $X_t$ represents random variables, while the lower cases like $x_t$ represent the realisations of a random variable, thus is a constant.] which is sometimes called the **propagation kernel**. The observation process is dependent on the latent process in such a way that for each $t$, conditional on $X_t$ we have independence between $Y_t$ and any other states. Furthermore, the relationship between $X_t$ and $Y_t$ is captured by the **emission kernel** $$Y_t | X_t = x_t \sim G(x_t, \cdot).$$
+
+Usually, when the state space of the hidden process $\{X_t\}$ is finite we call such a model as an SSM, and an HMM more general state spaces. 
+
+![Directed Acyclid Graph (DAG) of a Hidden Markov Model](./hmm.PNG){width=50%}
+
+For us, we will only look at a special class of HMM - the **linear Gaussian models**, as that is the model class Kalman filter and ensemble Kalman filter (EnKF) assumes. This model is described below. 
+
+$$
+\begin{split}
+X_t &= \Phi X_{t-1} + \eta, \qquad \eta \sim N(0, B) \\
+Y_t &= H X_t + \epsilon, \qquad \epsilon \sim N(0, R)
+\end{split}
+$$
+where $\Phi, H, B, R$ are matrices that we assume to know beforehand. It is easy to see why this model is called linear Gaussian - all the noise are Gaussians, and the relationships are all linear. 
+
+### Kalman Filter
+
+The **filtering** problem of HMM is about learning the hidden state $X_t$ given the observations $y_{1:t}$^[We use the notation $1:t$ to represent $1, 2, \ldots, t$.], i.e. finding the distribution $p(x_t | y_{1:t})$. Closely related to filtering is the **prediction** problem where we try to learn $X_{t+1}$ using observations $y_{1:t}$, i.e. finding $p(x_{t+1}|y_{1:t})$. Since we assume we know the relationship between $X_t$ and $X_{t+1}$, solving the filtering problem will allow us to solve the prediction problem. 
+
+The [Kalman filter](https://en.wikipedia.org/wiki/Kalman_filter), as the name might suggest, is Kalman's solution to the filtering problem assuming the linear Gaussian HMMs. We will derive the method below, which only uses (a bit tedious but) elementary linear algebra and probability theory. 
+
+We define the distribution $X_t |y_{1:t} \sim N(\tilde{\mu}_t, \tilde{\Sigma}_t)$ for $t = 1,2, \ldots$ where the Gaussianity follows from the closedness of Gaussian random variables under linear operators and $\tilde{\mu}_t, \tilde{\Sigma}_t$ are things that we will figure out the expressions of subsequently. 
+
+First, we know from the conditional independence structure of an HMM that^[We will slightly abuse the notation by including things such as $N(0,Q)$ with properly defined random variables to ease of exposition.] 
+$$
+X_t | x_{0:t-1}, y_{1:t-1} = \Phi x_{t-1} + N(0, B).
+$$
+If we integrate out $X_{0:t-1}$, and especially $X_{t-1}$, we would have 
+$$
+{\color{blue} X_t | y_{1:t-1} \sim N(\Phi\tilde{\mu}_{t-1} , \Phi \tilde{\Sigma}_{t-1} \Phi^T + B) =: N({\mu}_{t}, {\Sigma}_t).}
+$$
+This gives us the solution to the **prediction** problem subject to knowing the filtering problem. Next, we will solve the **filtering** problem. 
+
+Again, using the model structure, we know that 
+$$
+Y_t | y_{1:t-1}, x_{0:t} = H x_t + N(0,R)
+$$
+which helps us to realise the covariance structure of $Y_t$ and $X_t$ conditional on $y_{t-1}$. This gives us the following distribution 
+$$
+\begin{bmatrix}
+X_t \\
+Y_t 
+\end{bmatrix} \bigg| y_{t-1} = N\left(  \begin{bmatrix}
+\mu_t \\
+H\mu_t 
+\end{bmatrix}, \begin{bmatrix}
+\Sigma_t & \Sigma_t H^T \\
+H\Sigma_t & H \Sigma_t H^T + R 
+\end{bmatrix} \right)
+$$
+using the conditional distribution $X_t | y_{t-1}$ above. 
+
+Afterwards, we use the formula of conditional distribution of multivariate Gaussian (see [here](https://shusheng3927.github.io/posts/2024-10-13-basic-GP-regression-formula/#marginal-and-conditional-gaussians) for a derivation) to write down the **filtering** distribution:
+$$
+{\color{blue} \begin{split}
+X_t | y_{1:t} &\sim N(\tilde{\mu}_t, \tilde{\Sigma}_t) \\
+\tilde{\mu}_t &= \mu_t + \Sigma_t H^T (H \Sigma_t H^T + R)^{-1} (y_t - H \mu_t) =:  \mu_t + K_t (y_t - H \mu_t) \\
+\tilde{\Sigma}_t &= \Sigma_t - \Sigma_t H^T (H \Sigma_t H^T + R)^{-1}H \Sigma_t =: \Sigma_t - K_t H \Sigma_t \\
+K_t &:= \Sigma_t H^T (H \Sigma_t H^T + R)^{-1}
+\end{split}}
+$$
+where $K_t$ is often called the **Kalman gain** as it could be viewed as the weighting of the assimilated observation $y - H \mu_t$ we use to update our prediction.
+
+<u>In summary</u>, we can break down the Kalman filter procedure after observing a new observation $y_t$ into two steps: 
+Given current filtering distribution $X_{t-1} | y_{1:t-1} \sim N(\tilde{\mu}_{t-1}, \tilde{\Sigma}_{t-1})$, 
+
+- **Propagate**: $X_{t} | y_{1:t-1} \sim N(\mu_t, \Sigma_t)$ with propagated mean $\mu_t = \Phi \tilde{\mu}_{t-1}$; propagated covariance $\Sigma_t = \Phi \tilde{\Sigma}_{t-1}\Phi^T + B$.
+- **Assimilate**: $X_{t} | y_{1:t} \sim N(\tilde{\mu}_{t}, \tilde{\Sigma}_{t})$ with Kalman gain $K_t = \Sigma_t H^T (H \Sigma_t H^T + R)^{-1}$; filtered mean $\tilde{\mu}_t = \mu_t + K_t (y_t - H \mu_t)$; filtered covariance $\tilde{\Sigma}_t = \Sigma_t - K_t H \Sigma_t$.
+
+### Ensemble Kalman Filter
+
+In Kalman filter, we update the filtering distribution using the propagated mean and covariance. However, this is not necessary - we could use the average of samples from the latest filtering distribution instead. This will result in the **ensemble Kalman filter**. 
+
+Assume we draw $M$ i.i.d. samples from the filtering distribution $X_{t-1} | y_{1:t-1}$ and denote them by $\tilde{X}^{m}_{t-1}$ for $m = 1, 2, \ldots, M$. Subsequently, we would obtain the propagated samples 
+$$
+{\color{blue}
+X^m_{t} = \Phi \tilde{X}^{m}_{t-1} + N(0,B)
+}
+$$
+where different Gaussian noises are injected to each sample. It can be shown that the mean and variance of those propagated samples are identical to those of the exact propagated distribution. 
+
+Subsequently, we simulate 
+$$
+{\color{blue}
+Y_t^m = H X_t^m + N(0, R).
+}
+$$ 
+Those $Y_t^m$ would replace the role of $Y_t | y_{1:t-1}, x_{0:t}$ in our computation. Recall that our Kalman gain can be written as 
+$$
+K_t = \cov (X_t, Y_t | y_{t-1}) \cov (Y_t, Y_t | y_{t-1})^{-1}. 
+$$
+Using our samples $X_t^m$ and $Y_t^m$, we can compute their empirical covariance and estimate the Kalman gain, given by 
+$$
+{\color{blue} \hat{K}_t = \cov (X_t^{1:m}, Y_t^{1:m}) \cov (Y_t^{1:m}, Y_t^{1:m})^{-1}.
+}
+$$
+This would then allow us to update our existing samples $X_t^m$, which is given by 
+$$
+{\color{blue} \tilde{X}_t^m = X_t^m + \hat{K}_t(y_t - Y_t^m)
+}
+$$
+for each $m = 1, 2, \ldots, M$. 
+
+<u>In summary</u>, we can break down the ensemble Kalman filter procedure after observing a new observation $y_t$ into two steps: 
+Given current samples $\tilde{X}^{m}_{t-1}$ from the filtering distribution $X_{t-1} | y_{1:t-1} \sim N(\tilde{\mu}_{t-1}, \tilde{\Sigma}_{t-1})$, 
+
+- **Propagate**: For each $m$, we propagate by $X^m_{t} = \Phi \tilde{X}^{m}_{t-1} + N(0,B)$. 
+- **Assimilate**: For each $m$, we simulate $Y_t^m = H X_t^m + N(0, R)$ and estimate the Kalman gain $\hat{K}_t = \cov (X_t^{1:m}, Y_t^{1:m}) \cov (Y_t^{1:m}, Y_t^{1:m})^{-1}$. Subsequently, we assimilate our samples by $\tilde{X}_t^m = X_t^m + \hat{K}_t(y_t - Y_t^m)$. 
+
