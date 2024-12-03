@@ -2,7 +2,7 @@
 title: "[Derivation Scribbles] 3D-Var and 4D-Var"
 description: "Derivations for 3D-Var and 4D-Var."
 date: "03 December 2024"
-image: "3dvar_4dvar.PNG"
+image: "3dvar4dvar.PNG"
 bibliography: references.bib
 categories:
   - Data Assimilation
@@ -13,7 +13,7 @@ categories:
 
 *This blog post follows from the [previous post](https://shusheng3927.github.io/posts/2024-11-28-Kalman-filter/) on the Kalman filter and ensemble Kalman filter.*
 
-![Illustration of 3D-Var (top) and 4D-Var (bottom), extracted from [@edwards2015regional].](./3dvar_4dvar.PNG){width=90%}
+![Illustration of 3D-Var (top) and 4D-Var (bottom), extracted from [@edwards2015regional].](./3dvar4dvar.PNG){width=90%}
 
 ### Setup
 
