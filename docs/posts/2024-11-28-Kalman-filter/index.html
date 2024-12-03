@@ -23,7 +23,26 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -178,7 +197,7 @@ ul.task-list li input[type="checkbox"] {
 <p><em>This blog post is largely based on some notes written by <a href="https://chrisgsherlock.github.io/">Chris Sherlock</a>.</em></p>
 <section id="hidden-markov-model" class="level3">
 <h3 class="anchored" data-anchor-id="hidden-markov-model">Hidden Markov Model</h3>
-<p>The mathematical structure that allows one to do (Ensemble) Kalman filter is a <a href="https://en.wikipedia.org/wiki/Hidden_Markov_model">hidden Markov model</a> (HMM) or a <em>state space model</em> (SSM). A hidden Markov model consists to two processes: a <strong>latent process</strong> <span class="math inline">\(\{X_t\}\)</span> and an <strong>observation process</strong> <span class="math inline">\(\{Y_t\}\)</span>. The latent process is Markovian, and we assume we know the transition kernel <span class="math display">\[X_t | X_{t-1} = x_{t-1} \sim P(x_{t-1}, \cdot)\]</span><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> which is sometimes called the <strong>propagation kernel</strong>. The observation process is dependent on the latent process in such a way that for each <span class="math inline">\(t\)</span>, conditional on <span class="math inline">\(X_t\)</span> we have independence between <span class="math inline">\(Y_t\)</span> and any other states. Furthermore, the relationship between <span class="math inline">\(X_t\)</span> and <span class="math inline">\(Y_t\)</span> is captured by the <strong>emission kernel</strong> <span class="math display">\[Y_t | X_t = x_t \sim G(x_t, \cdot).\]</span></p>
+<p>The mathematical structure that allows one to do (Ensemble) Kalman filter is a <a href="https://en.wikipedia.org/wiki/Hidden_Markov_model">hidden Markov model</a> (HMM) or a <em>state space model</em> (SSM). A hidden Markov model consists to two processes: a <strong>latent process</strong> <span class="math inline">\(\{X_t\}\)</span> and an <strong>observation process</strong> <span class="math inline">\(\{Y_t\}\)</span>. The latent process is Markovian, and we assume we know the transition kernel<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> <span class="math display">\[X_t | X_{t-1} = x_{t-1} \sim P(x_{t-1}, \cdot)\]</span> which is sometimes called the <strong>propagation kernel</strong>. The observation process is dependent on the latent process in such a way that for each <span class="math inline">\(t\)</span>, conditional on <span class="math inline">\(X_t\)</span> we have independence between <span class="math inline">\(Y_t\)</span> and any other states. Furthermore, the relationship between <span class="math inline">\(X_t\)</span> and <span class="math inline">\(Y_t\)</span> is captured by the <strong>emission kernel</strong> <span class="math display">\[Y_t | X_t = x_t \sim G(x_t, \cdot).\]</span></p>
 <p>Usually, when the state space of the hidden process <span class="math inline">\(\{X_t\}\)</span> is finite we call such a model as an SSM, and an HMM more general state spaces.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -231,10 +250,17 @@ K_t &amp;:= \Sigma_t H^T (H \Sigma_t H^T + R)^{-1}
 <li><strong>Propagate</strong>: <span class="math inline">\(X_{t} | y_{1:t-1} \sim N(\mu_t, \Sigma_t)\)</span> with propagated mean <span class="math inline">\(\mu_t = \Phi \tilde{\mu}_{t-1}\)</span>; propagated covariance <span class="math inline">\(\Sigma_t = \Phi \tilde{\Sigma}_{t-1}\Phi^T + B\)</span>.</li>
 <li><strong>Assimilate</strong>: <span class="math inline">\(X_{t} | y_{1:t} \sim N(\tilde{\mu}_{t}, \tilde{\Sigma}_{t})\)</span> with Kalman gain <span class="math inline">\(K_t = \Sigma_t H^T (H \Sigma_t H^T + R)^{-1}\)</span>; filtered mean <span class="math inline">\(\tilde{\mu}_t = \mu_t + K_t (y_t - H \mu_t)\)</span>; filtered covariance <span class="math inline">\(\tilde{\Sigma}_t = \Sigma_t - K_t H \Sigma_t\)</span>.</li>
 </ul>
+<section id="remark" class="level4">
+<h4 class="anchored" data-anchor-id="remark">Remark</h4>
+<ul>
+<li>If we use a fixed covariance matrix <span class="math inline">\(P^b\)</span> instead of the time-varying <span class="math inline">\(\Sigma_t\)</span> for the above procedure, we would recover the <strong>optimal interpolation</strong> (OI) <span class="citation" data-cites="edwards2015regional">(<a href="#ref-edwards2015regional" role="doc-biblioref">Edwards et al. 2015</a>)</span> of oceanographic / meterological data assimilation.</li>
+<li>If we use a non-linear observation operator <span class="math inline">\(h(\cdot)\)</span> and use its Jacobian <span class="math inline">\(H_t := \nabla h(x_t)\)</span> instead of <span class="math inline">\(H\)</span> when hidden state is <span class="math inline">\(x_t\)</span>, we would recover the <strong>extended Kalman filter</strong> (EKF) <span class="citation" data-cites="edwards2015regional">(<a href="#ref-edwards2015regional" role="doc-biblioref">Edwards et al. 2015</a>)</span>.</li>
+</ul>
+</section>
 </section>
 <section id="ensemble-kalman-filter" class="level3">
 <h3 class="anchored" data-anchor-id="ensemble-kalman-filter">Ensemble Kalman Filter</h3>
-<p>In Kalman filter, we update the filtering distribution using the propagated mean and covariance. However, this is not necessary - we could use the average of samples from the latest filtering distribution instead. This will result in the <strong>ensemble Kalman filter</strong>.</p>
+<p>In Kalman filter, we update the filtering distribution using the propagated mean and covariance. However, this is not necessary - we could use the average of samples from the latest filtering distribution instead. This will result in the <strong>ensemble Kalman filter</strong> (EnKF).</p>
 <p>Assume we draw <span class="math inline">\(M\)</span> i.i.d. samples from the filtering distribution <span class="math inline">\(X_{t-1} | y_{1:t-1}\)</span> and denote them by <span class="math inline">\(\tilde{X}^{m}_{t-1}\)</span> for <span class="math inline">\(m = 1, 2, \ldots, M\)</span>. Subsequently, we would obtain the propagated samples <span class="math display">\[
 {\color{blue}
 X^m_{t} = \Phi \tilde{X}^{m}_{t-1} + N(0,B)
@@ -260,10 +286,15 @@ K_t = \operatorname{Cov}(X_t, Y_t | y_{t-1}) \operatorname{Cov}(Y_t, Y_t | y_{t-
 </ul>
 
 
+
 </section>
 
 
-<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-edwards2015regional" class="csl-entry" role="listitem">
+Edwards, Christopher A, Andrew M Moore, Ibrahim Hoteit, and Bruce D Cornuelle. 2015. <span>“Regional Ocean Data Assimilation.”</span> <em>Annual Review of Marine Science</em> 7 (1): 21–42.
+</div>
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
 <li id="fn1"><p>An implicit notation throughout this blog post is that capital letters such as <span class="math inline">\(X_t\)</span> represents random variables, while the lower cases like <span class="math inline">\(x_t\)</span> represent the realisations of a random variable, thus is a constant.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>

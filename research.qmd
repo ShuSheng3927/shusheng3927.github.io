@@ -4,11 +4,11 @@ title: "Research"
 
 I am broadly interested in computational statistics and machine learning methodologies, and their applications in scientific and health-related disciplines. In particular, I am interested in (1) developing methodologies with strong relevance to applications, and (2) advancing our understandings of the underlying mechanisms behind existing, commonly used algorithms. Below are some of the keywords that interest me: 
 
-- Sampling Algorithms: MCMC, SMC, Variational Bayes, Normalising Flows
-- Gaussian Processes
+- MCMC, SMC, Variational Bayes, Normalising Flows
+- Gaussian Processes 
 - Sequential Experiment Design, Bayesian Optimisation, Active Learning
 - Data Assimilation
-- Diffusion Models, Computational Optimal Transport
+- Computational Optimal Transport
 
 Currently, I am investigating how Bayesian optimisation and active learning, in combination with physics-informed Gaussian processes surrogate models, can help engineers and oceanographers to better understand ocean currents and inform their exploration strategies. 
 
@@ -23,4 +23,4 @@ Currently, I am investigating how Bayesian optimisation and active learning, in 
 
 ### Publications and Workshop Papers
 
-- Zhang, R. Y., Moss, H. B., Astfalck, L. C., Cripps, E. J., and Leslie, D. S. (2024). *BALLAST: Bayesian Active Learning with Look-ahead Amendment for Sea-drifter Trajectories*. **NeurIPS 2024 Workshop on Bayesian Decision-making and Uncertainty**. [[OpenReview]](https://openreview.net/pdf?id=sKjBnOQwtO)(accepted)
+- Zhang, R. Y., Moss, H. B., Astfalck, L. C., Cripps, E. J., and Leslie, D. S. (2024). *BALLAST: Bayesian Active Learning with Look-ahead Amendment for Sea-drifter Trajectories*. **NeurIPS 2024 Workshop on Bayesian Decision-making and Uncertainty**. [[OpenReview]](https://openreview.net/pdf?id=sKjBnOQwtO) (accepted)

@@ -2,6 +2,7 @@
 title: "[Derivation Scribbles] Kalman Filter and Ensemble Kalman Filter"
 description: "Derivations for Kalman filters and Ensemble Kalman Filter."
 date: "28 November 2024"
+bibliography: references.bib
 categories:
   - Data Assimilation
   - Derivation Scribbles
@@ -13,7 +14,7 @@ categories:
 
 ### Hidden Markov Model 
 
-The mathematical structure that allows one to do (Ensemble) Kalman filter is a [hidden Markov model](https://en.wikipedia.org/wiki/Hidden_Markov_model) (HMM) or a *state space model* (SSM). A hidden Markov model consists to two processes: a **latent process** $\{X_t\}$ and an **observation process** $\{Y_t\}$. The latent process is Markovian, and we assume we know the transition kernel $$X_t | X_{t-1} = x_{t-1} \sim P(x_{t-1}, \cdot)$$^[An implicit notation throughout this blog post is that capital letters such as $X_t$ represents random variables, while the lower cases like $x_t$ represent the realisations of a random variable, thus is a constant.] which is sometimes called the **propagation kernel**. The observation process is dependent on the latent process in such a way that for each $t$, conditional on $X_t$ we have independence between $Y_t$ and any other states. Furthermore, the relationship between $X_t$ and $Y_t$ is captured by the **emission kernel** $$Y_t | X_t = x_t \sim G(x_t, \cdot).$$
+The mathematical structure that allows one to do (Ensemble) Kalman filter is a [hidden Markov model](https://en.wikipedia.org/wiki/Hidden_Markov_model) (HMM) or a *state space model* (SSM). A hidden Markov model consists to two processes: a **latent process** $\{X_t\}$ and an **observation process** $\{Y_t\}$. The latent process is Markovian, and we assume we know the transition kernel^[An implicit notation throughout this blog post is that capital letters such as $X_t$ represents random variables, while the lower cases like $x_t$ represent the realisations of a random variable, thus is a constant.] $$X_t | X_{t-1} = x_{t-1} \sim P(x_{t-1}, \cdot)$$ which is sometimes called the **propagation kernel**. The observation process is dependent on the latent process in such a way that for each $t$, conditional on $X_t$ we have independence between $Y_t$ and any other states. Furthermore, the relationship between $X_t$ and $Y_t$ is captured by the **emission kernel** $$Y_t | X_t = x_t \sim G(x_t, \cdot).$$
 
 Usually, when the state space of the hidden process $\{X_t\}$ is finite we call such a model as an SSM, and an HMM more general state spaces. 
 
@@ -83,9 +84,14 @@ Given current filtering distribution $X_{t-1} | y_{1:t-1} \sim N(\tilde{\mu}_{t-
 - **Propagate**: $X_{t} | y_{1:t-1} \sim N(\mu_t, \Sigma_t)$ with propagated mean $\mu_t = \Phi \tilde{\mu}_{t-1}$; propagated covariance $\Sigma_t = \Phi \tilde{\Sigma}_{t-1}\Phi^T + B$.
 - **Assimilate**: $X_{t} | y_{1:t} \sim N(\tilde{\mu}_{t}, \tilde{\Sigma}_{t})$ with Kalman gain $K_t = \Sigma_t H^T (H \Sigma_t H^T + R)^{-1}$; filtered mean $\tilde{\mu}_t = \mu_t + K_t (y_t - H \mu_t)$; filtered covariance $\tilde{\Sigma}_t = \Sigma_t - K_t H \Sigma_t$.
 
+#### Remark
+
+- If we use a fixed covariance matrix $P^b$ instead of the time-varying $\Sigma_t$ for the above procedure, we would recover the **optimal interpolation** (OI) [@edwards2015regional] of oceanographic / meterological data assimilation. 
+- If we use a non-linear observation operator $h(\cdot)$ and use its Jacobian $H_t := \nabla h(x_t)$ instead of $H$ when hidden state is $x_t$, we would recover the **extended Kalman filter** (EKF) [@edwards2015regional]. 
+
 ### Ensemble Kalman Filter
 
-In Kalman filter, we update the filtering distribution using the propagated mean and covariance. However, this is not necessary - we could use the average of samples from the latest filtering distribution instead. This will result in the **ensemble Kalman filter**. 
+In Kalman filter, we update the filtering distribution using the propagated mean and covariance. However, this is not necessary - we could use the average of samples from the latest filtering distribution instead. This will result in the **ensemble Kalman filter** (EnKF). 
 
 Assume we draw $M$ i.i.d. samples from the filtering distribution $X_{t-1} | y_{1:t-1}$ and denote them by $\tilde{X}^{m}_{t-1}$ for $m = 1, 2, \ldots, M$. Subsequently, we would obtain the propagated samples 
 $$
