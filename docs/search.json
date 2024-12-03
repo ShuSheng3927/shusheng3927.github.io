@@ -74,7 +74,7 @@
     "href": "blog.html",
     "title": "Blog",
     "section": "",
-    "text": "[Derivation Scribbles] Kalman Filter and Ensemble Kalman Filter\n\n\n\n\n\n\n\nData Assimilation\n\n\nDerivation Scribbles\n\n\n\n\nDerivations for Kalman filters and Ensemble Kalman Filter.\n\n\n\n\n\n\nNov 28, 2024\n\n\nRui-Yang Zhang\n\n\n\n\n\n\n  \n\n\n\n\nSpatial-Temporal GP (2)\n\n\n\n\n\n\n\nGaussian Process\n\n\n\n\nA series of blog posts on spatial-temporal Gaussian processes. Exploiting the Kronecker structure of temporal GP regression with 1d space.\n\n\n\n\n\n\nOct 31, 2024\n\n\nRui-Yang Zhang\n\n\n\n\n\n\n  \n\n\n\n\nSpatial-Temporal GP (1)\n\n\n\n\n\n\n\nGaussian Process\n\n\n\n\nA series of blog posts on spatial-temporal Gaussian processes. Temporal GP regression with 1d space.\n\n\n\n\n\n\nOct 23, 2024\n\n\nRui-Yang Zhang\n\n\n\n\n\n\n  \n\n\n\n\n[Derivation Scribbles] Basic GP Regression Formula\n\n\n\n\n\n\n\nGaussian Process\n\n\nDerivation Scribbles\n\n\n\n\nDerivations for the Gaussian process predictive distribution. Single-output GP, observe with additive Gaussian noise.\n\n\n\n\n\n\nOct 13, 2024\n\n\nRui-Yang Zhang\n\n\n\n\n\n\n  \n\n\n\n\n[Reading Notes] Environmental sensor placement with convolutional Gaussian neural processes\n\n\n\n\n\n\n\nGaussian Process\n\n\nExperiment Design\n\n\nReading Notes\n\n\n\n\nReading Notes on Environmental sensor placement with convolutional Gaussian neural processes\n\n\n\n\n\n\nSep 30, 2024\n\n\nRui-Yang Zhang\n\n\n\n\n\n\n  \n\n\n\n\n[Reading Notes] Pre-trained Gaussian Processes for Bayesian Optimization\n\n\n\n\n\n\n\nBayesian Optimisation\n\n\nGaussian Process\n\n\nActive Learning\n\n\nExperiment Design\n\n\nReading Notes\n\n\n\n\nReading Notes on Pre-trained Gaussian Processes for Bayesian Optimization\n\n\n\n\n\n\nSep 29, 2024\n\n\nRui-Yang Zhang\n\n\n\n\n\n\n  \n\n\n\n\nWhy Should We Care About Gradient Flows?\n\n\n\n\n\n\n\nGradient Flow\n\n\n\n\nBlog post on gradient flows in Euclidean and Wasserstein spaces.\n\n\n\n\n\n\nSep 13, 2024\n\n\nRui-Yang Zhang, Christopher Nemeth\n\n\n\n\n\n\nNo matching items"
+    "text": "[Derivation Scribbles] 3D-Var and 4D-Var\n\n\n\n\n\n\n\nData Assimilation\n\n\nDerivation Scribbles\n\n\n\n\nDerivations for 3D-Var and 4D-Var.\n\n\n\n\n\n\nDec 3, 2024\n\n\nRui-Yang Zhang\n\n\n\n\n\n\n  \n\n\n\n\n[Derivation Scribbles] Kalman Filter and Ensemble Kalman Filter\n\n\n\n\n\n\n\nData Assimilation\n\n\nDerivation Scribbles\n\n\n\n\nDerivations for Kalman filters and Ensemble Kalman Filter.\n\n\n\n\n\n\nNov 28, 2024\n\n\nRui-Yang Zhang\n\n\n\n\n\n\n  \n\n\n\n\nSpatial-Temporal GP (2)\n\n\n\n\n\n\n\nGaussian Process\n\n\n\n\nA series of blog posts on spatial-temporal Gaussian processes. Exploiting the Kronecker structure of temporal GP regression with 1d space.\n\n\n\n\n\n\nOct 31, 2024\n\n\nRui-Yang Zhang\n\n\n\n\n\n\n  \n\n\n\n\nSpatial-Temporal GP (1)\n\n\n\n\n\n\n\nGaussian Process\n\n\n\n\nA series of blog posts on spatial-temporal Gaussian processes. Temporal GP regression with 1d space.\n\n\n\n\n\n\nOct 23, 2024\n\n\nRui-Yang Zhang\n\n\n\n\n\n\n  \n\n\n\n\n[Derivation Scribbles] Basic GP Regression Formula\n\n\n\n\n\n\n\nGaussian Process\n\n\nDerivation Scribbles\n\n\n\n\nDerivations for the Gaussian process predictive distribution. Single-output GP, observe with additive Gaussian noise.\n\n\n\n\n\n\nOct 13, 2024\n\n\nRui-Yang Zhang\n\n\n\n\n\n\n  \n\n\n\n\n[Reading Notes] Environmental sensor placement with convolutional Gaussian neural processes\n\n\n\n\n\n\n\nGaussian Process\n\n\nExperiment Design\n\n\nReading Notes\n\n\n\n\nReading Notes on Environmental sensor placement with convolutional Gaussian neural processes\n\n\n\n\n\n\nSep 30, 2024\n\n\nRui-Yang Zhang\n\n\n\n\n\n\n  \n\n\n\n\n[Reading Notes] Pre-trained Gaussian Processes for Bayesian Optimization\n\n\n\n\n\n\n\nBayesian Optimisation\n\n\nGaussian Process\n\n\nActive Learning\n\n\nExperiment Design\n\n\nReading Notes\n\n\n\n\nReading Notes on Pre-trained Gaussian Processes for Bayesian Optimization\n\n\n\n\n\n\nSep 29, 2024\n\n\nRui-Yang Zhang\n\n\n\n\n\n\n  \n\n\n\n\nWhy Should We Care About Gradient Flows?\n\n\n\n\n\n\n\nGradient Flow\n\n\n\n\nBlog post on gradient flows in Euclidean and Wasserstein spaces.\n\n\n\n\n\n\nSep 13, 2024\n\n\nRui-Yang Zhang, Christopher Nemeth\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "posts/2024-09-29-test/index.html",
@@ -243,5 +243,19 @@
     "title": "[Derivation Scribbles] Kalman Filter and Ensemble Kalman Filter",
     "section": "Footnotes",
     "text": "Footnotes\n\n\nAn implicit notation throughout this blog post is that capital letters such as \\(X_t\\) represents random variables, while the lower cases like \\(x_t\\) represent the realisations of a random variable, thus is a constant.↩︎\nWe use the notation \\(1:t\\) to represent \\(1, 2, \\ldots, t\\).↩︎\nWe will slightly abuse the notation by including things such as \\(N(0,Q)\\) with properly defined random variables to ease of exposition.↩︎"
+  },
+  {
+    "objectID": "posts/2024-12-03-3DVar-4DVar/index.html",
+    "href": "posts/2024-12-03-3DVar-4DVar/index.html",
+    "title": "[Derivation Scribbles] 3D-Var and 4D-Var",
+    "section": "",
+    "text": "This blog post follows from the previous post on the Kalman filter and ensemble Kalman filter."
+  },
+  {
+    "objectID": "posts/2024-12-03-3DVar-4DVar/index.html#footnotes",
+    "href": "posts/2024-12-03-3DVar-4DVar/index.html#footnotes",
+    "title": "[Derivation Scribbles] 3D-Var and 4D-Var",
+    "section": "Footnotes",
+    "text": "Footnotes\n\n\nStandard results of gradient descent tells us, since our loss function (negative log density) is convex, convergence is guaranteed when we run the optimiser for long enough.↩︎"
   }
 ]
