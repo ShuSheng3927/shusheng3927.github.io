@@ -20,8 +20,8 @@ I am currently a first year PhD student of [STOR-i CDT](https://www.lancaster.ac
 
 Previously, I did BSc Mathematics and Statistical Science at [UCL](https://www.ucl.ac.uk/maths/) where I was mentored by [Sam Livingstone](https://samueljlivingstone.wixsite.com/webpage) and received a [Royal Statistical Society](https://rss.org.uk) Award. 
 
-I am broadly interested in computational statistics and machine learning methodologies, and their applications in science and healthcare. See [here](./research.html) for more information. 
+I am broadly interested in computational statistics and machine learning methodologies, and their applications in science and engineering. See [here](./research.html) for more information. 
 
-I am currently organising the [Lancaster AI Reading Group](https://lai-reading-group.github.io). 
+I am currently co-organising the [Lancaster AI Reading Group](https://lai-reading-group.github.io) with [Andreas Makris](https://zedt123.github.io/). 
 
 ![Adapted from [Adrien](https://adriencorenflos.github.io/)'s [codes](https://t.co/1qWXSqgKoz).](./CSML.gif)
