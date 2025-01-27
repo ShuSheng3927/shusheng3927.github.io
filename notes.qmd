@@ -22,6 +22,8 @@ title: "Notes"
 
 4.  [Introduction to Kernel Stein Discrepancy](files/intro_to_ksd.pdf) (with Lanya Yang)
 
+5.  [Markov Decision Processes and How to Solve Them](files/MDP.pdf) ([code](files/gridworld.py))
+
 ### Biostatistics
 
 1.  [Multiple Testing Problem](files/MTP.pdf)
