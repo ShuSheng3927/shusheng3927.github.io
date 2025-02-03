@@ -1,0 +1,96 @@
+---
+title: "Summary of a Bivariate Gaussian Covariance Matrix"
+description: "Various ways one could summarise a bivariate Gaussian's covariance matrix."
+date: "03 February 2025"
+bibliography: references.bib
+categories:
+  - Active Learning
+  - Gaussian Process
+---
+
+\newcommand{\cov}{\operatorname{Cov}}
+
+
+## Background
+
+For the active learning of a spatial vector field, one may impose a gird structure to the space and assign a random vector (in 2D) to each of the grid cell. The full vector field is modeled using a Gaussian process (e.g. a Helmholtz GP of @berlinghieri2023gaussian), and under the Gaussian noise assumption, each random vector $[u v]^T$ of the grid cell $(x,y)$ is marginally a bivariate Gaussian:
+
+$$
+\begin{bmatrix} u_{(x,y)} \\ v_{(x,y)} \end{bmatrix} \sim N_2 \left(
+\begin{bmatrix} \mu^u_{(x,y)} \\ \mu^v_{(x,y)} \end{bmatrix}, 
+\begin{bmatrix} 
+\Sigma^{uu}_{(x,y)} & \Sigma^{uv}_{(x,y)} \\ 
+\Sigma^{vu}_{(x,y)} & \Sigma^{vv}_{(x,y)} 
+\end{bmatrix} 
+\right) = N_2 (\mu_{(x,y)}, \Sigma_{(x,y)}).
+$$
+
+Active learning algorithms aim to choose the next design/evaluation point that yields the *highest* utility, where the utility is often linked to the *uncertainty* of the evaluation point or the full system. For example, if our surrogate model of the system has input dimension of one, i.e. each design point will be marginally an univariate Gaussian, a utility choice is simply the **variance** of that distribution, leading to the max-var utility. Notice that the variance of an univariate Gaussian $X$ is monotonically related to its entropy
+
+$$ 
+H(X) := \frac{1}{2}  + \frac{1}{2} \log [2\pi \text{Var}(X)]
+$$
+in the sense that for two univariate Gaussians $X_1, X_2$ with variances $\sigma_1^2, \sigma_2^2$ respectively, we have $\sigma_1^2 \le \sigma_2^2 \implies H(X_1) \le H(X_2)$ which should be obvious from the definition. 
+
+
+## Summaries for Bivariate Gaussian Covariance
+
+We consider **max-var** styled policies, where we pick the evaluation point with the highest variance. In the case where we have a 2D spatial vector field to model and each vector is marginally $N_2$, we try to summarize the evaluation point's uncertainty using a function of the covariance matrix $\Sigma$.  
+
+### Entropy of a Multivariate Gaussian
+
+First, we calculate the entropy of a multivariate Gaussian $N_D(\mu, \Sigma)$. We have
+
+$$
+\begin{split}
+H(X) &= - \mathbb{E}_{x \sim X} \left[ \log p(x) \right] \\
+&= - \mathbb{E}_{x \sim X} \left[ \frac{D}{2} \log \pi + \frac{1}{2} \log \det (\Sigma) - \frac{1}{2} (x - \mu)^T \Sigma^{-1} (x - \mu) \right] \\
+&= \frac{D}{2} \log \pi + \frac{1}{2} \log \det (\Sigma) + \frac{1}{2} \mathbb{E}_{x \sim X} \left[ (x - \mu)^T \Sigma^{-1} (x - \mu) \right]
+\end{split}
+$$
+where 
+
+$$
+\begin{split}
+\mathbb{E}_{x \sim X} \left[ (x - \mu)^T \Sigma^{-1} (x - \mu) \right] &= \mathbb{E}_{x \sim X} \left[ \text{tr} \left( (x - \mu)^T \Sigma^{-1} (x - \mu) \right) \right] \\
+&= \mathbb{E}_{x \sim X} \left[ \text{tr} \left( \Sigma^{-T} (x - \mu) (x - \mu)^T \right) \right] \\
+&= \text{tr} \left[ \Sigma^{-1} \mathbb{E}_{x \sim X} \left[ (x - \mu) (x - \mu)^T \right] \right] \\
+&= \text{tr} \left[ \Sigma^{-1} \Sigma \right] = \text{tr} \left[ I_D \right] = D.
+\end{split}
+$$
+
+Thus, the differential entropy is
+
+$$
+H(X) = \frac{D}{2} \log \pi + \frac{D}{2} + \frac{1}{2} \log \det (\Sigma).
+$$
+
+### Summary Options
+
+1. Trace of $\Sigma$
+   
+   $$
+   \text{tr}(\Sigma) = \Sigma_{11} + \Sigma_{22}
+   $$
+   - This captures the sum of the variances in both dimensions, <span style="color:blue;">but ignores the correlations</span>. 
+
+2. Determinant of $\Sigma$  
+   
+   $$
+   \det(\Sigma) = \Sigma_{11} \Sigma_{22} - \Sigma_{12} \Sigma_{21}
+   $$
+   - This can be interpreted as the "area" of uncertainty in the 2D space. It is equivalent to the entropy when used for comparison. For two covariance matrices with same variances, the determinant will be smaller for the one with higher correlation. 
+
+3. Norm of $\Sigma$
+
+   $$
+   \| \Sigma \|_{?} 
+   $$
+   - Different matrix norms provide different interpretations of overall uncertainty. For example, the Frobenius norm is an element-wise norm that flattens the matrix $\Sigma$ and compute its $L_2$ norm.  
+
+### Example
+
+In the following graph we show four covariance matrices and their covariance ellipses (horizontal cross-sections of their probability density functions), as well as the values for various summaries. 
+
+![An example of the values of summaries for various covariances.](./cov_ellipse.png){width=90%}
+
