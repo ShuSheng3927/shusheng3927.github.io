@@ -206,7 +206,12 @@ IG(x) = H(p(\cdot | \mathcal{D})) - H(p(\cdot | \mathcal{D}^+)).
 <section id="gaussian-process-posteriors" class="level3">
 <h3 class="anchored" data-anchor-id="gaussian-process-posteriors">Gaussian Process Posteriors</h3>
 <p>Consider our distribution is a Gaussian process (GP) with mean zero and kernel <span class="math inline">\(k\)</span>, and the posterior is the posterior predictive distribution of this GP on some finite set of test points <span class="math inline">\(x_*\)</span> with size <span class="math inline">\(m\)</span>. We also assume the current dataset <span class="math inline">\(\mathcal{D} := \{(x_i, y_i)\}_{i=1}^{n}\)</span> is of size <span class="math inline">\(n\)</span> and the observations with additive, centered, independent Gaussian noise of variance <span class="math inline">\(\sigma^2\)</span>.</p>
-<p>We will also use the following notations to denote the various Gram matrices using kernel <span class="math inline">\(k\)</span>: - <span class="math inline">\(K = k(X,X)\)</span>, size <span class="math inline">\(n \times n\)</span>. - <span class="math inline">\(K_* = k(X, x_*)\)</span>, size <span class="math inline">\(n \times m\)</span>. - <span class="math inline">\(K_{**} = k(x_*, x_*)\)</span>, size <span class="math inline">\(m \times m\)</span>.</p>
+<p>We will also use the following notations to denote the various Gram matrices using kernel <span class="math inline">\(k\)</span></p>
+<ul>
+<li><span class="math inline">\(K = k(X,X)\)</span>, size <span class="math inline">\(n \times n\)</span>.</li>
+<li><span class="math inline">\(K_* = k(X, x_*)\)</span>, size <span class="math inline">\(n \times m\)</span>.</li>
+<li><span class="math inline">\(K_{**} = k(x_*, x_*)\)</span>, size <span class="math inline">\(m \times m\)</span>.</li>
+</ul>
 <p>The posterior is therefore (see <a href="https://shusheng3927.github.io/posts/2024-10-13-basic-GP-regression-formula/">here</a> for a detailed derivation)</p>
 <p><span class="math display">\[
 \begin{split}
@@ -215,7 +220,12 @@ p(y^* | x^*, \mathcal{D}, \sigma^2) &amp;\sim \mathcal{N}(\mu_{y^*|\mathcal{D}},
 &amp;\Sigma_{y^*|\mathcal{D}} = K_{**} - K_*^T (K + \sigma^2 I_n)^{-1} K_*.
 \end{split}
 \]</span></p>
-<p>After adding a new observation at <span class="math inline">\(x\)</span>, we will have an updated dataset <span class="math inline">\(\mathcal{D}^+\)</span> with <span class="math inline">\(X^+ = X \cup \{x\}\)</span> and have an updated posterior using the following Gram matrices: - <span class="math inline">\(K^+ = k(X^+,X^+)\)</span>, size <span class="math inline">\((n+1) \times (n+1)\)</span>. - <span class="math inline">\(K_*^+ = k(X^+, x_*)\)</span>, size <span class="math inline">\((n+1) \times m\)</span>. - <span class="math inline">\(K_{**}^+ = K_{**} = k(x_*, x_*)\)</span>, size <span class="math inline">\(m \times m\)</span>.</p>
+<p>After adding a new observation at <span class="math inline">\(x\)</span>, we will have an updated dataset <span class="math inline">\(\mathcal{D}^+\)</span> with <span class="math inline">\(X^+ = X \cup \{x\}\)</span> and have an updated posterior using the following Gram matrices</p>
+<ul>
+<li><span class="math inline">\(K^+ = k(X^+,X^+)\)</span>, size <span class="math inline">\((n+1) \times (n+1)\)</span>.</li>
+<li><span class="math inline">\(K_*^+ = k(X^+, x_*)\)</span>, size <span class="math inline">\((n+1) \times m\)</span>.</li>
+<li><span class="math inline">\(K_{**}^+ = K_{**} = k(x_*, x_*)\)</span>, size <span class="math inline">\(m \times m\)</span>.</li>
+</ul>
 <p>So, the updated posterior’s covariance matrix is</p>
 <p><span class="math display">\[
 \Sigma_{y^*|\mathcal{D}^+} = K_{**}^+ - K_*^{+T} (K^+ + \sigma^2 I_{n+1})^{-1} K_*^+
@@ -234,10 +244,10 @@ IG(x) &amp;= \frac{1}{2} \log \det \Sigma_{y^*|\mathcal{D}} - \frac{1}{2} \log \
 \end{split}
 \]</span> Since <span class="math inline">\(IG(x)\)</span> is independent of <span class="math inline">\(y | x\)</span>, the acquisition function <strong>expected information gain</strong> (EIG) is therefore</p>
 <p><span class="math display">\[
-EIG(x) = E_{y}[IG(x)] = IG(x)
+EIG(x) = \mathbb{E}_{y}[IG(x)] = IG(x)
 \]</span> Furthermore, we can remove several terms when we do <span class="math inline">\(\arg\max_x\)</span> for the acquisition function optimisation, and get</p>
 <p><span class="math display">\[
-EIG(x) = - \det \Big( K_{**}^+ - K_*^{+T} (K^+ + \sigma^2 I_{n+1})^{-1} K_*^+\Big).
+EIG(x) = - \log \det \Big( K_{**}^+ - K_*^{+T} (K^+ + \sigma^2 I_{n+1})^{-1} K_*^+\Big).
 \]</span></p>
 </section>
 <section id="computational-tricks" class="level3">
@@ -247,7 +257,7 @@ EIG(x) = - \det \Big( K_{**}^+ - K_*^{+T} (K^+ + \sigma^2 I_{n+1})^{-1} K_*^+\Bi
 <h4 class="anchored" data-anchor-id="naive-implementation">Naive Implementation</h4>
 <p>We wish to compute</p>
 <p><span class="math display">\[
-EIG(x) = - \det \Big( K_{**}^+ - K_*^{+T} (K^+ + \sigma^2 I_{n+1})^{-1} K_*^+\Big).
+EIG(x) = - \log\det \Big( K_{**}^+ - K_*^{+T} (K^+ + \sigma^2 I_{n+1})^{-1} K_*^+\Big).
 \]</span></p>
 <table class="table">
 <colgroup>
@@ -275,28 +285,28 @@ EIG(x) = - \det \Big( K_{**}^+ - K_*^{+T} (K^+ + \sigma^2 I_{n+1})^{-1} K_*^+\Bi
 </tr>
 <tr class="odd">
 <td>3</td>
-<td><span class="math inline">\(K_*^{+T} (K^+ + \delta^2 I_{n+1})^{-1}\)</span></td>
+<td><span class="math inline">\(K_*^{+T} (K^+ + \delta^2 I_{n+1})^{-1}K_*^+\)</span></td>
 <td><span class="math inline">\(O(m (n+1)^2)\)</span></td>
 </tr>
 <tr class="even">
 <td>4</td>
-<td><span class="math inline">\(K_*^{+T} (K^+ + \delta^2 I_{n+1})^{-1} K_*^+\)</span></td>
+<td><span class="math inline">\(K^+ - K_*^{+T} (K^+ + \delta^2 I_{n+1})^{-1} K_*^+\)</span></td>
 <td><span class="math inline">\(O(m^2)\)</span></td>
 </tr>
 <tr class="odd">
 <td>5</td>
-<td><span class="math inline">\(\det\big(K_{**}^+ - K_*^{+T} (K^+ + \delta^2 I_{n+1})^{-1} K_*^+ \big)\)</span></td>
+<td><span class="math inline">\(-\log\det\big(K_{**}^+ - K_*^{+T} (K^+ + \delta^2 I_{n+1})^{-1} K_*^+ \big)\)</span></td>
 <td><span class="math inline">\(O({\color{red}m^3})\)</span></td>
 </tr>
 </tbody>
 </table>
-<p>So the overall cost is</p>
+<p>So the cost is</p>
 <p><span class="math display">\[
 O((n+1)^3 + (n+1)^2 m + m^2 (n+1) + m^2 + {\color{red}m^3}).
-\]</span></p>
-</section>
-<section id="nontrivial-implementation" class="level4">
-<h4 class="anchored" data-anchor-id="nontrivial-implementation">Nontrivial Implementation</h4>
+\]</span> We will need to compute the above quantity <span class="math inline">\(m\)</span> times for comparison <span class="math inline">\(\arg\max_x\)</span>, thus the full costs is</p>
+<p><span class="math display">\[
+O((n+1)^3m + (n+1)^2 m^2 + m^3 (n+1) + m^3 + {\color{red}m^4}).
+\]</span> #### Nontrivial Implementation</p>
 <p>We use the <a href="https://en.wikipedia.org/wiki/Matrix_determinant_lemma">matrix determinant identity</a>:</p>
 <p><span class="math display">\[
 \det(A + UWV^T) = \det(A) \det(W) \det(W + V^T A^{-1} U)
@@ -310,7 +320,7 @@ O((n+1)^3 + (n+1)^2 m + m^2 (n+1) + m^2 + {\color{red}m^3}).
 </ul>
 <p>Thus, we wish to compute</p>
 <p><span class="math display">\[
-EIG(x) = \det(K_{**}^+) \cdot 1/ \det(K^+ + \sigma^2 I_{n+1}) \cdot \det \big(K^+ + \sigma^2 I_{n+1}- K_*^+ (K_{**}^+)^{-1}K_*^{+T} \big)
+EIG(x) = -\log \left[ \det(K_{**}^+) \cdot 1/ \det(K^+ + \sigma^2 I_{n+1}) \cdot \det \big(K^+ + \sigma^2 I_{n+1}- K_*^+ (K_{**}^+)^{-1}K_*^{+T} \big) \right]
 \]</span></p>
 <p>Since <span class="math inline">\(K_{**}\)</span> is positive semi-definite, its determinant is always non-negative so we can ignore it in comparisons.</p>
 <table class="table">
@@ -364,13 +374,17 @@ EIG(x) = \det(K_{**}^+) \cdot 1/ \det(K^+ + \sigma^2 I_{n+1}) \cdot \det \big(K^
 </tr>
 <tr class="even">
 <td>8</td>
-<td><span class="math inline">\(1/ \det(K^+ + \sigma^2 I_{n+1}) \cdot \det \big(K^+ + \sigma^2 I_{n+1}- K_*^+ (K_{**}^+)^{-1}K_*^{+T} \big)\)</span></td>
+<td><span class="math inline">\(\log \left[ 1/ \det(K^+ + \sigma^2 I_{n+1}) \cdot \det \big(K^+ + \sigma^2 I_{n+1}- K_*^+ (K_{**}^+)^{-1}K_*^{+T} \big) \right]\)</span></td>
 <td><span class="math inline">\(O(1)\)</span></td>
 </tr>
 </tbody>
 </table>
-<p>So the overall cost is <span class="math display">\[
+<p>So the cost is <span class="math display">\[
 O((n+1)^2 + (n+1)^3 + {\color{blue}m^3} + m^2(n+1) + m(n+1)^2).
+\]</span></p>
+<p>We will need to compute the above quantity <span class="math inline">\(m\)</span> times for comparison <span class="math inline">\(\arg\max_x\)</span>, thus the full costs is</p>
+<p><span class="math display">\[
+O((n+1)^2m + (n+1)^3m + {\color{blue}m^3} + m^3(n+1) + m^2(n+1)^2).
 \]</span></p>
 
 
