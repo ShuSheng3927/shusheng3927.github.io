@@ -186,6 +186,7 @@ div.csl-indent {
   <li><a href="#gaussian-process-posteriors" id="toc-gaussian-process-posteriors" class="nav-link" data-scroll-target="#gaussian-process-posteriors">Gaussian Process Posteriors</a></li>
   <li><a href="#information-gain-calculation" id="toc-information-gain-calculation" class="nav-link" data-scroll-target="#information-gain-calculation">Information Gain Calculation</a></li>
   <li><a href="#computational-tricks" id="toc-computational-tricks" class="nav-link" data-scroll-target="#computational-tricks">Computational Tricks</a></li>
+  <li><a href="#eig-over-n-observations" id="toc-eig-over-n-observations" class="nav-link" data-scroll-target="#eig-over-n-observations">EIG over <span class="math inline">\(n\)</span> Observations</a></li>
   </ul>
 </nav>
     </div>
@@ -386,13 +387,38 @@ O((n+1)^2 + (n+1)^3 + {\color{blue}m^3} + m^2(n+1) + m(n+1)^2).
 <p><span class="math display">\[
 O((n+1)^2m + (n+1)^3m + {\color{blue}m^3} + m^3(n+1) + m^2(n+1)^2).
 \]</span></p>
-
-
-
 </section>
+</section>
+<section id="eig-over-n-observations" class="level3">
+<h3 class="anchored" data-anchor-id="eig-over-n-observations">EIG over <span class="math inline">\(n\)</span> Observations</h3>
+<p>Instead of the one-step EIG update (the difference in entropies between the posteriors with and without an additional observation), below we derive the EIG of the entirety of <span class="math inline">\(n\)</span> observations. This quantity could be used as the objective for non-myopic policies, such as the case of deep adaptive designs <span class="citation" data-cites="foster2021deep">(<a href="#ref-foster2021deep" role="doc-biblioref">Foster et al. 2021</a>)</span>.</p>
+<p>Consider we have the prior (a GP with kernel <span class="math inline">\(k\)</span>) <span class="math inline">\(p(\cdot)\)</span> and we have <span class="math inline">\(n\)</span> observations <span class="math inline">\(\mathcal{D} = \{(x_i, y_i)\}_{i=1}^n =: \{ (\boldsymbol{x}, \boldsymbol{y})\}\)</span> which yields the posterior <span class="math inline">\(p(\cdot | \mathcal{D})\)</span>, the information gain quantity of interest would be</p>
+<p><span class="math display">\[
+IG(\boldsymbol{x}) = H(p(\cdot)) - H(p(\cdot | \mathcal{D})) = MI(p(\cdot); \boldsymbol{y})
+\]</span> where the last equality follows from the definition of <a href="https://en.wikipedia.org/wiki/Mutual_information">mutual information</a>.</p>
+<p>Again, if we consider those GPs on a fixed, finite set of test points <span class="math inline">\(x_*\)</span> like before, we would be able to show the following:</p>
+<p><span class="math display">\[
+\begin{split}
+IG(\boldsymbol{x}) &amp;= H(p(\cdot)) - H(p(\cdot | \mathcal{D})) \\
+&amp;= \frac{1}{2} \log \det K_{**} - \frac{1}{2} \log \det \left[ K_{**} - K_*^T (K + \sigma^2 I_n)^{-1} K_*\right] \\
+&amp;= - \frac{1}{2} \log \det \left[K_{**}^{-1}( K_{**} - K_*^T (K + \sigma^2 I_n)^{-1} K_*)\right] \\
+&amp;= - \frac{1}{2} \log \det \left[I_m - K_{**}^{-1} K_*^T (K + \sigma^2 I_n)^{-1} K_*)\right] \\
+\end{split}
+\]</span> where, as before, we use the shorthand notations</p>
+<ul>
+<li><span class="math inline">\(K = k(X,X)\)</span>, size <span class="math inline">\(n \times n\)</span>.</li>
+<li><span class="math inline">\(K_* = k(X, x_*)\)</span>, size <span class="math inline">\(n \times m\)</span>.</li>
+<li><span class="math inline">\(K_{**} = k(x_*, x_*)\)</span>, size <span class="math inline">\(m \times m\)</span>.</li>
+</ul>
+
+
+
 </section>
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-foster2021deep" class="csl-entry" role="listitem">
+Foster, Adam, Desi R Ivanova, Ilyas Malik, and Tom Rainforth. 2021. <span>“Deep Adaptive Design: Amortizing Sequential Bayesian Experimental Design.”</span> In <em>International Conference on Machine Learning</em>, 3384–95. PMLR.
+</div>
 <div id="ref-rainforth2024modern" class="csl-entry" role="listitem">
 Rainforth, Tom, Adam Foster, Desi R Ivanova, and Freddie Bickford Smith. 2024. <span>“Modern Bayesian Experimental Design.”</span> <em>Statistical Science</em> 39 (1): 100–114.
 </div>

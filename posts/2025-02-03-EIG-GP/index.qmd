@@ -150,3 +150,31 @@ We will need to compute the above quantity $m$ times for comparison $\arg\max_x$
 $$
 O((n+1)^2m + (n+1)^3m + {\color{blue}m^3} + m^3(n+1) + m^2(n+1)^2).
 $$
+
+
+### EIG over $n$ Observations
+
+Instead of the one-step EIG update (the difference in entropies between the posteriors with and without an additional observation), below we derive the EIG of the entirety of $n$ observations. This quantity could be used as the objective for non-myopic policies, such as the case of deep adaptive designs [@foster2021deep]. 
+
+Consider we have the prior (a GP with kernel $k$) $p(\cdot)$ and we have $n$ observations $\mathcal{D} = \{(x_i, y_i)\}_{i=1}^n =: \{ (\boldsymbol{x}, \boldsymbol{y})\}$ which yields the posterior $p(\cdot | \mathcal{D})$, the information gain quantity of interest would be 
+
+$$
+IG(\boldsymbol{x}) = H(p(\cdot)) - H(p(\cdot | \mathcal{D})) = MI(p(\cdot); \boldsymbol{y})
+$$
+where the last equality follows from the definition of [mutual information](https://en.wikipedia.org/wiki/Mutual_information). 
+
+Again, if we consider those GPs on a fixed, finite set of test points $x_*$ like before, we would be able to show the following: 
+
+$$
+\begin{split}
+IG(\boldsymbol{x}) &= H(p(\cdot)) - H(p(\cdot | \mathcal{D})) \\
+&= \frac{1}{2} \log \det K_{**} - \frac{1}{2} \log \det \left[ K_{**} - K_*^T (K + \sigma^2 I_n)^{-1} K_*\right] \\
+&= - \frac{1}{2} \log \det \left[K_{**}^{-1}( K_{**} - K_*^T (K + \sigma^2 I_n)^{-1} K_*)\right] \\
+&= - \frac{1}{2} \log \det \left[I_m - K_{**}^{-1} K_*^T (K + \sigma^2 I_n)^{-1} K_*)\right] \\
+\end{split}
+$$
+where, as before, we use the shorthand notations
+
+- $K = k(X,X)$, size $n \times n$.
+- $K_* = k(X, x_*)$, size $n \times m$. 
+- $K_{**} = k(x_*, x_*)$, size $m \times m$. 
