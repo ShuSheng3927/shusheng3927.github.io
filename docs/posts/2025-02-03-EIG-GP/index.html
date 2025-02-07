@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Rui-Yang Zhang">
-<meta name="dcterms.date" content="2025-02-03">
+<meta name="dcterms.date" content="2025-02-07">
 <meta name="description" content="Computations and derivations of the expected information gain utility function of active learning when the surrogate model is a conjugate Gaussian process.">
 
 <title>Rui-Yang Zhang - Expected Information Gain with Gaussian Process Surrogate Models</title>
@@ -166,7 +166,7 @@ div.csl-indent {
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">February 3, 2025</p>
+        <p class="date">February 7, 2025</p>
       </div>
     </div>
     
@@ -182,12 +182,9 @@ div.csl-indent {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#expected-information-gain" id="toc-expected-information-gain" class="nav-link active" data-scroll-target="#expected-information-gain">Expected Information Gain</a></li>
-  <li><a href="#gaussian-process-posteriors" id="toc-gaussian-process-posteriors" class="nav-link" data-scroll-target="#gaussian-process-posteriors">Gaussian Process Posteriors</a></li>
-  <li><a href="#information-gain-calculation" id="toc-information-gain-calculation" class="nav-link" data-scroll-target="#information-gain-calculation">Information Gain Calculation</a></li>
-  <li><a href="#computational-tricks" id="toc-computational-tricks" class="nav-link" data-scroll-target="#computational-tricks">Computational Tricks</a></li>
-  <li><a href="#eig-over-n-observations" id="toc-eig-over-n-observations" class="nav-link" data-scroll-target="#eig-over-n-observations">EIG over <span class="math inline">\(n\)</span> Observations</a></li>
-  <li><a href="#cheap-formulation-of-eig-using-symmetric-property-of-mutual-information" id="toc-cheap-formulation-of-eig-using-symmetric-property-of-mutual-information" class="nav-link" data-scroll-target="#cheap-formulation-of-eig-using-symmetric-property-of-mutual-information">Cheap Formulation of EIG using Symmetric Property of Mutual Information</a></li>
+  <li><a href="#introducing-expected-information-gain" id="toc-introducing-expected-information-gain" class="nav-link active" data-scroll-target="#introducing-expected-information-gain">Introducing Expected Information Gain</a></li>
+  <li><a href="#eig-reformualtion---a-first-attempt" id="toc-eig-reformualtion---a-first-attempt" class="nav-link" data-scroll-target="#eig-reformualtion---a-first-attempt">EIG Reformualtion - a first attempt</a></li>
+  <li><a href="#eig-reformualtion---a-second-attempt" id="toc-eig-reformualtion---a-second-attempt" class="nav-link" data-scroll-target="#eig-reformualtion---a-second-attempt">EIG Reformualtion - a second attempt</a></li>
   </ul>
 </nav>
     </div>
@@ -197,17 +194,14 @@ div.csl-indent {
 
 
 
-<section id="expected-information-gain" class="level3">
-<h3 class="anchored" data-anchor-id="expected-information-gain">Expected Information Gain</h3>
-<p>In Bayesian experiment design <span class="citation" data-cites="rainforth2024modern">(<a href="#ref-rainforth2024modern" role="doc-biblioref">Rainforth et al. 2024</a>)</span>, a commonly used utility function is the information gain, where we are comparing the entropy of the distributions before and after observing an addition point. Assuming that our existing dataset is denoted by <span class="math inline">\(\mathcal{D}\)</span> and the posterior distribution is <span class="math inline">\(p(\cdot | \mathcal{D})\)</span>. If we make an observation at <span class="math inline">\(x\)</span> and observe <span class="math inline">\(y\)</span>, our new dataset will become <span class="math inline">\(\mathcal{D}^+ := \mathcal{D} \cup \{(x, y)\}\)</span>. This will then correspond to a new posterior <span class="math inline">\(p(\cdot | \mathcal{D}^+)\)</span>.</p>
+<section id="introducing-expected-information-gain" class="level3">
+<h3 class="anchored" data-anchor-id="introducing-expected-information-gain">Introducing Expected Information Gain</h3>
+<p>In Bayesian experiment design <span class="citation" data-cites="rainforth2024modern">(<a href="#ref-rainforth2024modern" role="doc-biblioref">Rainforth et al. 2024</a>)</span>, a commonly used utility function is the information gain, where we are comparing the entropy of the distributions before and after observing an addition point. Assuming that our existing data set is denoted by <span class="math inline">\(\mathcal{D}\)</span> and the posterior distribution is <span class="math inline">\(p(\cdot | \mathcal{D})\)</span>. If we make an observation at <span class="math inline">\(x\)</span> and observe <span class="math inline">\(y\)</span>, our new data set will become <span class="math inline">\(\mathcal{D}^+ := \mathcal{D} \cup \{(x, y)\}\)</span>. This will then correspond to a new posterior <span class="math inline">\(p(\cdot | \mathcal{D}^+)\)</span>.</p>
 <p>Given those, the <strong>information gain</strong> (IG) is given by:</p>
 <p><span class="math display">\[
 IG(x) = H(p(\cdot | \mathcal{D})) - H(p(\cdot | \mathcal{D}^+)).
 \]</span></p>
-</section>
-<section id="gaussian-process-posteriors" class="level3">
-<h3 class="anchored" data-anchor-id="gaussian-process-posteriors">Gaussian Process Posteriors</h3>
-<p>Consider our distribution is a Gaussian process (GP) with mean zero and kernel <span class="math inline">\(k\)</span>, and the posterior is the posterior predictive distribution of this GP on some finite set of test points <span class="math inline">\(x_*\)</span> with size <span class="math inline">\(m\)</span>. We also assume the current dataset <span class="math inline">\(\mathcal{D} := \{(x_i, y_i)\}_{i=1}^{n}\)</span> is of size <span class="math inline">\(n\)</span> and the observations with additive, centered, independent Gaussian noise of variance <span class="math inline">\(\sigma^2\)</span>.</p>
+<p>Consider our distribution is a Gaussian process (GP) with mean zero and kernel <span class="math inline">\(k\)</span>, and the posterior is the posterior predictive distribution of this GP on some finite set of test points <span class="math inline">\(x_*\)</span> with size <span class="math inline">\(m\)</span>. We also assume the current data set <span class="math inline">\(\mathcal{D} := \{(x_i, y_i)\}_{i=1}^{n}\)</span> is of size <span class="math inline">\(n\)</span> and the observations with additive, centered, independent Gaussian noise of variance <span class="math inline">\(\sigma^2\)</span>.</p>
 <p>We will also use the following notations to denote the various Gram matrices using kernel <span class="math inline">\(k\)</span></p>
 <ul>
 <li><span class="math inline">\(K = k(X,X)\)</span>, size <span class="math inline">\(n \times n\)</span>.</li>
@@ -232,10 +226,7 @@ p(y^* | x^*, \mathcal{D}, \sigma^2) &amp;\sim \mathcal{N}(\mu_{y^*|\mathcal{D}},
 <p><span class="math display">\[
 \Sigma_{y^*|\mathcal{D}^+} = K_{**}^+ - K_*^{+T} (K^+ + \sigma^2 I_{n+1})^{-1} K_*^+
 \]</span></p>
-</section>
-<section id="information-gain-calculation" class="level3">
-<h3 class="anchored" data-anchor-id="information-gain-calculation">Information Gain Calculation</h3>
-<p>The information gain can be written as</p>
+<p>Thus, the information gain can be written as</p>
 <p><span class="math display">\[
 IG(x) = H(p(\cdot | \mathcal{D})) - H(p(\cdot | \mathcal{D}^+))
 \]</span> where using the <a href="https://statproofbook.github.io/P/mvn-dent">definition of the entropy of multivariate Gaussian</a> yields</p>
@@ -251,9 +242,10 @@ EIG(x) = \mathbb{E}_{y}[IG(x)] = IG(x)
 <p><span class="math display">\[
 EIG(x) = - \log \det \Big( K_{**}^+ - K_*^{+T} (K^+ + \sigma^2 I_{n+1})^{-1} K_*^+\Big).
 \]</span></p>
+<p>In the current setup, the information gain is tractable due to nice properties of multivariate Gaussians and GP regression conjugacies. Albeit tractable, the immediate formulation of the expected information gain has undesirable computational costs which we will elaborate below. After a preliminary attempt to reformulate EIG in order to reduce the computation cost, we will present a different perspective of EIG using mutual information, which enables an EIG formulation with low computational costs.</p>
 </section>
-<section id="computational-tricks" class="level3">
-<h3 class="anchored" data-anchor-id="computational-tricks">Computational Tricks</h3>
+<section id="eig-reformualtion---a-first-attempt" class="level3">
+<h3 class="anchored" data-anchor-id="eig-reformualtion---a-first-attempt">EIG Reformualtion - a first attempt</h3>
 <p>We will consider the naive computation of the above <span class="math inline">\(EIG(x)\)</span> expression. One should note that in the active learning settings, we would often be in the scenarios where <span class="math inline">\(m &gt;&gt; n\)</span>. An improved approach of computing the same quantity is presented below, leveraging the matrix determinant lemma.</p>
 <section id="naive-implementation" class="level4">
 <h4 class="anchored" data-anchor-id="naive-implementation">Naive Implementation</h4>
@@ -393,8 +385,10 @@ O((n+1)^2m + (n+1)^3m + {\color{blue}m^3} + m^3(n+1) + m^2(n+1)^2).
 \]</span></p>
 </section>
 </section>
-<section id="eig-over-n-observations" class="level3">
-<h3 class="anchored" data-anchor-id="eig-over-n-observations">EIG over <span class="math inline">\(n\)</span> Observations</h3>
+<section id="eig-reformualtion---a-second-attempt" class="level3">
+<h3 class="anchored" data-anchor-id="eig-reformualtion---a-second-attempt">EIG Reformualtion - a second attempt</h3>
+<section id="eig-over-n-observations" class="level4">
+<h4 class="anchored" data-anchor-id="eig-over-n-observations">EIG over <span class="math inline">\(n\)</span> Observations</h4>
 <p>Instead of the one-step EIG update (the difference in entropies between the posteriors with and without an additional observation), below we derive the EIG of the entirety of <span class="math inline">\(n\)</span> observations. This quantity could be used as the objective for non-myopic policies, such as the case of deep adaptive designs <span class="citation" data-cites="foster2021deep">(<a href="#ref-foster2021deep" role="doc-biblioref">Foster et al. 2021</a>)</span>.</p>
 <p>Consider we have the prior (a GP with kernel <span class="math inline">\(k\)</span>) <span class="math inline">\(p(\cdot)\)</span> and we have <span class="math inline">\(n\)</span> observations <span class="math inline">\(\mathcal{D} = \{(x_i, y_i)\}_{i=1}^n =: \{ (\boldsymbol{x}, \boldsymbol{y})\}\)</span> which yields the posterior <span class="math inline">\(p(\cdot | \mathcal{D})\)</span>, the information gain quantity of interest would be</p>
 <p><span class="math display">\[
@@ -415,8 +409,8 @@ IG(\boldsymbol{x}) &amp;= H(p(\cdot)) - H(p(\cdot | \mathcal{D})) \\
 <li><span class="math inline">\(K_{**} = k(x_*, x_*)\)</span>, size <span class="math inline">\(m \times m\)</span>.</li>
 </ul>
 </section>
-<section id="cheap-formulation-of-eig-using-symmetric-property-of-mutual-information" class="level3">
-<h3 class="anchored" data-anchor-id="cheap-formulation-of-eig-using-symmetric-property-of-mutual-information">Cheap Formulation of EIG using Symmetric Property of Mutual Information</h3>
+<section id="low-cost-eig-formulation" class="level4">
+<h4 class="anchored" data-anchor-id="low-cost-eig-formulation">Low Cost EIG Formulation</h4>
 <p>The above computation is at least cubic in <span class="math inline">\(m\)</span> due to the determinant operation. In fact, using the symmetric property of the mutual information, we could obtain a much better expression.</p>
 <p>Note that <span class="math display">\[MI(X; Y) = H(X) - H(X|Y) = H(Y) - H(Y|X).\]</span> We first denote the prior as <span class="math inline">\(f\)</span>, the observations <span class="math inline">\(\boldsymbol{y_A}\)</span> at locations <span class="math inline">\(\boldsymbol{x_A}\)</span> with observational noise <span class="math inline">\(\boldsymbol{\varepsilon}\)</span> so <span class="math inline">\(\boldsymbol{y_A} = f(\boldsymbol{x_A}) + \boldsymbol{\varepsilon}\)</span>.</p>
 <p>The information gain from prior to posterior after observing <span class="math inline">\(\boldsymbol{y_A}\)</span> can be written as the mutual information</p>
@@ -442,10 +436,19 @@ IG(x) &amp;= H(f | \boldsymbol{y_A}) - H(f | \boldsymbol{y_B}) \\
 &amp;= - \log \det (I + \sigma^{-2} K(\boldsymbol{x_A}, \boldsymbol{x_A})) + \log \det (I + \sigma^{-2} K(\boldsymbol{x_B}, \boldsymbol{x_B})).
 \end{split}
 \]</span></p>
+<p>Notice that the first term is the same when comparing across different <span class="math inline">\(x\)</span>, thus can be omitted. This formulation’s cost is therefore</p>
+<p><span class="math display">\[
+O((n+1)^2 + (n+1)^3)
+\]</span></p>
+<p>for one-time computation and the overall cost for comparison <span class="math inline">\(\arg\max_x\)</span> is</p>
+<p><span class="math display">\[
+O(m(n+1)^2 + m(n+1)^3).
+\]</span></p>
 <p>One should note that similar rewriting of entropy-related objectives using the symmetry of mutual information also exist in the Bayesian optimization literature with the entropy search and the predictive entropy search (e.g. <span class="citation" data-cites="hernandez2014predictive">Hernández-Lobato, Hoffman, and Ghahramani (<a href="#ref-hernandez2014predictive" role="doc-biblioref">2014</a>)</span>).</p>
 
 
 
+</section>
 </section>
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">
