@@ -106,6 +106,7 @@ We will need to compute the above quantity $m$ times for comparison $\arg\max_x$
 $$
 O((n+1)^3m + (n+1)^2 m^2 + m^3 (n+1) + m^3 + {\color{red}m^4}).
 $$
+
 #### Nontrivial Implementation
 
 We use the [matrix determinant identity](https://en.wikipedia.org/wiki/Matrix_determinant_lemma):
@@ -178,3 +179,41 @@ where, as before, we use the shorthand notations
 - $K = k(X,X)$, size $n \times n$.
 - $K_* = k(X, x_*)$, size $n \times m$. 
 - $K_{**} = k(x_*, x_*)$, size $m \times m$. 
+
+### Cheap Formulation of EIG using Symmetric Property of Mutual Information
+
+The above computation is at least cubic in $m$ due to the determinant operation. In fact, using the symmetric property of the mutual information, we could obtain a much better expression. 
+
+Note that $$MI(X; Y) = H(X) - H(X|Y) = H(Y) - H(Y|X).$$ We first denote the prior as $f$, the observations $\boldsymbol{y_A}$ at locations $\boldsymbol{x_A}$ with observational noise $\boldsymbol{\varepsilon}$ so $\boldsymbol{y_A} = f(\boldsymbol{x_A}) + \boldsymbol{\varepsilon}$. 
+
+The information gain from prior to posterior after observing $\boldsymbol{y_A}$ can be written as the mutual information 
+
+$$
+IG(\boldsymbol{x_A}) = H(f) - H(f |\boldsymbol{y_A}) = MI(f; \boldsymbol{y_A}) = H(\boldsymbol{y_A}) - H(\boldsymbol{y_A} | f).
+$$
+
+Notice that since $y_A = f(\boldsymbol{x_A}) + \boldsymbol{\varepsilon}$, it is a multivariate with covariance $K(\boldsymbol{x_A}, \boldsymbol{x_A}) + \sigma^2 I$. In addition, $\boldsymbol{y_A} | f$ has covariance being just $\sigma^2 I$. Therefore, we have 
+
+$$
+\begin{split}
+IG(\boldsymbol{x_A}) &= H(\boldsymbol{y_A}) - H(\boldsymbol{y_A} | f) \\
+&= \log \det (K(\boldsymbol{x_A}, \boldsymbol{x_A}) + \sigma^2 I) - \log \det (\sigma^2 I) \\
+&= \log \det (I + \sigma^{-2} K(\boldsymbol{x_A}, \boldsymbol{x_A}))
+\end{split}
+$$
+
+which is the expression used in Section 2.2 of @srinivas2010gaussian, and is computationally cheap. 
+
+Using the same concept, we can rewrite the EIG of posteriors between $\mathcal{D} = \{ (\boldsymbol{x_A}, \boldsymbol{y_A}) \}$ and $\mathcal{D}^+ = \{ (\boldsymbol{x_B}, \boldsymbol{y_B}) \}$ (i.e. subject to one more observation). We have the information gain
+
+$$
+\begin{split}
+IG(x) &= H(f | \boldsymbol{y_A}) - H(f | \boldsymbol{y_B}) \\
+&= - H(f) + H(f | \boldsymbol{y_A}) + H(f) - H(f | \boldsymbol{y_B}) \\
+&= - [H(f) - H(f | \boldsymbol{y_A})] + [H(f) - H(f | \boldsymbol{y_B})] \\
+&= - [IG(\boldsymbol{x_A}) ] + [IG(\boldsymbol{x_B})] \\
+&= - \log \det (I + \sigma^{-2} K(\boldsymbol{x_A}, \boldsymbol{x_A})) + \log \det (I + \sigma^{-2} K(\boldsymbol{x_B}, \boldsymbol{x_B})).
+\end{split}
+$$
+
+One should note that similar rewriting of entropy-related objectives using the symmetry of mutual information also exist in the Bayesian optimization literature with the entropy search and the predictive entropy search (e.g. @hernandez2014predictive).

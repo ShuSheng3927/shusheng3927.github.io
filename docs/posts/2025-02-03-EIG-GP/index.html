@@ -187,6 +187,7 @@ div.csl-indent {
   <li><a href="#information-gain-calculation" id="toc-information-gain-calculation" class="nav-link" data-scroll-target="#information-gain-calculation">Information Gain Calculation</a></li>
   <li><a href="#computational-tricks" id="toc-computational-tricks" class="nav-link" data-scroll-target="#computational-tricks">Computational Tricks</a></li>
   <li><a href="#eig-over-n-observations" id="toc-eig-over-n-observations" class="nav-link" data-scroll-target="#eig-over-n-observations">EIG over <span class="math inline">\(n\)</span> Observations</a></li>
+  <li><a href="#cheap-formulation-of-eig-using-symmetric-property-of-mutual-information" id="toc-cheap-formulation-of-eig-using-symmetric-property-of-mutual-information" class="nav-link" data-scroll-target="#cheap-formulation-of-eig-using-symmetric-property-of-mutual-information">Cheap Formulation of EIG using Symmetric Property of Mutual Information</a></li>
   </ul>
 </nav>
     </div>
@@ -307,7 +308,10 @@ O((n+1)^3 + (n+1)^2 m + m^2 (n+1) + m^2 + {\color{red}m^3}).
 \]</span> We will need to compute the above quantity <span class="math inline">\(m\)</span> times for comparison <span class="math inline">\(\arg\max_x\)</span>, thus the full costs is</p>
 <p><span class="math display">\[
 O((n+1)^3m + (n+1)^2 m^2 + m^3 (n+1) + m^3 + {\color{red}m^4}).
-\]</span> #### Nontrivial Implementation</p>
+\]</span></p>
+</section>
+<section id="nontrivial-implementation" class="level4">
+<h4 class="anchored" data-anchor-id="nontrivial-implementation">Nontrivial Implementation</h4>
 <p>We use the <a href="https://en.wikipedia.org/wiki/Matrix_determinant_lemma">matrix determinant identity</a>:</p>
 <p><span class="math display">\[
 \det(A + UWV^T) = \det(A) \det(W) \det(W + V^T A^{-1} U)
@@ -410,6 +414,35 @@ IG(\boldsymbol{x}) &amp;= H(p(\cdot)) - H(p(\cdot | \mathcal{D})) \\
 <li><span class="math inline">\(K_* = k(X, x_*)\)</span>, size <span class="math inline">\(n \times m\)</span>.</li>
 <li><span class="math inline">\(K_{**} = k(x_*, x_*)\)</span>, size <span class="math inline">\(m \times m\)</span>.</li>
 </ul>
+</section>
+<section id="cheap-formulation-of-eig-using-symmetric-property-of-mutual-information" class="level3">
+<h3 class="anchored" data-anchor-id="cheap-formulation-of-eig-using-symmetric-property-of-mutual-information">Cheap Formulation of EIG using Symmetric Property of Mutual Information</h3>
+<p>The above computation is at least cubic in <span class="math inline">\(m\)</span> due to the determinant operation. In fact, using the symmetric property of the mutual information, we could obtain a much better expression.</p>
+<p>Note that <span class="math display">\[MI(X; Y) = H(X) - H(X|Y) = H(Y) - H(Y|X).\]</span> We first denote the prior as <span class="math inline">\(f\)</span>, the observations <span class="math inline">\(\boldsymbol{y_A}\)</span> at locations <span class="math inline">\(\boldsymbol{x_A}\)</span> with observational noise <span class="math inline">\(\boldsymbol{\varepsilon}\)</span> so <span class="math inline">\(\boldsymbol{y_A} = f(\boldsymbol{x_A}) + \boldsymbol{\varepsilon}\)</span>.</p>
+<p>The information gain from prior to posterior after observing <span class="math inline">\(\boldsymbol{y_A}\)</span> can be written as the mutual information</p>
+<p><span class="math display">\[
+IG(\boldsymbol{x_A}) = H(f) - H(f |\boldsymbol{y_A}) = MI(f; \boldsymbol{y_A}) = H(\boldsymbol{y_A}) - H(\boldsymbol{y_A} | f).
+\]</span></p>
+<p>Notice that since <span class="math inline">\(y_A = f(\boldsymbol{x_A}) + \boldsymbol{\varepsilon}\)</span>, it is a multivariate with covariance <span class="math inline">\(K(\boldsymbol{x_A}, \boldsymbol{x_A}) + \sigma^2 I\)</span>. In addition, <span class="math inline">\(\boldsymbol{y_A} | f\)</span> has covariance being just <span class="math inline">\(\sigma^2 I\)</span>. Therefore, we have</p>
+<p><span class="math display">\[
+\begin{split}
+IG(\boldsymbol{x_A}) &amp;= H(\boldsymbol{y_A}) - H(\boldsymbol{y_A} | f) \\
+&amp;= \log \det (K(\boldsymbol{x_A}, \boldsymbol{x_A}) + \sigma^2 I) - \log \det (\sigma^2 I) \\
+&amp;= \log \det (I + \sigma^{-2} K(\boldsymbol{x_A}, \boldsymbol{x_A}))
+\end{split}
+\]</span></p>
+<p>which is the expression used in Section 2.2 of <span class="citation" data-cites="srinivas2010gaussian">Srinivas et al. (<a href="#ref-srinivas2010gaussian" role="doc-biblioref">2010</a>)</span>, and is computationally cheap.</p>
+<p>Using the same concept, we can rewrite the EIG of posteriors between <span class="math inline">\(\mathcal{D} = \{ (\boldsymbol{x_A}, \boldsymbol{y_A}) \}\)</span> and <span class="math inline">\(\mathcal{D}^+ = \{ (\boldsymbol{x_B}, \boldsymbol{y_B}) \}\)</span> (i.e.&nbsp;subject to one more observation). We have the information gain</p>
+<p><span class="math display">\[
+\begin{split}
+IG(x) &amp;= H(f | \boldsymbol{y_A}) - H(f | \boldsymbol{y_B}) \\
+&amp;= - H(f) + H(f | \boldsymbol{y_A}) + H(f) - H(f | \boldsymbol{y_B}) \\
+&amp;= - [H(f) - H(f | \boldsymbol{y_A})] + [H(f) - H(f | \boldsymbol{y_B})] \\
+&amp;= - [IG(\boldsymbol{x_A}) ] + [IG(\boldsymbol{x_B})] \\
+&amp;= - \log \det (I + \sigma^{-2} K(\boldsymbol{x_A}, \boldsymbol{x_A})) + \log \det (I + \sigma^{-2} K(\boldsymbol{x_B}, \boldsymbol{x_B})).
+\end{split}
+\]</span></p>
+<p>One should note that similar rewriting of entropy-related objectives using the symmetry of mutual information also exist in the Bayesian optimization literature with the entropy search and the predictive entropy search (e.g. <span class="citation" data-cites="hernandez2014predictive">Hernández-Lobato, Hoffman, and Ghahramani (<a href="#ref-hernandez2014predictive" role="doc-biblioref">2014</a>)</span>).</p>
 
 
 
@@ -419,8 +452,14 @@ IG(\boldsymbol{x}) &amp;= H(p(\cdot)) - H(p(\cdot | \mathcal{D})) \\
 <div id="ref-foster2021deep" class="csl-entry" role="listitem">
 Foster, Adam, Desi R Ivanova, Ilyas Malik, and Tom Rainforth. 2021. <span>“Deep Adaptive Design: Amortizing Sequential Bayesian Experimental Design.”</span> In <em>International Conference on Machine Learning</em>, 3384–95. PMLR.
 </div>
+<div id="ref-hernandez2014predictive" class="csl-entry" role="listitem">
+Hernández-Lobato, José Miguel, Matthew W Hoffman, and Zoubin Ghahramani. 2014. <span>“Predictive Entropy Search for Efficient Global Optimization of Black-Box Functions.”</span> <em>Advances in Neural Information Processing Systems</em> 27.
+</div>
 <div id="ref-rainforth2024modern" class="csl-entry" role="listitem">
 Rainforth, Tom, Adam Foster, Desi R Ivanova, and Freddie Bickford Smith. 2024. <span>“Modern Bayesian Experimental Design.”</span> <em>Statistical Science</em> 39 (1): 100–114.
+</div>
+<div id="ref-srinivas2010gaussian" class="csl-entry" role="listitem">
+Srinivas, Niranjan, Andreas Krause, Sham Kakade, and Matthias Seeger. 2010. <span>“Gaussian Process Optimization in the Bandit Setting: No Regret and Experimental Design.”</span> In <em>Proceedings of the 27th International Conference on Machine Learning</em>, 1015–22. Omnipress.
 </div>
 </div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
