@@ -234,7 +234,7 @@ Y_t
 H\mu_t
 \end{bmatrix}, \begin{bmatrix}
 \Sigma_t &amp; \Sigma_t H^T \\
-H\Sigma_t &amp; H \Sigma_t H^T + R
+H\Sigma_t^T &amp; H \Sigma_t H^T + R
 \end{bmatrix} \right)
 \]</span> using the conditional distribution <span class="math inline">\(X_t | y_{t-1}\)</span> above.</p>
 <p>Afterwards, we use the formula of conditional distribution of multivariate Gaussian (see <a href="https://shusheng3927.github.io/posts/2024-10-13-basic-GP-regression-formula/#marginal-and-conditional-gaussians">here</a> for a derivation) to write down the <strong>filtering</strong> distribution: <span class="math display">\[

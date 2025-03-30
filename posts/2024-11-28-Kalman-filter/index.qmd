@@ -62,7 +62,7 @@ Y_t
 H\mu_t 
 \end{bmatrix}, \begin{bmatrix}
 \Sigma_t & \Sigma_t H^T \\
-H\Sigma_t & H \Sigma_t H^T + R 
+H\Sigma_t^T & H \Sigma_t H^T + R 
 \end{bmatrix} \right)
 $$
 using the conditional distribution $X_t | y_{t-1}$ above. 

@@ -2,7 +2,8 @@
   {
     "listing": "/blog.html",
     "items": [
-      "/posts/2025-02-03-EIG-GP/index.html",
+      "/posts/2025-03-30-temporal-GP-3/index.html",
+      "/posts/2025-02-07-EIG-GP/index.html",
       "/posts/2025-02-03-gaussian-cov/index.html",
       "/posts/2024-12-03-3DVar-4DVar/index.html",
       "/posts/2024-11-28-Kalman-filter/index.html",
