@@ -9,7 +9,9 @@ categories:
 
 In this blog post, I will describe how one could formulate an one-dimensional temporal Matérn Gaussian process as a stochastic differential equation. This dynamic formulation of a Gaussian process allows one to do regression with linear computational cost. 
 
-The detailed mathematical derivations are omitted in the blog post, but can be found [here](notes.pdf). A large portion of the post is based on @solin2016stochastic and @sarkka2013spatiotemporal. 
+The detailed mathematical derivations are omitted in the blog post, but can be found [here](notes.pdf). The Python implementation codes can be found [here](code.py). A large portion of the post is based on @solin2016stochastic and @sarkka2013spatiotemporal. 
+
+![Gaussan Process Regression via the SDE Approach](GPR_true_prior.png)
 
 ### Basic Gaussian Process Regression
 

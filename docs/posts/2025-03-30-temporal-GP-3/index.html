@@ -196,7 +196,13 @@ div.csl-indent {
 
 
 <p>In this blog post, I will describe how one could formulate an one-dimensional temporal Matérn Gaussian process as a stochastic differential equation. This dynamic formulation of a Gaussian process allows one to do regression with linear computational cost.</p>
-<p>The detailed mathematical derivations are omitted in the blog post, but can be found <a href="notes.pdf">here</a>. A large portion of the post is based on <span class="citation" data-cites="solin2016stochastic">Solin (<a href="#ref-solin2016stochastic" role="doc-biblioref">2016</a>)</span> and <span class="citation" data-cites="sarkka2013spatiotemporal">Sarkka, Solin, and Hartikainen (<a href="#ref-sarkka2013spatiotemporal" role="doc-biblioref">2013</a>)</span>.</p>
+<p>The detailed mathematical derivations are omitted in the blog post, but can be found <a href="notes.pdf">here</a>. The Python implementation codes can be found <a href="code.py">here</a>. A large portion of the post is based on <span class="citation" data-cites="solin2016stochastic">Solin (<a href="#ref-solin2016stochastic" role="doc-biblioref">2016</a>)</span> and <span class="citation" data-cites="sarkka2013spatiotemporal">Sarkka, Solin, and Hartikainen (<a href="#ref-sarkka2013spatiotemporal" role="doc-biblioref">2013</a>)</span>.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="GPR_true_prior.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Gaussan Process Regression via the SDE Approach</figcaption>
+</figure>
+</div>
 <section id="basic-gaussian-process-regression" class="level3">
 <h3 class="anchored" data-anchor-id="basic-gaussian-process-regression">Basic Gaussian Process Regression</h3>
 <p>Consider an one-dimensional, scalar output Gaussian process (GP) <span class="math inline">\(f \sim \mathcal{GP}(0, k)\)</span> with zero mean and kernel <span class="math inline">\(k\)</span>. This GP <span class="math inline">\(f\)</span> is defined on input space <span class="math inline">\(\mathbb{R}\)</span> and its output space is <span class="math inline">\(\mathbb{R}\)</span>. To help with the subsequent exposition, it is beneficial to view the input space as a timeline, and the GP models an univariate time series.</p>
