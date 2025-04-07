@@ -7,6 +7,7 @@ categories:
   - Active Learning
   - Gaussian Process
 ---
+![Dennis Lindley; @lindley1956measure](Dennis_Lindley.jpg)
 
 ### Introducing Expected Information Gain 
 
