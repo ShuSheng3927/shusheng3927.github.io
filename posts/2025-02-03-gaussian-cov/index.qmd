@@ -44,7 +44,7 @@ First, we calculate the entropy of a multivariate Gaussian $N_D(\mu, \Sigma)$. W
 $$
 \begin{split}
 H(X) &= - \mathbb{E}_{x \sim X} \left[ \log p(x) \right] \\
-&= - \mathbb{E}_{x \sim X} \left[ \frac{D}{2} \log \pi + \frac{1}{2} \log \det (\Sigma) - \frac{1}{2} (x - \mu)^T \Sigma^{-1} (x - \mu) \right] \\
+&= - \mathbb{E}_{x \sim X} \left[- \frac{D}{2} \log \pi - \frac{1}{2} \log \det (\Sigma) - \frac{1}{2} (x - \mu)^T \Sigma^{-1} (x - \mu) \right] \\
 &= \frac{D}{2} \log \pi + \frac{1}{2} \log \det (\Sigma) + \frac{1}{2} \mathbb{E}_{x \sim X} \left[ (x - \mu)^T \Sigma^{-1} (x - \mu) \right]
 \end{split}
 $$

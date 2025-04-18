@@ -224,7 +224,7 @@ H(X) := \frac{1}{2}  + \frac{1}{2} \log [2\pi \text{Var}(X)]
 <p><span class="math display">\[
 \begin{split}
 H(X) &amp;= - \mathbb{E}_{x \sim X} \left[ \log p(x) \right] \\
-&amp;= - \mathbb{E}_{x \sim X} \left[ \frac{D}{2} \log \pi + \frac{1}{2} \log \det (\Sigma) - \frac{1}{2} (x - \mu)^T \Sigma^{-1} (x - \mu) \right] \\
+&amp;= - \mathbb{E}_{x \sim X} \left[- \frac{D}{2} \log \pi - \frac{1}{2} \log \det (\Sigma) - \frac{1}{2} (x - \mu)^T \Sigma^{-1} (x - \mu) \right] \\
 &amp;= \frac{D}{2} \log \pi + \frac{1}{2} \log \det (\Sigma) + \frac{1}{2} \mathbb{E}_{x \sim X} \left[ (x - \mu)^T \Sigma^{-1} (x - \mu) \right]
 \end{split}
 \]</span> where</p>
