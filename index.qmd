@@ -22,6 +22,4 @@ Previously, I did BSc Mathematics and Statistical Science at [UCL](https://www.u
 
 I am broadly interested in computational statistics and machine learning methodologies, and their applications in science and engineering. See [here](./research.html) for more information. 
 
-I am currently co-organising the [Lancaster AI Reading Group](https://lai-reading-group.github.io) with [Andreas Makris](https://zedt123.github.io/). 
-
 ![Adapted from [Adrien](https://adriencorenflos.github.io/)'s [codes](https://t.co/1qWXSqgKoz).](./CSML.gif)
