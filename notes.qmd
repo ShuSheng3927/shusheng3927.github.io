@@ -1,6 +1,8 @@
 ---
-title: "Notes"
+title: "Notes & Slides"
 ---
+
+## Notes
 
 ### Computational Statistics
 
@@ -39,3 +41,9 @@ title: "Notes"
 ### Uncategorised
 
 1.  [Univariate Extreme Value Modelling](files/EVT.pdf)
+
+## Slides
+
+1. [BALLAST: Bayesian Active Learning with Look-ahead Amendment for Sea-drifter Trajectories](files/BALLAST_workshop.pptx)
+
+2. [LLM for Research](files/llm_for_research_Rui.pdf)

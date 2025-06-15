@@ -13,7 +13,7 @@ website:
       - href: research.qmd
         text: Research
       - href: notes.qmd
-        text: Notes
+        text: Notes & Slides
       - href: resources.qmd
         text: Resources
       - href: blog.qmd
