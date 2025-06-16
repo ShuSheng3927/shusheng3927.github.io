@@ -17,9 +17,9 @@ Currently, I am investigating how active learning, in combination with physics-i
       
 ### Preprints
 
-- Livingstone, S., Nüsken, N., Vasdekis, G., & Zhang, R. Y. (2024). *Skew-symmetric schemes for stochastic differential equations with non-Lipschitz drift: an unadjusted Barker algorithm.* [[arxiv]](https://arxiv.org/abs/2405.14373) (submitted)
+- Livingstone, S., Nüsken, N., Vasdekis, G., & Zhang, R. Y. (2024). *Skew-symmetric schemes for stochastic differential equations with non-Lipschitz drift: an unadjusted Barker algorithm.* [[arxiv]](https://arxiv.org/abs/2405.14373) [[code]](https://github.com/ShuSheng3927/skew_symmetric_SDE) (submitted)
 
 
 ### Publications and Workshop Papers
 
-- Zhang, R. Y., Moss, H. B., Astfalck, L. C., Cripps, E. J., and Leslie, D. S. (2024). *BALLAST: Bayesian Active Learning with Look-ahead Amendment for Sea-drifter Trajectories*. **NeurIPS 2024 Workshop on Bayesian Decision-making and Uncertainty**. [[OpenReview]](https://openreview.net/pdf?id=sKjBnOQwtO) [[Video]](https://youtu.be/1W5YQzI1yaQ?si=zLQn13T3Xn0lcBgv) 
+- Zhang, R. Y., Moss, H. B., Astfalck, L. C., Cripps, E. J., and Leslie, D. S. (2024). *BALLAST: Bayesian Active Learning with Look-ahead Amendment for Sea-drifter Trajectories*. **NeurIPS 2024 Workshop on Bayesian Decision-making and Uncertainty**. [[OpenReview]](https://openreview.net/pdf?id=sKjBnOQwtO) [[slides]](files/BALLAST_workshop.pptx) [[talk]](https://youtu.be/1W5YQzI1yaQ?si=zLQn13T3Xn0lcBgv) 
