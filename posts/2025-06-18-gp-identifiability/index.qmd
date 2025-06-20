@@ -175,3 +175,6 @@ print(p2)
 | Noisy, fixed-domain     | $\sigma^2/l^{2\nu}$, $\tau^2$ | @tang2021identifiability        |
 | Increasing-domain       | All parameters                   | Standard asymptotics apply |
 
+As a side remark, we are always working in the setting where the spatial field is fixed throughout the sampling. The following simulation result indicates that we may have identifiable parameters for different spatial field samples. 
+
+![Simulation results on the estimation of parameters of a Matern kernel with increasing number of observations with different spatial field each run.](Matern_different_nugget.png)

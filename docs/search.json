@@ -396,7 +396,7 @@
     "href": "posts/2025-06-18-gp-identifiability/index.html#summary",
     "title": "Identifiability Issues of Gaussian Processes",
     "section": "6. Summary",
-    "text": "6. Summary\n\n\n\n\n\n\n\n\nScenario\nIdentifiable Parameters\nKey Results\n\n\n\n\nNoiseless, fixed-domain\nOnly \\(\\sigma^2/l^{2\\nu}\\)\nZhang (2004)\n\n\nNoisy, fixed-domain\n\\(\\sigma^2/l^{2\\nu}\\), \\(\\tau^2\\)\nTang, Zhang, and Banerjee (2021)\n\n\nIncreasing-domain\nAll parameters\nStandard asymptotics apply"
+    "text": "6. Summary\n\n\n\n\n\n\n\n\nScenario\nIdentifiable Parameters\nKey Results\n\n\n\n\nNoiseless, fixed-domain\nOnly \\(\\sigma^2/l^{2\\nu}\\)\nZhang (2004)\n\n\nNoisy, fixed-domain\n\\(\\sigma^2/l^{2\\nu}\\), \\(\\tau^2\\)\nTang, Zhang, and Banerjee (2021)\n\n\nIncreasing-domain\nAll parameters\nStandard asymptotics apply\n\n\n\nAs a side remark, we are always working in the setting where the spatial field is fixed throughout the sampling. The following simulation result indicates that we may have identifiable parameters for different spatial field samples.\n\n\n\nSimulation results on the estimation of parameters of a Matern kernel with increasing number of observations with different spatial field each run."
   },
   {
     "objectID": "posts/2025-06-18-gp-identifiability/index.html#references",
