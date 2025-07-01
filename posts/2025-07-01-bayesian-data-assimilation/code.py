@@ -60,7 +60,7 @@ plt.show()
 @jax.jit
 def loglikelihood(theta):
     x0 = theta["x0"]
-    obs_noise = noise#theta["obs_noise"]
+    obs_noise = theta["obs_noise"]
     a = theta["a"]
     l = theta["l"]
 
@@ -90,9 +90,6 @@ def loglikelihood(theta):
     return loglik
 
 #%% MCMC setup
-def flatten(pos):
-    return jnp.stack([pos["a"], pos["l"], pos["x0"]])
-
 def build_rw_kernel(sigmas):
     proposal = blackjax.mcmc.random_walk.normal(sigmas)
     return blackjax.additive_step_random_walk(loglikelihood, proposal)
@@ -219,4 +216,42 @@ plt.xlabel("Time $t$")
 plt.ylabel("State $x$")
 plt.legend()
 plt.grid(True)
+plt.show()
+
+
+#%% NUTS
+import numpy as np 
+
+inv_mass_matrix = np.array([1,1,1])
+step_size = 1e-3
+nuts = blackjax.nuts(loglikelihood, step_size, inv_mass_matrix)
+
+initial_position = {"a": 4., "l": 0.5, "x0": 2.}
+initial_state = nuts.init(initial_position)
+
+warmup = blackjax.window_adaptation(blackjax.nuts, loglikelihood)
+rng_key, warmup_key, sample_key = jax.random.split(rng_key, 3)
+(state, parameters), _ = warmup.run(warmup_key, initial_position, num_steps=1_000)
+
+kernel = blackjax.nuts(loglikelihood, **parameters).step
+states = inference_loop(sample_key, kernel, state, 1_000)
+
+mcmc_samples = states.position
+
+fig, axes = plt.subplots(2, 3, figsize=(15, 8))
+row_labels = ["Trace", "Histogram"]
+
+for i, k in enumerate(initial_position):
+    # Trace plot
+    axes[0, i].plot(mcmc_samples[k], color="steelblue")
+    axes[0, i].axhline(true_params[k], ls="--", color="red", label="True")
+    axes[0, i].set_title(f"MCMC Trace: {k}")
+    axes[0, i].legend()
+
+    # Histogram
+    axes[1, i].hist(mcmc_samples[k], bins=30, density=True, color="lightseagreen", alpha=0.7)
+    axes[1, i].axvline(true_params[k], ls="--", color="red", label="True")
+    axes[1, i].legend()
+
+plt.tight_layout()
 plt.show()

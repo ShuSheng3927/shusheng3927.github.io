@@ -183,7 +183,10 @@ div.csl-indent {
   <ul>
   <li><a href="#model-and-observations" id="toc-model-and-observations" class="nav-link active" data-scroll-target="#model-and-observations">Model and Observations</a></li>
   <li><a href="#bayesian-inference-setup" id="toc-bayesian-inference-setup" class="nav-link" data-scroll-target="#bayesian-inference-setup">Bayesian Inference Setup</a></li>
-  <li><a href="#mcmc-results" id="toc-mcmc-results" class="nav-link" data-scroll-target="#mcmc-results">MCMC Results</a></li>
+  <li><a href="#mcmc-results" id="toc-mcmc-results" class="nav-link" data-scroll-target="#mcmc-results">MCMC Results</a>
+  <ul class="collapse">
+  <li><a href="#nuts" id="toc-nuts" class="nav-link" data-scroll-target="#nuts">NUTS</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -224,11 +227,11 @@ y_i = x(t_i) + \epsilon_i, \quad \epsilon_i \sim \mathcal{N}(0, \sigma^2)
 </section>
 <section id="mcmc-results" class="level2">
 <h2 class="anchored" data-anchor-id="mcmc-results">MCMC Results</h2>
-<p>We run MCMC on the constructed posterior using Python’s <a href="https://blackjax-devs.github.io/blackjax/">BlackJax</a> package <span class="citation" data-cites="cabezas2024blackjax">(<a href="#ref-cabezas2024blackjax" role="doc-biblioref">Cabezas et al. 2024</a>)</span>. For whatever reason, more involved MCMC algorithms like HMC and NUTS fail to produce reasonable chains (potentially due to poor selection of algorithm hyperparameters, or autograd not reacting well to our likelihood computation). Eventually, I turned to the basic RWM. After trying to hand-tune the stepsize (for each parameter) and getting frustrated, I used an adaptive version of RWM with Robins-Monroe adaptation <span class="citation" data-cites="andrieu2008tutorial">(<a href="#ref-andrieu2008tutorial" role="doc-biblioref">Andrieu and Thoms 2008</a>)</span> targeting the optimal acceptance rate (around 0.3, given the low posterior dimension <span class="citation" data-cites="roberts2001optimal">(<a href="#ref-roberts2001optimal" role="doc-biblioref">Roberts and Rosenthal 2001</a>)</span>).</p>
+<p>We run MCMC on the constructed posterior using Python’s <a href="https://blackjax-devs.github.io/blackjax/">BlackJax</a> package <span class="citation" data-cites="cabezas2024blackjax">(<a href="#ref-cabezas2024blackjax" role="doc-biblioref">Cabezas et al. 2024</a>)</span>. I first consider a random walk Metropolis. After trying to hand-tune the stepsize (for each parameter) and getting frustrated, I used an adaptive version of RWM with Robins-Monroe adaptation <span class="citation" data-cites="andrieu2008tutorial">(<a href="#ref-andrieu2008tutorial" role="doc-biblioref">Andrieu and Thoms 2008</a>)</span> targeting the optimal acceptance rate (around 0.3, given the low posterior dimension <span class="citation" data-cites="roberts2001optimal">(<a href="#ref-roberts2001optimal" role="doc-biblioref">Roberts and Rosenthal 2001</a>)</span>).</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="./mcmc_chain.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">(Top) Trace plots for sampled parameters with true values shown as red dashed lines. (Bottom) Histogram for the samples with true values shown as red dashed lines.</figcaption>
+<figcaption class="figure-caption">RWM with Robins-Monroe adaptation. (Top) Trace plots for sampled parameters with true values shown as red dashed lines. (Bottom) Histogram for the samples with true values shown as red dashed lines.</figcaption>
 </figure>
 </div>
 <p>I initialise the chain at <span class="math inline">\((\alpha, l, x_0) = (4,1,0.5)\)</span> so they are moderately close to the truth, yet some good MCMC movement is needed. For the chain, I first run 20,000 steps with adaptation as burn-in and warm-up, then use the learned stepsize to run another 20,000 steps without adaptation to obtain samples from the posterior. The resulting trajectories (burn-in removed) are shown in Figure above. The assimilated dynamics with 90% credible interval are shown below, and the result looks great. The assimilated dynamic trajectories are simulated using 1000 sets of parameter values, bootstrapped from the <em>joint</em> posterior samples, which are then averaged and quantiled to produce the mean and credible interval.</p>
@@ -238,9 +241,19 @@ y_i = x(t_i) + \epsilon_i, \quad \epsilon_i \sim \mathcal{N}(0, \sigma^2)
 <figcaption class="figure-caption">Assimilated dynamics with 90% credible interval.</figcaption>
 </figure>
 </div>
+<section id="nuts" class="level3">
+<h3 class="anchored" data-anchor-id="nuts">NUTS</h3>
+<p>I initially tried NUTS but it did not work. Somehow, I tried it again, with the help of Thomas Newman, and it worked! For 1000 steps of warmup and 1000 further steps, we have the following results, which is visually indistinguishable from that of the RWM – seems like it works correctly too.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="./nuts_results.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">NUTS. (Top) Trace plots for sampled parameters with true values shown as red dashed lines. (Bottom) Histogram for the samples with true values shown as red dashed lines.</figcaption>
+</figure>
+</div>
 
 
 
+</section>
 </section>
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">
