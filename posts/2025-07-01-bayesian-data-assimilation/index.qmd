@@ -1,0 +1,52 @@
+---
+title: "Toy Bayesian Data Assimilation"
+description: "Bayesian data assimilation for a toy problem."
+date: "1 July 2025"
+bibliography: references.bib
+categories:
+  - Data Assimilation
+---
+
+We do Bayesian data assimilation for a deterministic ODE model using its noisy observations. The Python codes used are [here](code.py).
+
+## Model and Observations
+
+The ODE of interest is defined as:
+
+$$
+\frac{dx}{dt} = \exp(-l t) \cos(\alpha t)
+$$
+
+where $l$ and $\alpha$ are unknown parameters to be inferred. The system is numerically integrated using the Euler method with an initial condition $x(0) = x_0$ over the time interval $[0, 5]$ with time step $\Delta t = 0.01$.
+
+A synthetic trajectory is generated using the true parameter values: $\alpha = 5, l = 0.5, x_0 = 1.0$. Noisy observations are sampled at 100 randomly chosen time points $\{t_i\}_{i=1}^{100}$ following:
+
+$$
+y_i = x(t_i) + \epsilon_i, \quad \epsilon_i \sim \mathcal{N}(0, \sigma^2)
+$$
+
+with observation noise standard deviation $\sigma = 0.05$. The dynamics and observations are shown in Figure below. 
+
+![Dynamics of $dx/dt = \exp(-l t) \cos(\alpha t)$ with noisy observations.](./latent_dynamics_observations.png)
+
+## Bayesian Inference Setup
+
+We assume the observation noise standard deviation is known, and wish to conduct Bayesian inference on the ODE hyperparameters and initial condition $\theta = (\alpha, l, x_0)$. We set a flat prior for all the parameters. The (unnormalised) posterior distribution of the parameters of interest $\theta$ is thus given by the likelihood.
+
+Since we assume the dynamics are deterministic, all the stochasticities are captured in the observation noise. Here, the log-likelihood function is constructed by simulating the system forward (via Euler's method with stepsize \$0.01\$) using candidate parameters and comparing the predicted states to observations, thus:
+
+$$
+\log L(\theta) = \log p(y \mid \theta) = \sum_{i=1}^{N} \log \phi\left( \frac{y_i - x_\theta(t_i)}{\sigma}\right)
+$$
+
+where $x_\theta(t_i)$ denotes the simulated trajectory's value at time $t_i$ under parameters $\theta$ and $\phi$ is the density function of a standard normal distribution.
+
+## MCMC Results
+
+We run MCMC on the constructed posterior using Python's [BlackJax](https://blackjax-devs.github.io/blackjax/) package [@cabezas2024blackjax]. For whatever reason, more involved MCMC algorithms like HMC and NUTS fail to produce reasonable chains (potentially due to poor selection of algorithm hyperparameters, or autograd not reacting well to our likelihood computation). Eventually, I turned to the basic RWM. After trying to hand-tune the stepsize (for each parameter) and getting frustrated, I used an adaptive version of RWM with Robins-Monroe adaptation [@andrieu2008tutorial] targeting the optimal acceptance rate (around 0.3, given the low posterior dimension [@roberts2001optimal]).
+
+![(Top) Trace plots for sampled parameters with true values shown as red dashed lines. (Bottom) Histogram for the samples with true values shown as red dashed lines.](./mcmc_chain.png)
+
+I initialise the chain at $(\alpha, l, x_0) = (4,1,0.5)$ so they are moderately close to the truth, yet some good MCMC movement is needed. For the chain, I first run 20,000 steps with adaptation as burn-in and warm-up, then use the learned stepsize to run another 20,000 steps without adaptation to obtain samples from the posterior. The resulting trajectories (burn-in removed) are shown in Figure above. The assimilated dynamics with 90% credible interval are shown below, and the result looks great. The assimilated dynamic trajectories are simulated using 1000 sets of parameter values, bootstrapped from the *joint* posterior samples, which are then averaged and quantiled to produce the mean and credible interval.
+
+![Assimilated dynamics with 90% credible interval.](data_assimilation_result.png)
