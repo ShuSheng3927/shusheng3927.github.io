@@ -43,7 +43,7 @@ where $x_\theta(t_i)$ denotes the simulated trajectory's value at time $t_i$ und
 
 ## MCMC Results
 
-We run MCMC on the constructed posterior using Python's [BlackJax](https://blackjax-devs.github.io/blackjax/) package [@cabezas2024blackjax]. I first consider a random walk Metropolis. After trying to hand-tune the stepsize (for each parameter) and getting frustrated, I used an adaptive version of RWM with Robins-Monroe adaptation [@andrieu2008tutorial] targeting the optimal acceptance rate (around 0.3, given the low posterior dimension [@roberts2001optimal]).
+We run MCMC on the constructed posterior using Python's [BlackJax](https://blackjax-devs.github.io/blackjax/) package [@cabezas2024blackjax]. I first consider a random walk Metropolis. After trying to hand-tune the stepsize (for each parameter) and getting frustrated, I used an adaptive version of RWM with Robbins-Monro adaptation [@andrieu2008tutorial] targeting the optimal acceptance rate (around 0.3, given the low posterior dimension [@roberts2001optimal]).
 
 ![RWM with Robins-Monroe adaptation. (Top) Trace plots for sampled parameters with true values shown as red dashed lines. (Bottom) Histogram for the samples with true values shown as red dashed lines.](./mcmc_chain.png)
 
