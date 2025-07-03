@@ -231,7 +231,7 @@ y_i = x(t_i) + \epsilon_i, \quad \epsilon_i \sim \mathcal{N}(0, \sigma^2)
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="./mcmc_chain.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">RWM with Robins-Monroe adaptation. (Top) Trace plots for sampled parameters with true values shown as red dashed lines. (Bottom) Histogram for the samples with true values shown as red dashed lines.</figcaption>
+<figcaption class="figure-caption">RWM with Robbins-Monro adaptation. (Top) Trace plots for sampled parameters with true values shown as red dashed lines. (Bottom) Histogram for the samples with true values shown as red dashed lines.</figcaption>
 </figure>
 </div>
 <p>I initialise the chain at <span class="math inline">\((\alpha, l, x_0) = (4,1,0.5)\)</span> so they are moderately close to the truth, yet some good MCMC movement is needed. For the chain, I first run 20,000 steps with adaptation as burn-in and warm-up, then use the learned stepsize to run another 20,000 steps without adaptation to obtain samples from the posterior. The resulting trajectories (burn-in removed) are shown in Figure above. The assimilated dynamics with 90% credible interval are shown below, and the result looks great. The assimilated dynamic trajectories are simulated using 1000 sets of parameter values, bootstrapped from the <em>joint</em> posterior samples, which are then averaged and quantiled to produce the mean and credible interval.</p>
