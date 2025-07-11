@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.433">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Rui-Yang Zhang">
+<meta name="dcterms.date" content="2025-07-11">
+<meta name="description" content="Notes on reading Andrew Gordon Wilson’s ICML 2025 paper Deep Learning is Not So Mysterious or Different.">
+
+<title>Rui-Yang Zhang - [Reading Notes] Deep Learning is Not So Mysterious or Different</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../rui.svg" rel="icon" type="image/svg+xml">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../rui.svg" alt="" class="navbar-logo">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Rui-Yang Zhang</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html" rel="" target="">
+ <span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../research.html" rel="" target="">
+ <span class="menu-text">Research</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../notes.html" rel="" target="">
+ <span class="menu-text">Notes &amp; Slides</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../resources.html" rel="" target="">
+ <span class="menu-text">Resources</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../blog.html" rel="" target="">
+ <span class="menu-text">Blog</span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools ms-auto">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">[Reading Notes] Deep Learning is Not So Mysterious or Different</h1>
+                  <div>
+        <div class="description">
+          Notes on reading Andrew Gordon Wilson’s ICML 2025 paper Deep Learning is Not So Mysterious or Different.
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">Deep Learning</div>
+                <div class="quarto-category">Reading Notes</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Rui-Yang Zhang </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">July 11, 2025</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#summary" id="toc-summary" class="nav-link active" data-scroll-target="#summary">Summary</a>
+  <ul class="collapse">
+  <li><a href="#double-descent-and-benign-overfitting" id="toc-double-descent-and-benign-overfitting" class="nav-link" data-scroll-target="#double-descent-and-benign-overfitting">Double Descent and Benign Overfitting</a></li>
+  <li><a href="#inductive-bias" id="toc-inductive-bias" class="nav-link" data-scroll-target="#inductive-bias">Inductive Bias</a></li>
+  <li><a href="#model-complexity" id="toc-model-complexity" class="nav-link" data-scroll-target="#model-complexity">Model Complexity</a></li>
+  <li><a href="#main-argument" id="toc-main-argument" class="nav-link" data-scroll-target="#main-argument">Main Argument</a></li>
+  </ul></li>
+  <li><a href="#loose-thoughts" id="toc-loose-thoughts" class="nav-link" data-scroll-target="#loose-thoughts">Loose Thoughts</a>
+  <ul class="collapse">
+  <li><a href="#regression-penalty" id="toc-regression-penalty" class="nav-link" data-scroll-target="#regression-penalty">Regression Penalty</a></li>
+  <li><a href="#soft-vs.-hard-inductive-bias" id="toc-soft-vs.-hard-inductive-bias" class="nav-link" data-scroll-target="#soft-vs.-hard-inductive-bias">Soft vs.&nbsp;Hard Inductive Bias</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<section id="summary" class="level2">
+<h2 class="anchored" data-anchor-id="summary">Summary</h2>
+<p>The ICML 2025 paper <em>Deep Learning is Not So Mysterious or Different</em> by Wilson <span class="citation" data-cites="wilson2025deep">(<a href="#ref-wilson2025deep" role="doc-biblioref">Wilson 2025</a>)</span> reviews literature on the generalization properties of overparameterized neural networks and argues that <strong>soft inductive bias</strong> is a key concept for understanding their generalization behavior.</p>
+<section id="double-descent-and-benign-overfitting" class="level3">
+<h3 class="anchored" data-anchor-id="double-descent-and-benign-overfitting">Double Descent and Benign Overfitting</h3>
+<p>Double descent and benign overfitting are phenomena observed in neural networks, where generalization (i.e.&nbsp;prediction performance on the test set) improves as the number of model parameters increases—even after the model perfectly fits the training data. The classical double descent curve, illustrated below, shows test error decreasing, then increasing, and then decreasing again as model capacity grows.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="./double_descent.PNG" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Double Descent. Extracted from Figure 1 of <span class="citation" data-cites="schaeffer2024double">Schaeffer et al. (<a href="#ref-schaeffer2024double" role="doc-biblioref">2024</a>)</span>.</figcaption>
+</figure>
+</div>
+<p>The left side of the curve aligns with classical statistical learning theory: increasing model complexity (e.g.&nbsp;through more parameters) initially reduces bias but eventually leads to overfitting and increased test error. However, contrary to this traditional view, further increasing model capacity can <em>improve</em> generalization, a phenomenon that challenges the old bias–variance tradeoff.</p>
+</section>
+<section id="inductive-bias" class="level3">
+<h3 class="anchored" data-anchor-id="inductive-bias">Inductive Bias</h3>
+<p>Inductive bias refers to assumptions or constraints that restrict the model class within the broader universe of possible functions. For example, linear regression imposes a hard inductive bias by limiting the hypothesis space to linear functions, thereby excluding polynomial or other nonlinear models. Penalized regression methods, such as LASSO, further modify the model class by emphasizing sparsity, imposing what can be viewed as a <strong>soft inductive bias</strong>—they prefer simpler models but do not outright exclude complex ones.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="./soft_hard_inductive_bias.PNG" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Pictorial comparison of hard and soft inductive biases. Extracted from Figure 3 of <span class="citation" data-cites="wilson2025deep">Wilson (<a href="#ref-wilson2025deep" role="doc-biblioref">2025</a>)</span>.</figcaption>
+</figure>
+</div>
+</section>
+<section id="model-complexity" class="level3">
+<h3 class="anchored" data-anchor-id="model-complexity">Model Complexity</h3>
+<p>A central point in <span class="citation" data-cites="wilson2025deep">Wilson (<a href="#ref-wilson2025deep" role="doc-biblioref">2025</a>)</span> is that model complexity is not necessarily tied to the number of parameters. An overparameterized model can still be “simple” in an information-theoretic or geometric sense. One useful metric is the <strong>effective dimension</strong> of a matrix, defined as:</p>
+<p><span class="math display">\[
+N_\text{eff}(A) = \sum_i \frac{\lambda_i}{\lambda_i + \alpha},
+\]</span> where <span class="math inline">\(\lambda_i\)</span> are the eigenvalues of matrix <span class="math inline">\(A\)</span>, and <span class="math inline">\(\alpha\)</span> is a regularization parameter. Intuitively, a full matrix may still have low effective dimension (e.g.&nbsp;if most eigenvalues are small), while a sparse matrix could have higher effective dimension. Thus, counting parameters alone does not reliably reflect model complexity.</p>
+</section>
+<section id="main-argument" class="level3">
+<h3 class="anchored" data-anchor-id="main-argument">Main Argument</h3>
+<p>The central claims of <span class="citation" data-cites="wilson2025deep">Wilson (<a href="#ref-wilson2025deep" role="doc-biblioref">2025</a>)</span> can be summarized as follows:</p>
+<ul>
+<li>A model with more parameters may be <em>simpler</em> under appropriate complexity measures (e.g.&nbsp;effective dimension or compressibility).</li>
+<li>Soft inductive bias steers the model toward simpler solutions within a rich hypothesis space.</li>
+<li>Neural networks naturally impose soft inductive biases, increasingly so as their size grows.</li>
+</ul>
+<p>Moreover, generalization can be rigorously captured by <strong>PAC-Bayes</strong> and <strong>countable hypothesis bounds</strong>, which upper bound the expected risk as the sum of empirical risk and a complexity penalty—often expressed as model compressibility or description length. This theoretical framing accommodates models with millions or billions of parameters.</p>
+</section>
+</section>
+<section id="loose-thoughts" class="level2">
+<h2 class="anchored" data-anchor-id="loose-thoughts">Loose Thoughts</h2>
+<section id="regression-penalty" class="level3">
+<h3 class="anchored" data-anchor-id="regression-penalty">Regression Penalty</h3>
+<p>In Section 2 of <span class="citation" data-cites="wilson2025deep">Wilson (<a href="#ref-wilson2025deep" role="doc-biblioref">2025</a>)</span>, a polynomial regression model <span class="math inline">\(f(x, w) = \sum_j w_j x^j\)</span> is trained with a loss function:</p>
+<p><span class="math display">\[
+L(w) = - \log p(y|f(x,w)) + \sum_j \gamma^j w_j^2, \qquad \gamma &gt; 1.
+\]</span> This introduces a regularization term that penalizes higher-order terms exponentially more, encouraging simpler functions even within a flexible function space. This differs from standard L1 (LASSO) or L2 (Ridge) regularization, which treat all coefficients uniformly. Conceptually, this approach resembles kernel ridge regression, where the RKHS norm acts as a complexity penalty. The analogy to penalizing higher-order terms can likely be formalized via the spectral interpretation of the RKHS norm.</p>
+</section>
+<section id="soft-vs.-hard-inductive-bias" class="level3">
+<h3 class="anchored" data-anchor-id="soft-vs.-hard-inductive-bias">Soft vs.&nbsp;Hard Inductive Bias</h3>
+<p>A recurring theme of the paper is that <strong>soft inductive bias</strong> is often preferable to <strong>hard inductive bias</strong>, particularly in the context of neural networks. This raises interesting questions in the domain of physics-informed machine learning (PIML). For instance, Physics-Informed Neural Networks (PINNs) apply soft physical constraints via collocation points, while operator learning methods (e.g.&nbsp;DeepONets or FNOs) often encode more rigid physical assumptions—effectively imposing harder inductive biases. There are also approaches that encode PDE structure directly into GP kernels.</p>
+<p>It would be fruitful to explore how varying degrees of inductive bias softness influence generalization and extrapolation in PIML. For example, do soft constraints help in the presence of approximate symmetries, while hard constraints work better in strictly governed physical regimes?</p>
+
+
+
+</section>
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-schaeffer2024double" class="csl-entry" role="listitem">
+Schaeffer, Rylan, Zachary Robertson, Akhilan Boopathy, Mikail Khona, Kateryna Pistunova, Jason William Rocks, Ila R Fiete, Andrey Gromov, and Sanmi Koyejo. 2024. <span>“Double Descent Demystified: Identifying, Interpreting &amp; Ablating the Sources of a Deep Learning Puzzle.”</span> In <em>The Third Blogpost Track at ICLR 2024</em>.
+</div>
+<div id="ref-wilson2025deep" class="csl-entry" role="listitem">
+Wilson, Andrew G. 2025. <span>“Deep Learning Is Not so Mysterious or Different.”</span> In. International Conference on Machine Learning.
+</div>
+</div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
