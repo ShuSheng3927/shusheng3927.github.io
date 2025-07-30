@@ -2,6 +2,7 @@
   {
     "listing": "/blog.html",
     "items": [
+      "/posts/2025-07-30-brownian-path-upscale/index.html",
       "/posts/2025-07-11-deep-learning-generalisation/index.html",
       "/posts/2025-07-01-bayesian-data-assimilation/index.html",
       "/posts/2025-06-18-gp-identifiability/index.html",
