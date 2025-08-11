@@ -5,6 +5,7 @@ date: "30 July 2025"
 bibliography: references.bib
 categories:
   - Gaussian Process
+  - Sampling
 ---
 
 Consider a fixed [Brownian motion](https://en.wikipedia.org/wiki/Wiener_process) path $\{W_t\}_{t \ge 0}$ that we have made observations $\{W_n\}_n$ at times $\{t_n\}_n$, we wish to upscale the observed path to more timestamps $\{s_m\}_m$ while making sure that it is the same Brownian motion path that we are simulating from. 
