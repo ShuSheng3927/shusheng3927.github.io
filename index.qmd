@@ -16,7 +16,7 @@ about:
       href: https://bsky.app/profile/ryzhang.bsky.social
 ---
 
-I am currently a first year PhD student of [STOR-i CDT](https://www.lancaster.ac.uk/stor-i/) at Lancaster University. My PhD project looks at Bayesian experiment design for ocean currents predictions, and is in collaboration with [TIDE](https://tide.edu.au). My supervisors are [Henry Moss](https://henrymoss.github.io) and [David Leslie](https://www.lancaster.ac.uk/maths/people/david-leslie) at [Lancaster](https://www.lancaster.ac.uk/maths/), as well as [Lachlan Astfalck](https://astfalckl.github.io) and [Edward Cripps](https://research-repository.uwa.edu.au/en/persons/edward-cripps) at [UWA](https://www.uwa.edu.au/schools/physics-mathematics-computing/mathematics-and-stats). 
+I am currently a second year PhD student of [STOR-i CDT](https://www.lancaster.ac.uk/stor-i/) at Lancaster University. My PhD project, supported by [TIDE](https://tide.edu.au), investigates sequential Bayesian experimental design and its application in ocean engineering and oceanography. My supervisors are [Henry Moss](https://henrymoss.github.io) and [David Leslie](https://www.lancaster.ac.uk/maths/people/david-leslie) at [Lancaster](https://www.lancaster.ac.uk/maths/), as well as [Lachlan Astfalck](https://astfalckl.github.io) and [Edward Cripps](https://research-repository.uwa.edu.au/en/persons/edward-cripps) at [UWA](https://www.uwa.edu.au/schools/physics-mathematics-computing/mathematics-and-stats). 
 
 Previously, I did BSc Mathematics and Statistical Science at [UCL](https://www.ucl.ac.uk/maths/) where I was mentored by [Sam Livingstone](https://samueljlivingstone.wixsite.com/webpage) and received a [Royal Statistical Society](https://rss.org.uk) Award. 
 

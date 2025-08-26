@@ -2,14 +2,14 @@
 title: "Research"
 ---
 
-I am broadly interested in computational statistics and machine learning methodologies, and their applications in scientific disciplines. In particular, I am interested in (1) developing methodologies with strong relevance to applications, and (2) advancing our understandings of the underlying mechanisms behind existing, commonly used algorithms. Below are some of the keywords that interest me: 
+I am broadly interested in computational statistics and machine learning methodologies, and their applications in scientific and engineering disciplines. In particular, I aim to develop methodologies with strong relevance to applications. Below are some of the keywords that interest me: 
 
-- Sequential Experiment Design, Bayesian Optimisation, Active Learning
-- Amortized Inference, Simulation-Based Inference
-- MCMC, SMC, Variational Bayes, Normalising Flows
+- Sequential Bayesian Experiment Design, Bayesian Optimization, Active Learning
+- Probabilistic Numerics
 - Gaussian Process Modelling
+- MCMC, SMC, Simulation-Based Inference
 
-Currently, I am investigating how active learning, in combination with physics-informed Gaussian processes surrogate models, can help ocean engineers and oceanographers better understand ocean currents and inform their exploration strategies. 
+Currently, I am investigating sequential Bayesian experiment designs (such as active learning and Bayesian optimization) and their application in oceanographic sensor deployment. I am also actively thinking about other task that could be improved using experiment design, or could be cast as a design problem.   
 
 ## Publication
 
