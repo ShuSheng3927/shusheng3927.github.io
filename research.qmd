@@ -2,14 +2,9 @@
 title: "Research"
 ---
 
-I am broadly interested in computational statistics and machine learning methodologies, and their applications in scientific and engineering disciplines. In particular, I aim to develop methodologies with strong relevance to applications. Below are some of the keywords that interest me: 
+My core research revolves around **decision-making under uncertainty with physics-inspired machine learning**. More concretely, I am interested in how we can leverage probabilistic models with physical constraints (e.g., physics-informed Gaussian processes, probabilistic numerics) to devise decision rules (e.g., active learning, Bayesian optimisation), often under practical limitations such as restricted search domains, non-standard measurement devices, or computational budgets.
 
-- Sequential Bayesian Experiment Design, Bayesian Optimization, Active Learning
-- Probabilistic Numerics
-- Gaussian Process Modelling
-- MCMC, SMC, Simulation-Based Inference
-
-Currently, I am investigating sequential Bayesian experiment designs (such as active learning and Bayesian optimization) and their application in oceanographic sensor deployment. I am also actively thinking about other task that could be improved using experiment design, or could be cast as a design problem.   
+Currently, I am investigating spatio-temporal active learning for the deployment of oceanographic sensors. I am also actively exploring the decision-making aspects of probabilistic numerics.
 
 ## Publication
 
