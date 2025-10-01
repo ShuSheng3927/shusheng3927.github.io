@@ -312,7 +312,7 @@
     "href": "research.html#publication",
     "title": "Research",
     "section": "Publication",
-    "text": "Publication\nGoogle Scholar\n\nPreprints\n\nIguchi, Y., Livingstone, S., Nüsken, N., Vasdekis, G., & Zhang, R. Y. (2025). Skew-symmetric schemes for stochastic differential equations with non-Lipschitz drift: an unadjusted Barker algorithm. [arxiv] [code] (submitted)\n\n\n\nPublications and Workshop Papers\n\nZhang, R. Y., Moss, H. B., Astfalck, L. C., Cripps, E. J., and Leslie, D. S. (2024). BALLAST: Bayesian Active Learning with Look-ahead Amendment for Sea-drifter Trajectories. NeurIPS 2024 Workshop on Bayesian Decision-making and Uncertainty. [OpenReview] [slides] [talk]"
+    "text": "Publication\nGoogle Scholar\n\nPreprints\n\nZhang, R. Y., Moss, H. B., Astfalck, L. C., Cripps, E. J., and Leslie, D. S. (2025). BALLAST: Bayesian Active Learning with Look-ahead Amendment for Sea-drifter Trajectories under Spatio-Temporal Vector Fields. [arxiv] (submitted)\nIguchi, Y., Livingstone, S., Nüsken, N., Vasdekis, G., & Zhang, R. Y. (2025). Skew-symmetric schemes for stochastic differential equations with non-Lipschitz drift: an unadjusted Barker algorithm. [arxiv] [code] (submitted)\n\n\n\nPublications and Workshop Papers\n\nZhang, R. Y., Moss, H. B., Astfalck, L. C., Cripps, E. J., and Leslie, D. S. (2024). BALLAST: Bayesian Active Learning with Look-ahead Amendment for Sea-drifter Trajectories. NeurIPS 2024 Workshop on Bayesian Decision-making and Uncertainty. [OpenReview] [slides] [talk]"
   },
   {
     "objectID": "posts/2025-08-06-mc-qmc-rqmc/index.html",
