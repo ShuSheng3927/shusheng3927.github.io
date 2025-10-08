@@ -2,9 +2,7 @@
 title: "Research"
 ---
 
-My core research revolves around **decision-making under uncertainty with physics-inspired machine learning**. More concretely, I am interested in how we can leverage probabilistic models with physical constraints (e.g., physics-informed Gaussian processes, probabilistic numerics) to devise decision rules (e.g., active learning, Bayesian optimisation), often under practical limitations such as restricted search domains, non-standard measurement devices, or computational budgets.
-
-Currently, I am investigating spatio-temporal active learning for the deployment of oceanographic sensors. I am also actively exploring the decision-making aspects of probabilistic numerics.
+My core research focuses on **decision-making under uncertainty**. I leverage probabilistic machine learning methods — with an emphasis on Gaussian processes and physics-inspired models — to design adaptive decision rules such as active learning and Bayesian optimization to tackle real-world decision problems. I am especially interested in problems where practical limitations (e.g. restricted domains, computational budgets, unconventional data sources) shape the nature of decision-making. The applications I am interested in include probabilistic numerics, ocean engineering, and digital twins.
 
 ## Publication
 
