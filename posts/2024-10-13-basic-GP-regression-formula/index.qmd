@@ -131,7 +131,7 @@ which gives us
 $$
 \begin{split} 
 y_* ~|X_*, \mathcal{D}, \sigma^2 &\sim N_{n}(\mu_{y_* | \mathcal{D}}, K_{y_* | \mathcal{D}}), \\
-\mu_{y_* | \mathcal{D}} &= \mu(X) + K_*^T (K + \sigma^2 I_n)^{-1} y,\\
+\mu_{y_* | \mathcal{D}} &= \mu(X_*) + K_*^T (K + \sigma^2 I_n)^{-1} (y - \mu(X)),\\
 K_{y_* | \mathcal{D}} &= K_{**} - K_*^T (K + \sigma^2 I_n)^{-1}K_*.
 \end{split}
 $$

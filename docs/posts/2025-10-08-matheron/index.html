@@ -7,10 +7,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Rui-Yang Zhang">
-<meta name="dcterms.date" content="2024-10-13">
-<meta name="description" content="Derivations for the Gaussian process predictive distribution. Single-output GP, observe with additive Gaussian noise.">
+<meta name="dcterms.date" content="2025-10-09">
+<meta name="description" content="The Matheron rule of conditional multivariate normal distribution offers a new way to approximately sample from a posterior Gaussian process.">
 
-<title>Rui-Yang Zhang - [Derivation Scribbles] Basic GP Regression Formula</title>
+<title>Rui-Yang Zhang - Approximate GP Posterior Sampling via the Matheron Rule</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,7 +23,26 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -121,15 +140,14 @@ ul.task-list li input[type="checkbox"] {
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">[Derivation Scribbles] Basic GP Regression Formula</h1>
+      <h1 class="title">Approximate GP Posterior Sampling via the Matheron Rule</h1>
                   <div>
         <div class="description">
-          Derivations for the Gaussian process predictive distribution. Single-output GP, observe with additive Gaussian noise.
+          The Matheron rule of conditional multivariate normal distribution offers a new way to approximately sample from a posterior Gaussian process.
         </div>
       </div>
                           <div class="quarto-categories">
                 <div class="quarto-category">Gaussian Process</div>
-                <div class="quarto-category">Derivation Scribbles</div>
               </div>
                   </div>
   </div>
@@ -147,7 +165,7 @@ ul.task-list li input[type="checkbox"] {
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">October 13, 2024</p>
+        <p class="date">October 9, 2025</p>
       </div>
     </div>
     
@@ -163,9 +181,8 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#block-matrix-inversion" id="toc-block-matrix-inversion" class="nav-link active" data-scroll-target="#block-matrix-inversion">Block Matrix Inversion</a></li>
-  <li><a href="#marginal-and-conditional-gaussians" id="toc-marginal-and-conditional-gaussians" class="nav-link" data-scroll-target="#marginal-and-conditional-gaussians">Marginal and Conditional Gaussians</a></li>
-  <li><a href="#gaussian-process-regression" id="toc-gaussian-process-regression" class="nav-link" data-scroll-target="#gaussian-process-regression">Gaussian Process Regression</a></li>
+  <li><a href="#matheron-rule" id="toc-matheron-rule" class="nav-link active" data-scroll-target="#matheron-rule">Matheron Rule</a></li>
+  <li><a href="#approximate-sampling" id="toc-approximate-sampling" class="nav-link" data-scroll-target="#approximate-sampling">Approximate Sampling</a></li>
   </ul>
 </nav>
     </div>
@@ -175,122 +192,101 @@ ul.task-list li input[type="checkbox"] {
 
 
 
+<p><em>This blog post is about <span class="citation" data-cites="wilson2020efficiently">J. Wilson et al. (<a href="#ref-wilson2020efficiently" role="doc-biblioref">2020</a>)</span> and <span class="citation" data-cites="wilson2021pathwise">J. T. Wilson et al. (<a href="#ref-wilson2021pathwise" role="doc-biblioref">2021</a>)</span>.</em></p>
+<section id="matheron-rule" class="level2">
+<h2 class="anchored" data-anchor-id="matheron-rule">Matheron Rule</h2>
+<p>The Matheron rule states that, for random variables <span class="math inline">\(a\)</span>, <span class="math inline">\(b\)</span> that are jointly Gaussian, the conditional distribution <span class="math inline">\(a | b = \beta\)</span> is given by</p>
+<p><span class="math display">\[
+(a| b = \beta) \stackrel{d}{=} a + \Sigma_{a,b} \Sigma_{b,b}^{-1} (\beta - b)
+\]</span></p>
+<p>where <span class="math inline">\(\stackrel{d}{=}\)</span> means distributional equivalence, <span class="math inline">\(\Sigma_{a,b} := \text{Cov}(a, b)\)</span> and <span class="math inline">\(\Sigma_{b,b} := \text{Cov}(b, b)\)</span>. This can be verified easily by matching the mean and covariance of the two sides of the equation.</p>
+<p>Using this formulation of conditional Gaussian, we can extrapolate it to a Gaussian process (GP) and obtain the following result. For a GP <span class="math inline">\(f \sim GP(\mu, k)\)</span> with marginal <span class="math inline">\(f_n = f(X_n)\)</span> at observation locations <span class="math inline">\(X_n\)</span> that gives noisy observations <span class="math inline">\(y = f(X_n) + \varepsilon\)</span> for <span class="math inline">\(\varepsilon \sim N(0, \sigma^2 I_n)\)</span>, we have the Matheron rule for posterior GP <span class="math inline">\(f|y\)</span></p>
+<p><span class="math display">\[
+(f|y) (\cdot) \stackrel{d}{=} f(\cdot) + k(\cdot, X_n) (K_{n, n} + \sigma^2I_n)^{-1} (y - f_n - \varepsilon)
+\]</span></p>
+<p>where <span class="math inline">\(K_{n,n} = k(X_n, X_n)\)</span> is the Gram matrix of <span class="math inline">\(X_n\)</span> with GP kernel <span class="math inline">\(k\)</span>.</p>
+<p>At this point, we recall that the standard formulation posterior GP at test points <span class="math inline">\(X_* \in \mathbb{R}^m\)</span> is given by</p>
+<p><span class="math display">\[
+\begin{split}
+f(X_*) |y &amp;\sim N_{n}(\mu_{* | y}, K_{* | y}), \\
+\mu_{* | y} &amp;= \mu(X) + K_{*,n}^T (K_{n,n} + \sigma^2 I_n)^{-1} y,\\
+K_{* | y} &amp;= K_{*,*} - K_{*,n} (K_{n,n} + \sigma^2 I_n)^{-1}K_{*,n}^T.
+\end{split}
+\]</span></p>
+<p>and to draw a sample <span class="math inline">\(f_*^{(1)}\)</span> from such a posterior <span class="math inline">\(f(X_*) |y\)</span>, we have</p>
+<p><span class="math display">\[
+f_*^{(1)} = \mu_{* | y} + \sqrt{K_{* | y}} ~\xi, \qquad \xi \sim N(0, I)
+\]</span></p>
+<p>where the matrix ‘square root’ <span class="math inline">\(\sqrt{A} := L\)</span> where <span class="math inline">\(LL^T = A\)</span>. Such matrix square roots are usually obtained using <a href="https://en.wikipedia.org/wiki/Cholesky_decomposition">Cholesky decomposition</a>, which has <span class="math inline">\(O(m^3)\)</span> time complexity for <span class="math inline">\(A \in \mathbb{R}^{m \times m}\)</span>. Thus, assuming the posterior mean and covariance are already obtained, the cost of drawing a posterior sample is <span class="math inline">\(O(m^3)\)</span> for <span class="math inline">\(m\)</span> test points.</p>
+<p>Now, to samples directly using the Matheron rule formulation, we have</p>
+<p><span class="math display">\[
+(f|y) (X_*) \stackrel{d}{=} f(X_*) + k(X_*, X_n) (K_{n, n} + \sigma^2I_n)^{-1} (y - f(X_n) - \varepsilon)
+\]</span></p>
+<p>and thus after obtaining a sample <span class="math inline">\(f^{(1),prior} = f_*^{(1),prior} \cup f_n^{(1),prior}\)</span> from the prior <span class="math inline">\(f(X)\)</span> with <span class="math inline">\(X = X_* \cup X_n\)</span>, we can obtain a posterior sample <span class="math inline">\(f_*^{(1)}\)</span> as</p>
+<p><span class="math display">\[
+f_*^{(1)} = f_*^{(1),prior} + k(X_*, X_n) (K_{n, n} + \sigma^2I_n)^{-1} (y - f_n^{(1),prior} - \varepsilon^{(1)}), \quad \varepsilon^{(1)} \sim N(0, \sigma^2 I_n)
+\]</span></p>
+<p>which cost <span class="math inline">\(O((m+n)^3)\)</span> assuming all the mean and covariance are pre-computed as its takes <span class="math inline">\(O((m+n)^3)\)</span> to compute the matrix square root <span class="math inline">\(k(X, X)\)</span> to sample <span class="math inline">\(f^{(1),prior}\)</span>, although the cost could be reduced to <span class="math inline">\(O(m^3+n^3)\)</span> using <a href="https://en.wikipedia.org/wiki/Schur_complement">Schur complement</a>. Thus, as it stands currently, there is <em>no computational benefit</em> of posterior sampling using the Matheron rule – even a loss when <span class="math inline">\(X_n \not \subset X_*\)</span>! However, when we start to draw samples approximately, the Materon rule offers more flexibility.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="gp.svg" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Gaussian Process Regression, adapted from <a href="https://docs.jaxgaussianprocesses.com/">https://docs.jaxgaussianprocesses.com/</a>.</figcaption>
+<p><img src="illustration.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption"><span class="citation" data-cites="wilson2021pathwise">J. T. Wilson et al. (<a href="#ref-wilson2021pathwise" role="doc-biblioref">2021</a>)</span></figcaption>
 </figure>
 </div>
-<section id="block-matrix-inversion" class="level3">
-<h3 class="anchored" data-anchor-id="block-matrix-inversion">Block Matrix Inversion</h3>
-<p>The first thing we need to establish is the block matrix inversion identity. Consider an invertible matrix <span class="math inline">\(\Sigma\)</span> that can be written as</p>
-<p><span class="math display">\[
-\Sigma = \begin{bmatrix}\Sigma_{AA} &amp; \Sigma_{AB} \\\Sigma_{BA} &amp; \Sigma_{BB} \\\end{bmatrix}
-\]</span></p>
-<p>where <span class="math inline">\(\Sigma_{AA}, \Sigma_{AB}, \Sigma_{BA}, \Sigma_{BB}\)</span> are matrices of the right dimension and sufficiently non-singular. Next, we have the block matrix inversion identity stated below.</p>
-<p><span class="math display">\[
-\begin{split}
-\Sigma^{-1} &amp;= \begin{bmatrix}\Sigma_{AA} &amp; \Sigma_{AB} \\\Sigma_{BA} &amp; \Sigma_{BB} \\\end{bmatrix}^{-1} \\
-&amp;= \begin{bmatrix} (\Sigma_{AA} - \Sigma_{AB}\Sigma_{BB}^{-1}\Sigma_{BA})^{-1}  &amp; -(\Sigma_{AA} - \Sigma_{AB}\Sigma_{BB}^{-1}\Sigma_{BA})^{-1} \Sigma_{AB} \Sigma_{BB}^{-1}\\ -\Sigma_{BB}^{-1} \Sigma_{BA}(\Sigma_{AA} - \Sigma_{AB}\Sigma_{BB}^{-1}\Sigma_{BA})^{-1}  &amp; (\Sigma_{BB} - \Sigma_{BA}\Sigma_{AA}^{-1}\Sigma_{AB})^{-1} \end{bmatrix}.
-\end{split}
-\]</span></p>
 </section>
-<section id="marginal-and-conditional-gaussians" class="level3">
-<h3 class="anchored" data-anchor-id="marginal-and-conditional-gaussians">Marginal and Conditional Gaussians</h3>
-<p>Consider a multivariate Gaussian distribution <span class="math inline">\(x = (x_A, x_B)^T\)</span> where <span class="math inline">\(x_A\)</span> is <span class="math inline">\(d_A\)</span> dimensional, <span class="math inline">\(x_B\)</span> is <span class="math inline">\(d_B\)</span> dimensional, and <span class="math inline">\(x\)</span> is <span class="math inline">\(d = d_A + d_B\)</span> dimensional. The mean vector and covariance matrix of the multivariate Gaussian is set to be as follows:</p>
+<section id="approximate-sampling" class="level2">
+<h2 class="anchored" data-anchor-id="approximate-sampling">Approximate Sampling</h2>
+<p>Recall the general Matheron rule for GP posterior yields</p>
 <p><span class="math display">\[
-x = \begin{bmatrix} x_A \\ x_B \end{bmatrix} \sim N_d \left( \mu, \Sigma\right) = N_d \left( \begin{bmatrix} \mu_A \\ \mu_B \end{bmatrix}, \begin{bmatrix}\Sigma_{AA} &amp; \Sigma_{AB} \\\Sigma_{BA} &amp; \Sigma_{BB} \\\end{bmatrix}\right).
-\]</span></p>
-<p>It is easy to notice that the <strong>marginal distributions</strong> <span class="math inline">\(x_A\)</span> and <span class="math inline">\(x_B\)</span> can be obtained by selecting the needed entries of the above equation, i.e.&nbsp;</p>
-<p><span class="math display">\[
-\begin{split}
-x_A &amp;\sim N_{d_A}(\mu_A, \Sigma_{AA}), \\
-x_B &amp;\sim N_{d_B}(\mu_B, \Sigma_{BB}).
-\end{split}
-\]</span></p>
-<p>The conditional distributions are a bit tricky, which we will derive below. Due to symmetry, we will derive the conditional distribution <span class="math inline">\(x_A | x_B\)</span> and just state <span class="math inline">\(x_B | x_A\)</span>. Using <span class="math inline">\(p(\cdot)\)</span> to denote the density of a random variable, we have</p>
-<p><span class="math display">\[
-\begin{split}
-p(x_A | x_B) &amp;= \frac{p(x_A, x_B)}{p(x_B)} \\ &amp;\propto \exp\left\{  -\frac{1}{2} (x - \mu)^T\Sigma^{-1}(x - \mu) \right\}.
-\end{split}
-\]</span></p>
-<p>Focusing on the terms inside the second exponential, we first denote</p>
-<p><span class="math display">\[
-\Sigma^{-1} = \begin{bmatrix} V_{AA} &amp; V_{AB} \\ V_{BA} &amp; V_{BB} \end{bmatrix}
-\]</span></p>
-<p>which then yield</p>
-<p><span class="math display">\[
-\begin{split}
-&amp;\quad  (x - \mu)^T\Sigma^{-1}(x - \mu) \\
-&amp;=  \begin{bmatrix} x_A - \mu_A \\ x_B - \mu_b \end{bmatrix}^T \begin{bmatrix} V_{AA} &amp; V_{AB} \\ V_{BA} &amp; V_{BB} \end{bmatrix}\begin{bmatrix} x_A - \mu_A \\ x_B - \mu_b \end{bmatrix}  \\
-&amp;= \begin{bmatrix} (x_A - \mu_A)^T V_{AA} + (x_B - \mu_B)^T V_{BA} \\ (x_A - \mu_A)^T V_{AB} + (x_B - \mu_B)^T V_{BB} \end{bmatrix}^T\begin{bmatrix} x_A - \mu_A \\ x_B - \mu_b \end{bmatrix} \\
-&amp;= (x_A - \mu_A)^T V_{AA} (x_A - \mu_A) + (x_A - \mu_A)^T V_{AB} (x_B - \mu_B) \\
-&amp;\quad +  (x_B - \mu_B)^T V_{BA} (x_A - \mu_A) + (x_B - \mu_B)^T V_{BB} (x_B - \mu_B).
-\end{split}
-\]</span></p>
-<p>We can keep terms with <span class="math inline">\(x_A\)</span> and put the rest into the normalising constant. As <span class="math inline">\(V_{AA}\)</span> is square and <span class="math inline">\(V_{AB}= V_{BA}^T\)</span>, we can simplify our above equation into</p>
-<p><span class="math display">\[
-\begin{split}
-&amp;\quad x_A^T V_{AA} x_A - 2 x_A^T V_{AA} \mu_A + 2x_A^T V_{AB} (x_B - \mu_B) \\
-&amp;= x_A^T V_{AA} x_A - 2 x_A^T [ V_{AA} \mu_A +V_{AB} (x_B - \mu_B)] \\
-&amp;= (x_A - \mu')^T V_{AA}(x_A - \mu')+ C
-\end{split}
-\]</span></p>
-<p>for some constant <span class="math inline">\(C\)</span> independent of <span class="math inline">\(x_A\)</span> and the newly defined</p>
-<p><span class="math display">\[
-\mu' = \mu_A - V_{AA}^{-1}V_{AB} (x_B - \mu_B).
-\]</span></p>
-<p>Therefore, using the values of <span class="math inline">\(V_{AA}, V_{AB}\)</span> from the block matrix inversion formula earlier, we have</p>
-<p><span class="math display">\[
-\begin{split}
-\mu' &amp;= \mu_A - V_{AA}^{-1}V_{AB} (x_B - \mu_B) \\
-&amp;= \mu_A + \Sigma_{AB}\Sigma_{BB}^{-1}(x_B - \mu_B) \\
-V_{AA}^{-1} &amp;= \Sigma_{AA} - \Sigma_{AB}\Sigma_{BB}^{-1}\Sigma_{BA} \\
-\end{split}
-\]</span></p>
-<p>and via symmetry, we have the <strong>conditional distributions</strong></p>
-<p><span class="math display">\[
-\begin{split}
-x_A | x_B &amp;\sim N_{d_A}(\mu_A + \Sigma_{AB}\Sigma_{BB}^{-1}(x_B - \mu_B), \Sigma_{AA} - \Sigma_{AB}\Sigma_{BB}^{-1}\Sigma_{BA}), \\
-x_B | x_A &amp;\sim N_{d_B}(\mu_B + \Sigma_{BA}\Sigma_{AA}^{-1}(x_A - \mu_A), \Sigma_{BB} - \Sigma_{BA}\Sigma_{AA}^{-1}\Sigma_{AB}).
-\end{split}
-\]</span></p>
-</section>
-<section id="gaussian-process-regression" class="level3">
-<h3 class="anchored" data-anchor-id="gaussian-process-regression">Gaussian Process Regression</h3>
-<p>Consider we have a single-output Gaussian process <span class="math inline">\(f \sim \mathcal{GP}(\mu, k)\)</span> where <span class="math inline">\(\mu\)</span> is the mean function and <span class="math inline">\(k\)</span> is the kernel function. The support of this GP is assumed to be <span class="math inline">\(\mathbb{R}^d\)</span>. Consider we have made <span class="math inline">\(m\)</span> observations of this GP <span class="math inline">\(f\)</span> where the observations are made at locations <span class="math inline">\(X \in \mathbb{R}^m\)</span> with values <span class="math inline">\(y \in \mathbb{R}^m\)</span> and the observations are noisy with independent additive Gaussian noise of variance <span class="math inline">\(\sigma^2\)</span>, i.e.&nbsp;<span class="math inline">\(y = f(X) + \xi\)</span> with <span class="math inline">\(\xi_i \sim N(0, \sigma^2) ~\forall i = 1, 2, \ldots, m\)</span>. Denote the existing observations as <span class="math inline">\(\mathcal{D} = \{ X, y \}\)</span>.</p>
-<p>Under our modelling assumptions, we could write down the (log) likelihood of the <span class="math inline">\(m\)</span> observations <span class="math inline">\(y\)</span> under our GP prior <span class="math inline">\(f \sim \mathcal{GP}(\mu, k)\)</span>. Since <span class="math inline">\(y = f(X) + \xi\)</span>, we have</p>
-<p><span class="math display">\[
-y | X \sim N_m \left( \mu(X), k(X, X) + \sigma^2 I_m \right)
-\]</span> paramerised by <span class="math inline">\(\theta\)</span> (e.g.&nbsp;observation noise <span class="math inline">\(\sigma\)</span>, lengthscale and variance of the kernel <span class="math inline">\(k\)</span>) which gives us the following log likelihood</p>
-<p><span class="math display">\[
-\log p(y|X) = - \frac{m}{2}\log(2\pi) - \log | k(X, X) + \sigma^2 I_m | - \frac{1}{2} \left( y - \mu(X) \right)^T ( k(X, X) + \sigma^2 I_m)^{-1}\left( y - \mu(X) \right)
-\]</span> that we maximise w.r.t. <span class="math inline">\(\theta\)</span> to obtain the maximum likelihood estimators of the (hyper)parameters.</p>
-<p>Next, conditional on these observations, we wish to know the distributions of the GP at test points <span class="math inline">\(X_* \in \mathbb{R}^n\)</span>, i.e.&nbsp;the conditional distribution <span class="math inline">\(y_* = f(X_*) ~| \mathcal{D}\)</span>. This can be achieved by first model <span class="math inline">\(y_*\)</span> and <span class="math inline">\(y\)</span> jointly, then condition on <span class="math inline">\(y\)</span>. Using the conditional distribution formula above, we denote for simplicity the Gram matrices</p>
-<p><span class="math display">\[
-K = k(X, X), \qquad K_* = k(X, X_*), \qquad K_{**}=k(X_*, X_*),
-\]</span></p>
-<p>which gives us</p>
-<p><span class="math display">\[
-\begin{split}
-y_* ~|X_*, \mathcal{D}, \sigma^2 &amp;\sim N_{n}(\mu_{y_* | \mathcal{D}}, K_{y_* | \mathcal{D}}), \\
-\mu_{y_* | \mathcal{D}} &amp;= \mu(X_*) + K_*^T (K + \sigma^2 I_n)^{-1} (y - \mu(X)),\\
-K_{y_* | \mathcal{D}} &amp;= K_{**} - K_*^T (K + \sigma^2 I_n)^{-1}K_*.
-\end{split}
-\]</span></p>
-<p>In the common scenario where we assume <span class="math inline">\(\mu = 0\)</span>, we further have the following <strong>GP predictive distribution</strong></p>
-<p><span class="math display">\[
-\begin{split}
-y_* ~|X_*, \mathcal{D}, \sigma^2 &amp;\sim N_{n}(\mu_{y_* | \mathcal{D}}, K_{y_* | \mathcal{D}}), \\
-\mu_{y_* | \mathcal{D}} &amp;= K_*^T (K + \sigma^2 I_n)^{-1} y,\\
-K_{y_* | \mathcal{D}} &amp;= K_{**} - K_*^T (K + \sigma^2 I_n)^{-1}K_*.
-\end{split}
-\]</span></p>
+(f|y) (\cdot) \stackrel{d}{=} \underbrace{f(\cdot)}_\text{prior} + \underbrace{k(\cdot, X_n) (K_{n, n} + \sigma^2I_n)^{-1} (y - f_n - \varepsilon)}_\text{update}
+\]</span> where the first term on the right is a <em>prior</em> term, and the second term is the <em>update</em> term. The two computational bottlenecks for posterior sampling in this fashion are (a) the sampling from prior, and (b) the computation of matrix inverse and multiple for the update. When we turn to approximate sampling, the decoupling of terms due to the Matheron rule enables us to use different approximations to each of the prior and update terms, as opposed to applying one approximation throughout in standard posterior sampling.</p>
+<p>Many approximation methods for GP exist:</p>
+<ul>
+<li>[Low Rank] Random Fourier feature <span class="citation" data-cites="rahimi2007random">(<a href="#ref-rahimi2007random" role="doc-biblioref">Rahimi and Recht 2007</a>)</span></li>
+<li>[Sparse] Inducing points <span class="citation" data-cites="titsias2009variational leibfried2020tutorial">(<a href="#ref-titsias2009variational" role="doc-biblioref">Titsias 2009</a>; <a href="#ref-leibfried2020tutorial" role="doc-biblioref">Leibfried et al. 2020</a>)</span></li>
+<li>[Iterative] Conjugate gradient <span class="citation" data-cites="pleiss2020scalable">(<a href="#ref-pleiss2020scalable" role="doc-biblioref">Pleiss 2020</a>)</span>, SGD <span class="citation" data-cites="lin2023sampling">(<a href="#ref-lin2023sampling" role="doc-biblioref">Lin et al. 2023</a>)</span></li>
+</ul>
+<p>All of the above can be mixed-and-matched to approximate the prior and update terms of the Matheron update to utilise their respective pros. For example, the results in <span class="citation" data-cites="wilson2021pathwise">J. T. Wilson et al. (<a href="#ref-wilson2021pathwise" role="doc-biblioref">2021</a>)</span> suggest that random Fourier feature is good for approximating the prior term, while conjugate gradient is suitable for approximating the update.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="example.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption"><span class="citation" data-cites="wilson2021pathwise">J. T. Wilson et al. (<a href="#ref-wilson2021pathwise" role="doc-biblioref">2021</a>)</span></figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="result.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption"><span class="citation" data-cites="wilson2021pathwise">J. T. Wilson et al. (<a href="#ref-wilson2021pathwise" role="doc-biblioref">2021</a>)</span></figcaption>
+</figure>
+</div>
+
 
 
 </section>
 
-</main> <!-- /main -->
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-leibfried2020tutorial" class="csl-entry" role="listitem">
+Leibfried, Felix, Vincent Dutordoir, ST John, and Nicolas Durrande. 2020. <span>“A Tutorial on Sparse Gaussian Processes and Variational Inference.”</span> <em>arXiv Preprint arXiv:2012.13962</em>.
+</div>
+<div id="ref-lin2023sampling" class="csl-entry" role="listitem">
+Lin, Jihao Andreas, Javier Antorán, Shreyas Padhy, David Janz, José Miguel Hernández-Lobato, and Alexander Terenin. 2023. <span>“Sampling from Gaussian Process Posteriors Using Stochastic Gradient Descent.”</span> <em>Advances in Neural Information Processing Systems</em> 36: 36886–912.
+</div>
+<div id="ref-pleiss2020scalable" class="csl-entry" role="listitem">
+Pleiss, Geoff. 2020. <em>A Scalable and Flexible Framework for Gaussian Processes via Matrix-Vector Multiplication</em>. Cornell University.
+</div>
+<div id="ref-rahimi2007random" class="csl-entry" role="listitem">
+Rahimi, Ali, and Benjamin Recht. 2007. <span>“Random Features for Large-Scale Kernel Machines.”</span> <em>Advances in Neural Information Processing Systems</em> 20.
+</div>
+<div id="ref-titsias2009variational" class="csl-entry" role="listitem">
+Titsias, Michalis. 2009. <span>“Variational Learning of Inducing Variables in Sparse Gaussian Processes.”</span> In <em>Artificial Intelligence and Statistics</em>, 567–74. PMLR.
+</div>
+<div id="ref-wilson2021pathwise" class="csl-entry" role="listitem">
+Wilson, James T, Viacheslav Borovitskiy, Alexander Terenin, Peter Mostowsky, and Marc Peter Deisenroth. 2021. <span>“Pathwise Conditioning of Gaussian Processes.”</span> <em>Journal of Machine Learning Research</em> 22 (105): 1–47.
+</div>
+<div id="ref-wilson2020efficiently" class="csl-entry" role="listitem">
+Wilson, James, Viacheslav Borovitskiy, Alexander Terenin, Peter Mostowsky, and Marc Deisenroth. 2020. <span>“Efficiently Sampling Functions from Gaussian Process Posteriors.”</span> In <em>International Conference on Machine Learning</em>, 10292–302. PMLR.
+</div>
+</div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
