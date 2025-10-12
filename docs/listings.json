@@ -2,6 +2,7 @@
   {
     "listing": "/blog.html",
     "items": [
+      "/posts/2025-10-12-fourier-transform/index.html",
       "/posts/2025-10-08-matheron/index.html",
       "/posts/2025-08-06-mc-qmc-rqmc/index.html",
       "/posts/2025-07-30-brownian-path-upscale/index.html",
