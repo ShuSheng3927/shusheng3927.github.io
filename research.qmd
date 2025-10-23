@@ -2,7 +2,7 @@
 title: "Research"
 ---
 
-My core research focuses on **decision-making under uncertainty**. I leverage probabilistic machine learning methods — with an emphasis on Gaussian processes and physics-inspired models — to design adaptive decision rules such as active learning and Bayesian optimization to tackle real-world decision problems. I am especially interested in problems where practical limitations (e.g. restricted domains, computational budgets, unconventional data sources) shape the nature of decision-making. The applications I am interested in include probabilistic numerics, ocean engineering, and digital twins.
+My core research focuses on **decision-making under uncertainty** -- such as active learning and Bayesian optimization -- where adaptive rules are designed to tackle real-world decision problems. I am especially interested in scenarios where we could leverage physical laws while accommodating practical limitations (e.g. restricted domains, computational budgets, unconventional data sources). These conditions shape the nature of decision-making, and often lead to developments of novel **physics-inspired machine learning** models and techniques. The applications I am interested in include probabilistic numerics, ocean engineering, and digital twins.
 
 ## Publication
 
