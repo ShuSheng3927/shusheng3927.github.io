@@ -166,6 +166,7 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#block-matrix-inversion" id="toc-block-matrix-inversion" class="nav-link active" data-scroll-target="#block-matrix-inversion">Block Matrix Inversion</a></li>
   <li><a href="#marginal-and-conditional-gaussians" id="toc-marginal-and-conditional-gaussians" class="nav-link" data-scroll-target="#marginal-and-conditional-gaussians">Marginal and Conditional Gaussians</a></li>
   <li><a href="#gaussian-process-regression" id="toc-gaussian-process-regression" class="nav-link" data-scroll-target="#gaussian-process-regression">Gaussian Process Regression</a></li>
+  <li><a href="#computational-costs" id="toc-computational-costs" class="nav-link" data-scroll-target="#computational-costs">Computational Costs</a></li>
   </ul>
 </nav>
     </div>
@@ -178,7 +179,7 @@ ul.task-list li input[type="checkbox"] {
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="gp.svg" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Gaussian Process Regression, adapted from <a href="https://docs.jaxgaussianprocesses.com/">https://docs.jaxgaussianprocesses.com/</a>.</figcaption>
+<figcaption class="figure-caption">Gaussian Process Regression, adapted from <a href="https://docs.jaxgaussianprocesses.com/" class="uri">https://docs.jaxgaussianprocesses.com/</a>.</figcaption>
 </figure>
 </div>
 <section id="block-matrix-inversion" class="level3">
@@ -201,7 +202,7 @@ ul.task-list li input[type="checkbox"] {
 <p><span class="math display">\[
 x = \begin{bmatrix} x_A \\ x_B \end{bmatrix} \sim N_d \left( \mu, \Sigma\right) = N_d \left( \begin{bmatrix} \mu_A \\ \mu_B \end{bmatrix}, \begin{bmatrix}\Sigma_{AA} &amp; \Sigma_{AB} \\\Sigma_{BA} &amp; \Sigma_{BB} \\\end{bmatrix}\right).
 \]</span></p>
-<p>It is easy to notice that the <strong>marginal distributions</strong> <span class="math inline">\(x_A\)</span> and <span class="math inline">\(x_B\)</span> can be obtained by selecting the needed entries of the above equation, i.e.&nbsp;</p>
+<p>It is easy to notice that the <strong>marginal distributions</strong> <span class="math inline">\(x_A\)</span> and <span class="math inline">\(x_B\)</span> can be obtained by selecting the needed entries of the above equation, i.e.</p>
 <p><span class="math display">\[
 \begin{split}
 x_A &amp;\sim N_{d_A}(\mu_A, \Sigma_{AA}), \\
@@ -258,17 +259,19 @@ x_B | x_A &amp;\sim N_{d_B}(\mu_B + \Sigma_{BA}\Sigma_{AA}^{-1}(x_A - \mu_A), \S
 </section>
 <section id="gaussian-process-regression" class="level3">
 <h3 class="anchored" data-anchor-id="gaussian-process-regression">Gaussian Process Regression</h3>
-<p>Consider we have a single-output Gaussian process <span class="math inline">\(f \sim \mathcal{GP}(\mu, k)\)</span> where <span class="math inline">\(\mu\)</span> is the mean function and <span class="math inline">\(k\)</span> is the kernel function. The support of this GP is assumed to be <span class="math inline">\(\mathbb{R}^d\)</span>. Consider we have made <span class="math inline">\(m\)</span> observations of this GP <span class="math inline">\(f\)</span> where the observations are made at locations <span class="math inline">\(X \in \mathbb{R}^m\)</span> with values <span class="math inline">\(y \in \mathbb{R}^m\)</span> and the observations are noisy with independent additive Gaussian noise of variance <span class="math inline">\(\sigma^2\)</span>, i.e.&nbsp;<span class="math inline">\(y = f(X) + \xi\)</span> with <span class="math inline">\(\xi_i \sim N(0, \sigma^2) ~\forall i = 1, 2, \ldots, m\)</span>. Denote the existing observations as <span class="math inline">\(\mathcal{D} = \{ X, y \}\)</span>.</p>
+<p>Consider we have a single-output Gaussian process <span class="math inline">\(f \sim \mathcal{GP}(\mu, k)\)</span> where <span class="math inline">\(\mu\)</span> is the mean function and <span class="math inline">\(k\)</span> is the kernel function. The support of this GP is assumed to be <span class="math inline">\(\mathbb{R}^d\)</span>. Consider we have made <span class="math inline">\(n\)</span> observations of this GP <span class="math inline">\(f\)</span> where the observations are made at locations <span class="math inline">\(X \in \mathbb{R}^n\)</span> with values <span class="math inline">\(y \in \mathbb{R}^n\)</span> and the observations are noisy with independent additive Gaussian noise of variance <span class="math inline">\(\sigma^2\)</span>, i.e.&nbsp;<span class="math inline">\(y = f(X) + \xi\)</span> with <span class="math inline">\(\xi_i \sim N(0, \sigma^2) ~\forall i = 1, 2, \ldots, n\)</span>. Denote the existing observations as <span class="math inline">\(\mathcal{D} = \{ X, y \}\)</span>.</p>
 <p>Under our modelling assumptions, we could write down the (log) likelihood of the <span class="math inline">\(m\)</span> observations <span class="math inline">\(y\)</span> under our GP prior <span class="math inline">\(f \sim \mathcal{GP}(\mu, k)\)</span>. Since <span class="math inline">\(y = f(X) + \xi\)</span>, we have</p>
 <p><span class="math display">\[
-y | X \sim N_m \left( \mu(X), k(X, X) + \sigma^2 I_m \right)
-\]</span> paramerised by <span class="math inline">\(\theta\)</span> (e.g.&nbsp;observation noise <span class="math inline">\(\sigma\)</span>, lengthscale and variance of the kernel <span class="math inline">\(k\)</span>) which gives us the following log likelihood</p>
+y | X \sim N_n \left( \mu(X), k(X, X) + \sigma^2 I_n \right)
+\]</span></p>
+<p>paramerised by <span class="math inline">\(\theta\)</span> (e.g.&nbsp;observation noise <span class="math inline">\(\sigma\)</span>, lengthscale and variance of the kernel <span class="math inline">\(k\)</span>) which gives us the following log likelihood</p>
 <p><span class="math display">\[
-\log p(y|X) = - \frac{m}{2}\log(2\pi) - \log | k(X, X) + \sigma^2 I_m | - \frac{1}{2} \left( y - \mu(X) \right)^T ( k(X, X) + \sigma^2 I_m)^{-1}\left( y - \mu(X) \right)
-\]</span> that we maximise w.r.t. <span class="math inline">\(\theta\)</span> to obtain the maximum likelihood estimators of the (hyper)parameters.</p>
-<p>Next, conditional on these observations, we wish to know the distributions of the GP at test points <span class="math inline">\(X_* \in \mathbb{R}^n\)</span>, i.e.&nbsp;the conditional distribution <span class="math inline">\(y_* = f(X_*) ~| \mathcal{D}\)</span>. This can be achieved by first model <span class="math inline">\(y_*\)</span> and <span class="math inline">\(y\)</span> jointly, then condition on <span class="math inline">\(y\)</span>. Using the conditional distribution formula above, we denote for simplicity the Gram matrices</p>
+\log p(y|X) = - \frac{n}{2}\log(2\pi) - \log | k(X, X) + \sigma^2 I_n | - \frac{1}{2} \left( y - \mu(X) \right)^T ( k(X, X) + \sigma^2 I_n)^{-1}\left( y - \mu(X) \right)
+\]</span></p>
+<p>that we maximise w.r.t. <span class="math inline">\(\theta\)</span> to obtain the maximum likelihood estimators of the (hyper)parameters.</p>
+<p>Next, conditional on these observations, we wish to know the distributions of the GP at test points <span class="math inline">\(X_* \in \mathbb{R}^m\)</span>, i.e.&nbsp;the conditional distribution <span class="math inline">\(y_* = f(X_*) ~| \mathcal{D}\)</span>. This can be achieved by first model <span class="math inline">\(y_*\)</span> and <span class="math inline">\(y\)</span> jointly, then condition on <span class="math inline">\(y\)</span>. Using the conditional distribution formula above, we denote for simplicity the Gram matrices</p>
 <p><span class="math display">\[
-K = k(X, X), \qquad K_* = k(X, X_*), \qquad K_{**}=k(X_*, X_*),
+K = k(X, X) \in \mathbb{R}^{n \times n}, \qquad K_* = k(X, X_*) \in \mathbb{R}^{n \times m}, \qquad K_{**}=k(X_*, X_*) \in \mathbb{R}^{m \times m},
 \]</span></p>
 <p>which gives us</p>
 <p><span class="math display">\[
@@ -286,6 +289,89 @@ y_* ~|X_*, \mathcal{D}, \sigma^2 &amp;\sim N_{n}(\mu_{y_* | \mathcal{D}}, K_{y_*
 K_{y_* | \mathcal{D}} &amp;= K_{**} - K_*^T (K + \sigma^2 I_n)^{-1}K_*.
 \end{split}
 \]</span></p>
+</section>
+<section id="computational-costs" class="level3">
+<h3 class="anchored" data-anchor-id="computational-costs">Computational Costs</h3>
+<p>We first state the basic computational costs of matrix operations. See <a href="https://en.wikipedia.org/wiki/Computational_complexity_of_mathematical_operations#Matrix_algebra">here</a> and the links within for more details.</p>
+<table class="table">
+<colgroup>
+<col style="width: 24%">
+<col style="width: 17%">
+<col style="width: 17%">
+<col style="width: 41%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Operations</th>
+<th style="text-align: center;">Dimensions</th>
+<th style="text-align: center;">Cost</th>
+<th style="text-align: center;">Potential Tricks</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">Matrix Inversion</td>
+<td style="text-align: center;"><span class="math inline">\(\mathbb{R}^{n \times n}\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(O(n^3)\)</span></td>
+<td style="text-align: center;">Woodbury matrix identity</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Matrix Determinant</td>
+<td style="text-align: center;"><span class="math inline">\(\mathbb{R}^{n \times n}\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(O(n^3)\)</span></td>
+<td style="text-align: center;">Almost by-product of matrix inversion when using LU decomposition</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Matrix Multiplication</td>
+<td style="text-align: center;"><span class="math inline">\(\mathbb{R}^{n \times m}, \mathbb{R}^{m \times p}\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(O(nmp)\)</span></td>
+<td style="text-align: center;">/</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Matrix Square Root (Cholesky)</td>
+<td style="text-align: center;"><span class="math inline">\(\mathbb{R}^{n \times n}\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(O(n^3)\)</span></td>
+<td style="text-align: center;">/</td>
+</tr>
+</tbody>
+</table>
+<p>Using those, we can realise the following computational costs of GP operations.</p>
+<table class="table">
+<colgroup>
+<col style="width: 30%">
+<col style="width: 47%">
+<col style="width: 21%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Operations</th>
+<th style="text-align: center;">Size</th>
+<th style="text-align: center;">Cost</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">Likelihood Evaluation</td>
+<td style="text-align: center;"><span class="math inline">\(n\)</span> observations</td>
+<td style="text-align: center;"><span class="math inline">\(O(n^3)\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Posterior Mean</td>
+<td style="text-align: center;"><span class="math inline">\(n\)</span> observations, <span class="math inline">\(m\)</span> test points</td>
+<td style="text-align: center;"><span class="math inline">\(O(n^3 + n^2 m)\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Posterior Covariance</td>
+<td style="text-align: center;"><span class="math inline">\(n\)</span> observations, <span class="math inline">\(m\)</span> test points</td>
+<td style="text-align: center;"><span class="math inline">\(O(n^3 + n^2 m + n m^2)\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Posterior Sampling</td>
+<td style="text-align: center;"><span class="math inline">\(n\)</span> observations, <span class="math inline">\(m\)</span> test points, <span class="math inline">\(j\)</span> samples</td>
+<td style="text-align: center;"><span class="math inline">\(O(n^3 + n^2 m + n m^2 + m^2j)\)</span></td>
+</tr>
+</tbody>
+</table>
 
 
 </section>

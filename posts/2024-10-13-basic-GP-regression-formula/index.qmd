@@ -7,17 +7,17 @@ categories:
   - Derivation Scribbles
 ---
 
-![Gaussian Process Regression, adapted from [https://docs.jaxgaussianprocesses.com/](https://docs.jaxgaussianprocesses.com/).](gp.svg)
+![Gaussian Process Regression, adapted from <https://docs.jaxgaussianprocesses.com/>.](gp.svg)
 
 ### Block Matrix Inversion
 
-The first thing we need to establish is the block matrix inversion identity. Consider an invertible matrix $\Sigma$ that can be written as 
+The first thing we need to establish is the block matrix inversion identity. Consider an invertible matrix $\Sigma$ that can be written as
 
 $$
 \Sigma = \begin{bmatrix}\Sigma_{AA} & \Sigma_{AB} \\\Sigma_{BA} & \Sigma_{BB} \\\end{bmatrix}
 $$
 
-where $\Sigma_{AA}, \Sigma_{AB}, \Sigma_{BA}, \Sigma_{BB}$ are matrices of the right dimension and sufficiently non-singular. Next, we have the block matrix inversion identity stated below. 
+where $\Sigma_{AA}, \Sigma_{AB}, \Sigma_{BA}, \Sigma_{BB}$ are matrices of the right dimension and sufficiently non-singular. Next, we have the block matrix inversion identity stated below.
 
 $$
 \begin{split}
@@ -28,13 +28,13 @@ $$
 
 ### Marginal and Conditional Gaussians
 
-Consider a multivariate Gaussian distribution $x = (x_A, x_B)^T$ where $x_A$ is $d_A$ dimensional, $x_B$ is $d_B$ dimensional, and $x$ is $d = d_A + d_B$ dimensional. The mean vector and covariance matrix of the multivariate Gaussian is set to be as follows: 
+Consider a multivariate Gaussian distribution $x = (x_A, x_B)^T$ where $x_A$ is $d_A$ dimensional, $x_B$ is $d_B$ dimensional, and $x$ is $d = d_A + d_B$ dimensional. The mean vector and covariance matrix of the multivariate Gaussian is set to be as follows:
 
 $$
 x = \begin{bmatrix} x_A \\ x_B \end{bmatrix} \sim N_d \left( \mu, \Sigma\right) = N_d \left( \begin{bmatrix} \mu_A \\ \mu_B \end{bmatrix}, \begin{bmatrix}\Sigma_{AA} & \Sigma_{AB} \\\Sigma_{BA} & \Sigma_{BB} \\\end{bmatrix}\right).
 $$
 
-It is easy to notice that the **marginal distributions** $x_A$ and $x_B$ can be obtained by selecting the needed entries of the above equation, i.e. 
+It is easy to notice that the **marginal distributions** $x_A$ and $x_B$ can be obtained by selecting the needed entries of the above equation, i.e.
 
 $$
 \begin{split}
@@ -43,7 +43,7 @@ x_B &\sim N_{d_B}(\mu_B, \Sigma_{BB}).
 \end{split}
 $$
 
-The conditional distributions are a bit tricky, which we will derive below. Due to symmetry, we will derive the conditional distribution $x_A | x_B$ and just state $x_B | x_A$. Using $p(\cdot)$ to denote the density of a random variable, we have 
+The conditional distributions are a bit tricky, which we will derive below. Due to symmetry, we will derive the conditional distribution $x_A | x_B$ and just state $x_B | x_A$. Using $p(\cdot)$ to denote the density of a random variable, we have
 
 $$
 \begin{split}
@@ -51,7 +51,7 @@ p(x_A | x_B) &= \frac{p(x_A, x_B)}{p(x_B)} \\ &\propto \exp\left\{  -\frac{1}{2}
 \end{split}
 $$
 
-Focusing on the terms inside the second exponential, we first denote 
+Focusing on the terms inside the second exponential, we first denote
 
 $$
 \Sigma^{-1} = \begin{bmatrix} V_{AA} & V_{AB} \\ V_{BA} & V_{BB} \end{bmatrix}
@@ -69,7 +69,7 @@ $$
 \end{split}
 $$
 
-We can keep terms with $x_A$ and put the rest into the normalising constant. As $V_{AA}$ is square and $V_{AB}= V_{BA}^T$, we can simplify our above equation into 
+We can keep terms with $x_A$ and put the rest into the normalising constant. As $V_{AA}$ is square and $V_{AB}= V_{BA}^T$, we can simplify our above equation into
 
 $$
 \begin{split} 
@@ -79,13 +79,13 @@ $$
 \end{split}
 $$
 
-for some constant $C$ independent of $x_A$ and the newly defined 
+for some constant $C$ independent of $x_A$ and the newly defined
 
 $$
 \mu' = \mu_A - V_{AA}^{-1}V_{AB} (x_B - \mu_B).
 $$
 
-Therefore, using the values of $V_{AA}, V_{AB}$ from the block matrix inversion formula earlier, we have 
+Therefore, using the values of $V_{AA}, V_{AB}$ from the block matrix inversion formula earlier, we have
 
 $$
 \begin{split}
@@ -106,27 +106,29 @@ $$
 
 ### Gaussian Process Regression
 
-Consider we have a single-output Gaussian process $f \sim \mathcal{GP}(\mu, k)$ where $\mu$ is the mean function and $k$ is the kernel function. The support of this GP is assumed to be $\mathbb{R}^d$. Consider we have made $m$ observations of this GP $f$ where the observations are made at locations $X \in \mathbb{R}^m$ with values $y \in \mathbb{R}^m$ and the observations are noisy with independent additive Gaussian noise of variance $\sigma^2$, i.e. $y = f(X) + \xi$ with $\xi_i \sim N(0, \sigma^2) ~\forall i = 1, 2, \ldots, m$. Denote the existing observations as $\mathcal{D} = \{ X, y \}$.
+Consider we have a single-output Gaussian process $f \sim \mathcal{GP}(\mu, k)$ where $\mu$ is the mean function and $k$ is the kernel function. The support of this GP is assumed to be $\mathbb{R}^d$. Consider we have made $n$ observations of this GP $f$ where the observations are made at locations $X \in \mathbb{R}^n$ with values $y \in \mathbb{R}^n$ and the observations are noisy with independent additive Gaussian noise of variance $\sigma^2$, i.e. $y = f(X) + \xi$ with $\xi_i \sim N(0, \sigma^2) ~\forall i = 1, 2, \ldots, n$. Denote the existing observations as $\mathcal{D} = \{ X, y \}$.
 
-Under our modelling assumptions, we could write down the (log) likelihood of the $m$ observations $y$ under our GP prior $f \sim \mathcal{GP}(\mu, k)$. Since $y = f(X) + \xi$, we have 
+Under our modelling assumptions, we could write down the (log) likelihood of the $m$ observations $y$ under our GP prior $f \sim \mathcal{GP}(\mu, k)$. Since $y = f(X) + \xi$, we have
 
 $$
-y | X \sim N_m \left( \mu(X), k(X, X) + \sigma^2 I_m \right) 
-$$
+y | X \sim N_n \left( \mu(X), k(X, X) + \sigma^2 I_n \right) 
+$$ 
+
 paramerised by $\theta$ (e.g. observation noise $\sigma$, lengthscale and variance of the kernel $k$) which gives us the following log likelihood
 
 $$
-\log p(y|X) = - \frac{m}{2}\log(2\pi) - \log | k(X, X) + \sigma^2 I_m | - \frac{1}{2} \left( y - \mu(X) \right)^T ( k(X, X) + \sigma^2 I_m)^{-1}\left( y - \mu(X) \right)
-$$
-that we maximise w.r.t. $\theta$ to obtain the maximum likelihood estimators of the (hyper)parameters. 
+\log p(y|X) = - \frac{n}{2}\log(2\pi) - \log | k(X, X) + \sigma^2 I_n | - \frac{1}{2} \left( y - \mu(X) \right)^T ( k(X, X) + \sigma^2 I_n)^{-1}\left( y - \mu(X) \right)
+$$ 
 
-Next, conditional on these observations, we wish to know the distributions of the GP at test points $X_* \in \mathbb{R}^n$, i.e. the conditional distribution $y_* = f(X_*) ~| \mathcal{D}$. This can be achieved by first model $y_*$ and $y$ jointly, then condition on $y$. Using the conditional distribution formula above, we denote for simplicity the Gram matrices
+that we maximise w.r.t. $\theta$ to obtain the maximum likelihood estimators of the (hyper)parameters.
+
+Next, conditional on these observations, we wish to know the distributions of the GP at test points $X_* \in \mathbb{R}^m$, i.e. the conditional distribution $y_* = f(X_*) ~| \mathcal{D}$. This can be achieved by first model $y_*$ and $y$ jointly, then condition on $y$. Using the conditional distribution formula above, we denote for simplicity the Gram matrices
 
 $$
-K = k(X, X), \qquad K_* = k(X, X_*), \qquad K_{**}=k(X_*, X_*),
+K = k(X, X) \in \mathbb{R}^{n \times n}, \qquad K_* = k(X, X_*) \in \mathbb{R}^{n \times m}, \qquad K_{**}=k(X_*, X_*) \in \mathbb{R}^{m \times m},
 $$
 
-which gives us 
+which gives us
 
 $$
 \begin{split} 
@@ -145,5 +147,29 @@ y_* ~|X_*, \mathcal{D}, \sigma^2 &\sim N_{n}(\mu_{y_* | \mathcal{D}}, K_{y_* | \
 K_{y_* | \mathcal{D}} &= K_{**} - K_*^T (K + \sigma^2 I_n)^{-1}K_*.
 \end{split}
 $$
+
+
+### Computational Costs
+
+We first state the basic computational costs of matrix operations. See [here](https://en.wikipedia.org/wiki/Computational_complexity_of_mathematical_operations#Matrix_algebra) and the links within for more details. 
+
+| Operations        | Dimensions   | Cost  | Potential Tricks  |
+|:-----:|:---:|:---:|:----------:|
+|  Matrix Inversion    |  $\mathbb{R}^{n \times n}$ | $O(n^3)$  | Woodbury matrix identity |
+|  Matrix Determinant    |  $\mathbb{R}^{n \times n}$ | $O(n^3)$  | Almost by-product of matrix inversion when using LU decomposition |
+|  Matrix Multiplication    |  $\mathbb{R}^{n \times m}, \mathbb{R}^{m \times p}$ | $O(nmp)$  | / |
+| Matrix Square Root (Cholesky)  |  $\mathbb{R}^{n \times n}$ | $O(n^3)$  | / |
+
+Using those, we can realise the following computational costs of GP operations. 
+
+| Operations |  Size     | Cost  |
+|:-----:|:---------:|:---:|
+|  Likelihood Evaluation    |  $n$ observations | $O(n^3)$  | 
+|  Posterior Mean    |  $n$ observations, $m$ test points | $O(n^3 + n^2 m)$  |
+|  Posterior Covariance    |  $n$ observations, $m$ test points | $O(n^3 + n^2 m + n m^2)$  | 
+|  Posterior Sampling    |  $n$ observations, $m$ test points, $j$ samples | $O(n^3 + n^2 m + n m^2 + m^2j)$  |
+
+
+
 
 

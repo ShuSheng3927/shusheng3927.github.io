@@ -34,7 +34,7 @@ def rqmc_estimate(n):
     return np.mean(f(x))
 
 # Run multiple trials and compute MSE
-def run_mse(estimator, n, trials=1000):
+def run_mse(estimator, n, trials=10000):
     estimates = np.array([estimator(n) for _ in range(trials)])
     mse = np.mean((estimates - true_value)**2)
     return mse

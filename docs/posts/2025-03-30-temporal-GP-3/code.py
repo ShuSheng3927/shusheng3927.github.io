@@ -184,7 +184,6 @@ def compute_neg_log_marginal_likelihood(params, y):
     loglik = kalman_likelihood(obs_val, f0, P0, Phi, Q, H, obs_noise)
     return -loglik
 
-
 #%%
 # simulate ground truth
 
@@ -260,8 +259,8 @@ plt.show()
 
 #%%
 # regression via SDE approach
-
-f_filt, P_filt, f_pred, P_pred = kalman_filter(time_grid,obs_val, f0, P_inf, obs_idx, Phi, Q, H, obs_noise)
+f_init = jnp.array([0.,0.])
+f_filt, P_filt, f_pred, P_pred = kalman_filter(time_grid,obs_val, f_init, P_inf, obs_idx, Phi, Q, H, obs_noise)
 f_smooth, P_smooth = rts_smoother(f_filt, P_filt, f_pred, P_pred, Phi)
 
 plt.figure(figsize=(7.5, 2.5))
@@ -326,7 +325,8 @@ n_steps = time_grid.shape[0]
 Phi_est = expm(F_est * dt)
 Q_est = P_inf_est - Phi_est @ P_inf_est @ Phi_est.T
 
-f_filt, P_filt, f_pred, P_pred = kalman_filter(time_grid,obs_val, f0, P_inf, obs_idx, Phi, Q, H, obs_noise)
+f_init = jnp.array([0.,0.])
+f_filt, P_filt, f_pred, P_pred = kalman_filter(time_grid,obs_val, f_init, P_inf, obs_idx, Phi, Q, H, obs_noise)
 f_smooth, P_smooth = rts_smoother(f_filt, P_filt, f_pred, P_pred, Phi)
 
 plt.figure(figsize=(7.5, 2.5))
@@ -371,9 +371,8 @@ likelihood = gpx.likelihoods.Gaussian(num_datapoints=D.n, obs_stddev = obs_noise
 posterior = prior * likelihood
 
 latent_dist = posterior.predict(xtest, train_data=D)
-predictive_dist = posterior.likelihood(latent_dist)
-predictive_mean = predictive_dist.mean()
-predictive_std = predictive_dist.stddev()
+predictive_mean = latent_dist.mean()
+predictive_std = latent_dist.stddev()
 
 # fig, ax = plt.subplots(figsize=(15, 2.5))
 # ax.plot(
@@ -471,3 +470,4 @@ plt.show()
 # plt.xlabel("Observation Number")
 # plt.ylabel("Time (s)")
 # plt.title("Computational Time of Likelihood Training for Kalman Filter GP Regression")
+# %%
