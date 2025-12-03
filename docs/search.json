@@ -151,7 +151,7 @@
     "href": "index.html",
     "title": "Rui-Yang Zhang",
     "section": "",
-    "text": "I am currently a second year Computational Statistics and Machine Learning PhD student of STOR-i CDT at Lancaster University and am supported by TIDE in Australia. I develop probabilistic methods for decision-making under uncertainty, using physics-inspired machine learning that incorporate physical structure and practical constraints. My supervisors are Henry Moss and David Leslie at Lancaster, as well as Lachlan Astfalck and Edward Cripps at UWA.\nPreviously, I did BSc Mathematics and Statistical Science at UCL where I was mentored by Sam Livingstone and received a Royal Statistical Society Award.\nI am broadly interested in computational statistics and machine learning methodologies, and their applications in science and engineering. See here for more information.\n\n\n\nAdapted from Adrien’s codes."
+    "text": "I am currently a second year Computational Statistics and Machine Learning PhD student of STOR-i CDT at Lancaster University and am supported by TIDE in Australia. My research focuses on physics-informed machine learning, especially Gaussian processes, and decision-making under uncertainty, inspired by real-world applications in science and engineering. My supervisors are Henry Moss and David Leslie at Lancaster, as well as Lachlan Astfalck and Edward Cripps at UWA.\nPreviously, I did BSc Mathematics and Statistical Science at UCL where I was mentored by Sam Livingstone and received a Royal Statistical Society Award.\nI am broadly interested in computational statistics and machine learning methodologies, and their applications in science and engineering. See here for more information.\n\n\n\nAdapted from Adrien’s codes."
   },
   {
     "objectID": "blog.html",
@@ -179,7 +179,7 @@
     "href": "notes.html#slides",
     "title": "Notes & Slides",
     "section": "Slides",
-    "text": "Slides\n\nBALLAST: Bayesian Active Learning with Look-ahead Amendment for Sea-drifter Trajectories\nLLM for Research"
+    "text": "Slides\n\nLLM for Research\nDouble Descent"
   },
   {
     "objectID": "posts/2024-10-13-basic-GP-regression-formula/index.html",
@@ -305,7 +305,7 @@
     "href": "research.html",
     "title": "Research",
     "section": "",
-    "text": "My core research focuses on decision-making under uncertainty – such as active learning and Bayesian optimization – where adaptive rules are designed to tackle real-world decision problems. I am especially interested in scenarios where we could leverage physical laws while accommodating practical limitations (e.g. restricted domains, computational budgets, unconventional data sources). These conditions shape the nature of decision-making, and often lead to developments of novel physics-inspired machine learning models and techniques. The applications I am interested in include probabilistic numerics, ocean engineering, and digital twins."
+    "text": "My core research focuses on physics-informed machine learning and decision-making under uncertainty, often inspired from real-world applications in science and engineering. With physics-informed machine learning, I focus on Gaussian processes and investigate how one could inject physical knowledge into them while also computationally efficient. With decision-making under uncertainty, I focus mostly on sequential decision-making – such as active learning and Bayesian optimization – with practical constraints that requires non-trivial adjustments to the adaptive rules. The application domains I am interested in include probabilistic numerics, ocean engineering, and digital twins."
   },
   {
     "objectID": "research.html#publication",

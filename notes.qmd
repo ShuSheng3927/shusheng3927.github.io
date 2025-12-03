@@ -44,6 +44,6 @@ title: "Notes & Slides"
 
 ## Slides
 
-1. [BALLAST: Bayesian Active Learning with Look-ahead Amendment for Sea-drifter Trajectories](files/BALLAST_workshop.pptx)
+1. [LLM for Research](files/llm_for_research_Rui.pdf)
 
-2. [LLM for Research](files/llm_for_research_Rui.pdf)
+2. [Double Descent](files/double_descent.pptx)
