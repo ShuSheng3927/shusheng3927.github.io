@@ -19,10 +19,19 @@ about:
       href: files/cv.pdf
 ---
 
-I am currently a second year Computational Statistics and Machine Learning PhD student of [STOR-i CDT](https://www.lancaster.ac.uk/stor-i/) at Lancaster University and am supported by [TIDE](https://tide.edu.au) in Australia. My research focuses on **physics-informed machine learning**, especially Gaussian processes, and **decision-making under uncertainty**, inspired by real-world applications in science and engineering. My supervisors are [Henry Moss](https://henrymoss.github.io) and [David Leslie](https://www.lancaster.ac.uk/maths/people/david-leslie) at [Lancaster](https://www.lancaster.ac.uk/maths/), as well as [Lachlan Astfalck](https://astfalckl.github.io) and [Edward Cripps](https://research-repository.uwa.edu.au/en/persons/edward-cripps) at [UWA](https://www.uwa.edu.au/schools/physics-mathematics-computing/mathematics-and-stats). 
+I am currently a second year Computational Statistics and Machine Learning PhD student of [STOR-i CDT](https://www.lancaster.ac.uk/stor-i/) at Lancaster University and am supported by [ARC TIDE Hub](https://tide.edu.au) in Australia. My research focuses on **physics-informed machine learning**, especially Gaussian processes, and **decision-making under uncertainty**, inspired by real-world applications in science and engineering. My supervisors are [Henry Moss](https://henrymoss.github.io) and [David Leslie](https://www.lancaster.ac.uk/maths/people/david-leslie) at [Lancaster](https://www.lancaster.ac.uk/maths/), as well as [Lachlan Astfalck](https://astfalckl.github.io) and [Edward Cripps](https://research-repository.uwa.edu.au/en/persons/edward-cripps) at [UWA](https://www.uwa.edu.au/schools/physics-mathematics-computing/mathematics-and-stats). 
 
 Previously, I did BSc Mathematics and Statistical Science at [UCL](https://www.ucl.ac.uk/maths/) where I was mentored by [Sam Livingstone](https://samueljlivingstone.wixsite.com/webpage) and received a [Royal Statistical Society](https://rss.org.uk) Award. 
 
 I am broadly interested in computational statistics and machine learning methodologies, and their applications in science and engineering. See [here](./research.html) for more information. 
+
+
+### News
+
+- [Jan 26] Presented [BALLAST](https://arxiv.org/abs/2509.26005) at the STOR-i Annual Conference in Lancaster and the Irish CRT Winter Symposium in Dublin.   
+
+- [Dec 25] Our paper [Skew-symmetric schemes for stochastic differential equations with non-Lipschitz drift](https://arxiv.org/abs/2405.14373) has been accepted in the [IMA Journal of Numerical Analysis](https://academic.oup.com/imajna)! This is joint work with [Yuga Iguchi](https://www.yugaiguchi.com), [Sam Livingstone](https://samueljlivingstone.wixsite.com/webpage), [Nik Nüsken](https://www.kcl.ac.uk/people/nikolas-nusken), and [Giorgos Vasdekis](https://sites.google.com/view/giorgosvasdekis/home). 
+
+
 
 ![Adapted from [Adrien](https://adriencorenflos.github.io/)'s [codes](https://t.co/1qWXSqgKoz).](./CSML.gif)
