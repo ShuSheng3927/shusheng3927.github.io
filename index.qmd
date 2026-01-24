@@ -19,12 +19,11 @@ about:
       href: files/cv.pdf
 ---
 
-I am currently a second year Computational Statistics and Machine Learning PhD student of [STOR-i CDT](https://www.lancaster.ac.uk/stor-i/) at Lancaster University and am supported by [ARC TIDE Hub](https://tide.edu.au) in Australia. My research focuses on **physics-informed machine learning**, especially Gaussian processes, and **decision-making under uncertainty**, inspired by real-world applications in science and engineering. My supervisors are [Henry Moss](https://henrymoss.github.io) and [David Leslie](https://www.lancaster.ac.uk/maths/people/david-leslie) at [Lancaster](https://www.lancaster.ac.uk/maths/), as well as [Lachlan Astfalck](https://astfalckl.github.io) and [Edward Cripps](https://research-repository.uwa.edu.au/en/persons/edward-cripps) at [UWA](https://www.uwa.edu.au/schools/physics-mathematics-computing/mathematics-and-stats). 
+I am currently a second year Computational Statistics and Machine Learning PhD student of [STOR-i CDT](https://www.lancaster.ac.uk/stor-i/) at Lancaster University and am supported by [ARC TIDE Hub](https://tide.edu.au) in Australia. My supervisors are [Henry Moss](https://henrymoss.github.io) and [David Leslie](https://www.lancaster.ac.uk/maths/people/david-leslie) at [Lancaster](https://www.lancaster.ac.uk/maths/), as well as [Lachlan Astfalck](https://astfalckl.github.io) and [Edward Cripps](https://research-repository.uwa.edu.au/en/persons/edward-cripps) at [UWA](https://www.uwa.edu.au/schools/physics-mathematics-computing/mathematics-and-stats). 
+
+I am broadly interested in the decision aspect of Bayesian computational statistics and machine learning. In particular, my research focuses on developing **sequential Bayesian designs** -- such as active learning and Bayesian optimization -- for a wide range of application areas including *probabilistic numerics* and *ocean engineering*. I am also exploring what **post-Bayesian** ideas could offer for more robust, efficient decision-making. 
 
 Previously, I did BSc Mathematics and Statistical Science at [UCL](https://www.ucl.ac.uk/maths/) where I was mentored by [Sam Livingstone](https://samueljlivingstone.wixsite.com/webpage) and received a [Royal Statistical Society](https://rss.org.uk) Award. 
-
-I am broadly interested in Bayesian computational statistics and machine learning methodologies, and their applications in science and engineering. See [here](./research.html) for more information. 
-
 
 ### News
 

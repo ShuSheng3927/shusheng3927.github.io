@@ -2,7 +2,7 @@
 title: "Research"
 ---
 
-My core research focuses on **physics-informed machine learning** and **decision-making under uncertainty**, often inspired from real-world applications in science and engineering. With physics-informed machine learning, I focus on Gaussian processes and investigate how one could inject physical knowledge into them while also computationally efficient. With decision-making under uncertainty, I focus mostly on sequential decision-making -- such as active learning and Bayesian optimization -- with practical constraints that requires non-trivial adjustments to the adaptive rules. The application domains I am interested in include probabilistic numerics, ocean engineering, and digital twins.
+I am broadly interested in the decision aspects of Bayesian computational statistics and machine learning. In particular, my research focuses on developing **sequential Bayesian designs** -- such as active learning and Bayesian optimization -- for a wide range of application areas including *probabilistic numerics* and *ocean engineering*. I am also exploring what **post-Bayesian** ideas could offer for more robust, efficient decision-making. 
 
 ## Publication
 
