@@ -27,12 +27,37 @@ Previously, I did BSc Mathematics and Statistical Science at [UCL](https://www.u
 
 ### News
 
-- [Feb 26] Attended [AI Across Scale](https://www.newton.ac.uk/event/rclw05/) workshop at the Newton Institute in Cambridge and presented [BALLAST](https://arxiv.org/abs/2509.26005).
+- [Feb 26] Presented [BALLAST](https://arxiv.org/abs/2509.26005) at [AI Across Scale workshop](https://www.newton.ac.uk/event/rclw05/) in Newton Institute, Cambridge. 
 
 - [Jan 26] Presented [BALLAST](https://arxiv.org/abs/2509.26005) at the STOR-i Annual Conference in Lancaster and the Irish CRT Winter Symposium in Dublin.   
 
 - [Dec 25] Our paper [Skew-symmetric schemes for stochastic differential equations with non-Lipschitz drift](https://arxiv.org/abs/2405.14373) has been accepted in the [IMA Journal of Numerical Analysis](https://academic.oup.com/imajna)! This is joint work with [Yuga Iguchi](https://www.yugaiguchi.com), [Sam Livingstone](https://samueljlivingstone.wixsite.com/webpage), [Nik Nüsken](https://www.kcl.ac.uk/people/nikolas-nusken), and [Giorgos Vasdekis](https://sites.google.com/view/giorgosvasdekis/home). 
 
+<details>
+<summary><strong>Older News</strong></summary>
 
+- [Oct 25] Presented VaSE at [Workshop on Kernels, Flows, and Sampling](https://sites.google.com/view/kernels-flows-and-sampling/home) in Newcastle. Had a great time!
+
+- [Oct 25] Presented [BALLAST](https://arxiv.org/abs/2509.26005) at [Physics Enhancing Machine Learning workshop](https://iop.eventsair.com/asm2025/) in Institute of Physics, London.  
+
+- [Sep 25] Passed the baton of organising the [LAI reading group](https://lai-reading-group.github.io) to [Cass](https://www.lancaster.ac.uk/stor-i-student-sites/cassandra-durr/). What a year!
+
+- [Aug 25] Supervised two wonderful [STOR-i Summer Interns](https://www.lancaster.ac.uk/stor-i/summer-research-projects/): [Ben](https://uk.linkedin.com/in/benjamin-matsaert-7b9218231) on probabilistic eddy identifications and [Harriett](https://uk.linkedin.com/in/harriett-du-four-9b1175235) (co-supervised with [Kajal](https://www.lancaster.ac.uk/stor-i/about-us/people/kajal-dodhia)) on sea surface temperature modelling. 
+
+- [Jul 25] Awarded the [PGR Citizenship Prize](https://www.lancaster.ac.uk/stor-i/about-us/news/joint-pgr-citizenship-award-for-stor-i-student) with [Andreas](https://uk.linkedin.com/in/andreas-makris-41868b225) by the School of Mathematical Sciences for setting up the [LAI reading group](https://lai-reading-group.github.io). 
+
+- [Jun 25] Conducted a week-long research visit at UCL with [Yuga](https://www.yugaiguchi.com), [Sam](https://samueljlivingstone.wixsite.com/webpage), and [Giorgos](https://sites.google.com/view/giorgosvasdekis/home); sponsored by the [Heilbronn Institute](http://heilbronn.ac.uk).
+
+- [Mar 25] Did several outreach talks to sixth form students in Lancashire (Lancaster, Blackpool, and Southport) on decision and game theories -- giving back to the community. Supported by [STOR-i](https://www.lancaster.ac.uk/stor-i/), especially [Wendy](https://www.lancaster.ac.uk/stor-i/about-us/people/wendy-shimmin) and [Kate](https://www.lancaster.ac.uk/sci-tech/about-us/people/kate-haywood)! 
+
+- [Feb 25] Presented an earlier version of [BALLAST](https://arxiv.org/abs/2509.26005) at the Statistics PhD Seminar in UCL. Talk recording can be found [here](https://youtu.be/1W5YQzI1yaQ?si=zLQn13T3Xn0lcBgv).
+
+- [Dec 24] Attended [APTS](https://warwick.ac.uk/fac/sci/statistics/apts/) training in Oxford. Beautiful place!  
+
+- [Nov 24] Visited UWA in Perth, Australia for a month; sponsored by [ARC TIDE Hub](https://tide.edu.au). Nice sunny break from the damp English winter. 
+
+- [Sep 24] Co-organised the [BayesAI workshop](https://bayesaiworkshop.github.io); sponsored by [STOR-i](https://www.lancaster.ac.uk/stor-i/) and [ProbAI](https://www.probai.uk). 
+
+</details>
 
 ![Adapted from [Adrien](https://adriencorenflos.github.io/)'s [codes](https://t.co/1qWXSqgKoz).](./CSML.gif)
