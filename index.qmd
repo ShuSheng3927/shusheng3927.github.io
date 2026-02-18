@@ -27,7 +27,7 @@ Previously, I did BSc Mathematics and Statistical Science at [UCL](https://www.u
 
 ### News
 
-- [Feb 26] Presented [BALLAST](https://arxiv.org/abs/2509.26005) at [AI Across Scale workshop](https://www.newton.ac.uk/event/rclw05/) in Newton Institute, Cambridge. 
+- [Feb 26] Presented [BALLAST](https://arxiv.org/abs/2509.26005) at [AI Across Scale workshop](https://www.newton.ac.uk/event/rclw05/) in Newton Institute, Cambridge. The recording of my talk can be found [here](https://youtu.be/lggo0HE9ALM?si=y0zkR8x47QUDaN2_).
 
 - [Jan 26] Presented [BALLAST](https://arxiv.org/abs/2509.26005) at the STOR-i Annual Conference in Lancaster and the Irish CRT Winter Symposium in Dublin.   
 

@@ -26,6 +26,10 @@ title: "Notes & Slides"
 
 5.  [Markov Decision Processes and How to Solve Them](files/MDP.pdf) ([code](files/gridworld.py))
 
+### Numerical Analysis
+
+1. [Dirichlet Laplacian Eigenfunction Problem](files/Dirichlet_Laplacian_Eigenfunction_Problem.pdf)
+
 ### Biostatistics
 
 1.  [Multiple Testing Problem](files/MTP.pdf)
