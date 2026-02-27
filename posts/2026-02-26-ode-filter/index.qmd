@@ -1,0 +1,217 @@
+---
+title: "[Derivation Scribbles] Probabilistic ODE Solvers"
+description: "Probabilistic Numerics ODE Solver"
+date: "26 Feb 2026"
+bibliography: references.bib
+categories:
+  - Derivation Scribbles
+  - Data Assimilation
+  - Gaussian Process
+---
+
+Probabilistic numeric aim to recast numerical algorithms probabilistically to provide uncertainty quantification to the algorithm outputs. Here, we look at how to turn ODE solvers probabilistic. 
+
+Consider the generic initial value problem, consisting an ODE between $[0, T]$ with boundary condition 
+
+$$
+\frac{d}{dt} y(t) = f(y(t), t) \qquad y(0) = y_0 \in \mathbb{R}^d
+$$
+
+where $f$ is a (potentially nonlinear) function indicating the drift of the dynamics, where we aim to obtain a solution (function) $y:[0,T] \to \mathbb{R}^d$ satisfying the above conditions. Now, solving such problems exactly could be difficult, so one often solve them approximately using numerical methods. We often denote the true solution as $y$ and the approximate solution as $x$. 
+
+We can first rephrase the problem into the residual form 
+
+$$
+\frac{d}{dt} y(t) - f(y(t), t) = 0
+$$
+
+and the *collocation* method (one class of ODE solvers) aims to make sure the solution $x$ matches the above residual equation at multiple collocation points, i.e. we consider time steps $t_1, t_2, \ldots, t_k$ such that 
+
+$$
+z(t_n) := \frac{d}{dt} x(t_n) - f(x(t_n), t_n) = 0 \quad \forall n.
+$$
+
+This collocation method^[Note that this is not the approach of Euler's method (for example) that approximates the solution by 'freezing' the drift between two consecutive time steps.] is the key to the probabilistic solver we will be discussing below. 
+
+## Probabilistic ODE Solver
+
+The probabilistic solver establishes a Bayesian inference framework where we use the ODE conditions (dynamics and boundary conditions) as data to update our belief of the solution function. 
+
+### Prior
+
+For the first-order^[can be higher orders] ODE we are considering here, we consider the following prior two-dimensional stochastic process $\{X_t\}$ satisfying the SDE
+
+$$
+dX_t = d\begin{bmatrix} X_t^{(1)} \\ X_t^{(2)} \end{bmatrix} = [F X_t + u] dt + L dB_t
+$$
+
+where $F, u, L$ are known constant matrices. Here, $X_t^{(1)}$ denotes the solution function and $X_t^{(2)}$ denotes the first derivative of the solution function -- this requires the constant matrices of the above SDE to satisfy 
+
+$$
+dX_t^{(1)} = X_t^{(2)} dt
+$$
+
+for any $t$. 
+
+The precise prior choices (i.e. the choices of $F, u, L$) include a $\nu$-times integrated Wiener process (IWP($\nu$)), a $\nu$-times integrated Ornstein-Uhlenbeck process, or a Mat\'ern process of order $\nu + 1/2$. We also remark here that the SDE is linear, thus the transition can be obtained *exactly* following standard stochastic calculus results. 
+
+### Data
+
+As mentioned earlier, the data here are the collocation residuals. We define the residual dynamics 
+
+$$
+Z_t := X_t^{(2)} - f(X_t^{(1)}, t) =: \dot{C} X_t - f(C X_t , t)
+$$
+
+where we create constant matrices $C, \dot{C}$ that selects the correct coordinates (original solution and its first derivatve) of the full dynamics $\{X_t\}$. 
+
+The data are thus zero-values of $Z_t$ at selected time steps $t_1, t_2, \ldots$. For simplicity, we consider fixed stepsize $h$ so $t_{n+1} = t_n + h$ and write $Z_n := Z_{t_n}$ to make the notation neater. Therefore, our data / observations are the collocation points, as well as the initial conditions
+
+$$
+Z_1, Z_2, \ldots, Z_k = 0, \quad CX_0 = y_0.
+$$
+
+### Posterior
+
+To construct the posterior dynamics -- which is also the ODE solutions -- we just need to assimilate the data into the prior dynamics. Notice that the prior dynamics is driven by a linear SDE, the assimilation can be obtained via a standard Kalman filter and smoother if the data are *linearly* dependent on the dynamics. 
+
+Unfortunately, we are often interested in nonlinear ODEs, which means $f$, and therefore $Z$, would be nonlinear, thus requiring either linearization (extended Kalman filter) or particle approximation (particle filter). 
+
+Below, we first present the general posterior update. In subsequent subsections, the extended Kalamn filter (EKF) and the partical filter approximations will be described. 
+
+First, at uniform, discrete time steps $t_1, t_2, \ldots, t_k$ with stepsize $h$, we write $X_{t_n}$ as $X_n$ and have the following distributions for all $n$
+
+$$ 
+\boxed{
+\begin{split}
+X_{n+1}~|~X_n &\sim N(A_h X_n + \xi_h, Q_h) \\
+Z_n ~|~ X_n &\sim N(\dot{C}X_n - f(C X_n, t_n), R)
+\end{split}}
+$$ {#eq-state-space}
+
+where $A_h, Q_h, X_h$ are transition matrices directly computable from $F, u, L$ via integrating the SDE over a time period of $h$, and $R$ is the observation noise (could be set to zero).  
+
+We write the mean and the covariance of $X$ at time $t_n$ as $\mu_n$ and $\Sigma_n$ respectively, and use superscripts $F$ and $P$ to represent the filtered and propagating distributions respectively. So, we have 
+
+$$
+\boxed{
+\begin{split}
+X_0 &\sim N(\mu_0^F, \Sigma_0^F) \\
+\mu_{n+1}^P &= A_h \mu_{n}^F + \xi_h \\
+\Sigma_{n+1}^P &= A_h \Sigma_{n+1}^F A_h^T + Q_h 
+\end{split}}
+$$
+
+for the propagating mean and covariance, and 
+
+$$
+\boxed{
+\begin{split}
+S_n &= \text{Var}[\dot{C}X_n - f(CX_n, t_n) ~|~ Z_{1:n-1}] + R \\
+K_n &= \text{Cov}[X_n, \dot{C}X_n - f(CX_n, t_n) ~|~ Z_{1:n-1}] S_n^{-1} \\
+\hat{z}_n &= \mathbb{E}[\dot{C}X_n - f(CX_n, t_n) ~|~ Z_{1:n-1}] \\
+\mu_n^F &= \mu_n^P + K_n (z_n - \hat{z}_n) \\
+\Sigma_n^F &= \Sigma_n^P - K_n S_n K_n^T
+\end{split}}
+$$ {#eq-filtered-mean}
+
+for the filtered mean and covariance. Again, it can be noticed that the linearity of (or lack there of) $f$ determines if the updates are analytic or not. 
+
+### Extended Kalman Filter 
+
+The [extended Kalman filter](https://en.wikipedia.org/wiki/Extended_Kalman_filter) is an extension of Kalman filter for nonlinear updates by approximating nonlinear updates by a linear proxy via Taylor's expansion. Here, the key nonlinearity is with $f(CX_n, t_n)$, which we approximate using either the zeroth-order or the first-order Taylor expansion of $X_n$ around $\mu_n^P$, i.e. 
+
+$$
+f(CX_n, t_n) \approx f(C\mu_n^P, t_n) \quad \text{or} \quad f(CX_n, t_n) \approx f(C\mu_n^P, t_n) + J_f(C\mu_n^P, t_n) C(X_n - \mu_n^P)
+$$
+
+for $J_f$ being the Jacobian of $y \mapsto f(y,t)$. The extended Kalman filter thus works by replacing the original $f$ with the above approximations. The resulting algorithms are termed **EK0** and **EK1** for zeroth- and first-order approximations respectively. 
+
+### Particle Filter 
+
+The [particle filter](https://shusheng3927.github.io/files/intro_smc.pdf) approximate the various filtered and propagating distributions using the empirical distributions formed by a fixed number of samples (also known as particles). After initialising $J$ samples at time zero from the prior distribution, it gets propagated, assimilated (via likelihood-based weighting), resampled, and propagated again for each time step. While extended particle filter always produce errors in approximations, particle filter is unbiased and asymptotically exact when $J \to \infty$. 
+
+We write the $J$ samples for $X_n$ as $X_{n,j}$ for $j = 1, 2, \ldots, J$. We consider a Markov kernel $g$ that propagates samples from $X_{n,j}$ to the next time step, i.e. 
+
+$$
+\tilde{X}_{n+1, j} \sim g(\cdot|X_{n,j},z_n).
+$$
+
+The exact choice of $g$ will be mentioned in a bit, and it will be very closely related to the propagations for extended Kalman filters. At this stage, the particles have uniform weights, i.e. $w_j = 1/J$ for all $j$. 
+
+After propagation, one needs to evaluate the quality of these particles following the observation $z_{n+1}$. We first consider the additional weight component 
+
+$$
+\rho(\tilde{X}_{n+1, j}, X_{n,j}) = \frac{p(z_{n+1}|X_{n,j}) p(\tilde{X}_{n+1, j}| X_{n,j}) }{g(\tilde{X}_{n+1, j}| X_{n,j}, z_n)}
+$$
+
+where the likelihoods on top are Gaussians following @eq-state-space, and the likelihood below is the propagating Markov kernel. With the new weight component, we will multiply it to the old (uniform) weights and normalize them (so all $J$ weights add up to one), i.e. 
+
+$$
+\tilde{w}_{n+1, j} = w_j \times \rho(\tilde{X}_{n+1, j}, X_{n,j}), \qquad w_{n+1, j} = \frac{\tilde{w}_{n+1, j}}{\sum_{i=1}^J \tilde{w}_{n+1, i}}.
+$$
+
+The purpose of this weights is to ensure the empirical distribution of the (weighted) particles is an unbiased approximation to the true filtered distribution. 
+
+Finally, one [resamples](https://arxiv.org/pdf/cs/0507025) (with replacements) the particles following the normalised weights $\{w_{n+1, j} \}_j$ and assign uniform weights to the new particles. Rinse and repeat. 
+
+To summarise, the particle filter with propagating kernel $g$ updates as follows. 
+
+---
+
+**Inputs**
+
+- Number of particles: $J$
+- Observations: $\{z_n\}_{n=1}^N$
+- State-space model given in @eq-state-space
+- Markov kernel $g(\cdot | X_{n,j}, z_n)$
+
+**Initialisation ($n = 0$)**
+
+For $j = 1, \ldots, J$:
+
+1. Sample $X_{0,j} \sim N(\mu_0^F, \Sigma_0^F)$
+
+2. Set weights $w_{0,j} = 1/J$
+
+**For each time step $n = 0,1,\ldots,N$**
+
+1. Propagation
+
+- For $j = 1, \ldots, J$:
+
+  - $\tilde{X}_{n+1,j} \sim g(\cdot \mid X_{n,j}, z_n)$
+
+2. Weight Update
+
+- For $j = 1, \ldots, J$:
+
+  - Compute incremental weight $\rho(\tilde{X}_{n+1,j}, X_{n,j}) = p(z_{n+1} \mid X_{n,j}) \, p(\tilde{X}_{n+1,j} \mid X_{n,j})/ {g(\tilde{X}_{n+1,j} \mid X_{n,j}, z_n)}$
+
+  - Update unnormalised weights $\tilde{w}_{n+1,j} = w_{n,j}\times \rho(\tilde{X}_{n+1,j}, X_{n,j})$
+
+  - Normalise $w_{n+1,j} = \tilde{w}_{n+1,j} / {\sum_{i=1}^{J} \tilde{w}_{n+1,i}}$
+
+3. Resampling
+
+- Resample $\{X_{n+1,j}\}_{j=1}^J$ with replacement according to weights $\{w_{n+1,j}\}$.
+
+- Set new particles: $X_{n+1,j} \leftarrow \tilde{X}_{n+1,a_j}$ where $a_j$ are sampled indices.
+
+- Reset weights $w_{n+1,j} = 1/J$
+
+---
+
+Like in [importance sampling](https://en.wikipedia.org/wiki/Importance_sampling) where we aim to set the proposal distribution as similar as the target distribution, we will choose the propagating kernel $g$ such that it gets us closer to the target filtered distribution. Therefore, we will use a Gaussian kernel $g$ with mean $\mu_n^F$ and covariance $\Sigma_n^F$ obtained from @eq-filtered-mean under zeroth- or first-order Taylor approximations of $f$.
+
+
+## Example
+
+Solutions to a Lotka-Volterra using EK0 and EK1 against the true solution approximated from an Euler with tiny stepsize. The (code)[./ek_ode_lotka_volterra.py] can be found here, using the [ProbNum](https://probnum.readthedocs.io/en/latest/index.html) python package. 
+ 
+![Lotka-Volterra solutions with EK0 and EK1.](./lotka_volterra.png)
+
+
+
+
+
