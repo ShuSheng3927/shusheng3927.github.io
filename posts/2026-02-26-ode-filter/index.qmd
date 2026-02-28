@@ -129,80 +129,82 @@ for $J_f$ being the Jacobian of $y \mapsto f(y,t)$. The extended Kalman filter t
 
 ### Particle Filter 
 
-The [particle filter](https://shusheng3927.github.io/files/intro_smc.pdf) approximate the various filtered and propagating distributions using the empirical distributions formed by a fixed number of samples (also known as particles). After initialising $J$ samples at time zero from the prior distribution, it gets propagated, assimilated (via likelihood-based weighting), resampled, and propagated again for each time step. While extended particle filter always produce errors in approximations, particle filter is unbiased and asymptotically exact when $J \to \infty$. 
+to be done. 
 
-We write the $J$ samples for $X_n$ as $X_{n,j}$ for $j = 1, 2, \ldots, J$. We consider a Markov kernel $g$ that propagates samples from $X_{n,j}$ to the next time step, i.e. 
+<!-- The [particle filter](https://shusheng3927.github.io/files/intro_smc.pdf) approximate the various filtered and propagating distributions using the empirical distributions formed by a fixed number of samples (also known as particles). After initialising $J$ samples at time zero from the prior distribution, it gets propagated, assimilated (via likelihood-based weighting), resampled, and propagated again for each time step. While extended particle filter always produce errors in approximations, particle filter is unbiased and asymptotically exact when $J \to \infty$.  -->
 
-$$
-\tilde{X}_{n+1, j} \sim g(\cdot|X_{n,j},z_n).
-$$
+<!-- We write the $J$ samples for $X_n$ as $X_{n,j}$ for $j = 1, 2, \ldots, J$. We consider a Markov kernel $g$ that propagates samples from $X_{n,j}$ to the next time step, i.e.  -->
 
-The exact choice of $g$ will be mentioned in a bit, and it will be very closely related to the propagations for extended Kalman filters. At this stage, the particles have uniform weights, i.e. $w_j = 1/J$ for all $j$. 
+<!-- $$ -->
+<!-- \tilde{X}_{n+1, j} \sim g(\cdot|X_{n,j},z_n). -->
+<!-- $$ -->
 
-After propagation, one needs to evaluate the quality of these particles following the observation $z_{n+1}$. We first consider the additional weight component 
+<!-- The exact choice of $g$ will be mentioned in a bit, and it will be very closely related to the propagations for extended Kalman filters. At this stage, the particles have uniform weights, i.e. $w_j = 1/J$ for all $j$.  -->
 
-$$
-\rho(\tilde{X}_{n+1, j}, X_{n,j}) = \frac{p(z_{n+1}|X_{n,j}) p(\tilde{X}_{n+1, j}| X_{n,j}) }{g(\tilde{X}_{n+1, j}| X_{n,j}, z_n)}
-$$
+<!-- After propagation, one needs to evaluate the quality of these particles following the observation $z_{n+1}$. We first consider the additional weight component  -->
 
-where the likelihoods on top are Gaussians following @eq-state-space, and the likelihood below is the propagating Markov kernel. With the new weight component, we will multiply it to the old (uniform) weights and normalize them (so all $J$ weights add up to one), i.e. 
+<!-- $$ -->
+<!-- \rho(\tilde{X}_{n+1, j}, X_{n,j}) = \frac{p(z_{n+1}|X_{n,j}) p(\tilde{X}_{n+1, j}| X_{n,j}) }{g(\tilde{X}_{n+1, j}| X_{n,j}, z_n)} -->
+<!-- $$ -->
 
-$$
-\tilde{w}_{n+1, j} = w_j \times \rho(\tilde{X}_{n+1, j}, X_{n,j}), \qquad w_{n+1, j} = \frac{\tilde{w}_{n+1, j}}{\sum_{i=1}^J \tilde{w}_{n+1, i}}.
-$$
+<!-- where the likelihoods on top are Gaussians following @eq-state-space, and the likelihood below is the propagating Markov kernel. With the new weight component, we will multiply it to the old (uniform) weights and normalize them (so all $J$ weights add up to one), i.e.  -->
 
-The purpose of this weights is to ensure the empirical distribution of the (weighted) particles is an unbiased approximation to the true filtered distribution. 
+<!-- $$ -->
+<!-- \tilde{w}_{n+1, j} = w_j \times \rho(\tilde{X}_{n+1, j}, X_{n,j}), \qquad w_{n+1, j} = \frac{\tilde{w}_{n+1, j}}{\sum_{i=1}^J \tilde{w}_{n+1, i}}. -->
+<!-- $$ -->
 
-Finally, one [resamples](https://arxiv.org/pdf/cs/0507025) (with replacements) the particles following the normalised weights $\{w_{n+1, j} \}_j$ and assign uniform weights to the new particles. Rinse and repeat. 
+<!-- The purpose of this weights is to ensure the empirical distribution of the (weighted) particles is an unbiased approximation to the true filtered distribution.  -->
 
-To summarise, the particle filter with propagating kernel $g$ updates as follows. 
+<!-- Finally, one [resamples](https://arxiv.org/pdf/cs/0507025) (with replacements) the particles following the normalised weights $\{w_{n+1, j} \}_j$ and assign uniform weights to the new particles. Rinse and repeat.  -->
 
----
+<!-- To summarise, the particle filter with propagating kernel $g$ updates as follows.  -->
 
-**Inputs**
+<!-- --- -->
 
-- Number of particles: $J$
-- Observations: $\{z_n\}_{n=1}^N$
-- State-space model given in @eq-state-space
-- Markov kernel $g(\cdot | X_{n,j}, z_n)$
+<!-- **Inputs** -->
 
-**Initialisation ($n = 0$)**
+<!-- - Number of particles: $J$ -->
+<!-- - Observations: $\{z_n\}_{n=1}^N$ -->
+<!-- - State-space model given in @eq-state-space -->
+<!-- - Markov kernel $g(\cdot | X_{n,j}, z_n)$ -->
 
-For $j = 1, \ldots, J$:
+<!-- **Initialisation ($n = 0$)** -->
 
-1. Sample $X_{0,j} \sim N(\mu_0^F, \Sigma_0^F)$
+<!-- For $j = 1, \ldots, J$: -->
 
-2. Set weights $w_{0,j} = 1/J$
+<!-- 1. Sample $X_{0,j} \sim N(\mu_0^F, \Sigma_0^F)$ -->
 
-**For each time step $n = 0,1,\ldots,N$**
+<!-- 2. Set weights $w_{0,j} = 1/J$ -->
 
-1. Propagation
+<!-- **For each time step $n = 0,1,\ldots,N$** -->
 
-- For $j = 1, \ldots, J$:
+<!-- 1. Propagation -->
 
-  - $\tilde{X}_{n+1,j} \sim g(\cdot \mid X_{n,j}, z_n)$
+<!-- - For $j = 1, \ldots, J$: -->
 
-2. Weight Update
+<!--   - $\tilde{X}_{n+1,j} \sim g(\cdot \mid X_{n,j}, z_n)$ -->
 
-- For $j = 1, \ldots, J$:
+<!-- 2. Weight Update -->
 
-  - Compute incremental weight $\rho(\tilde{X}_{n+1,j}, X_{n,j}) = p(z_{n+1} \mid X_{n,j}) \, p(\tilde{X}_{n+1,j} \mid X_{n,j})/ {g(\tilde{X}_{n+1,j} \mid X_{n,j}, z_n)}$
+<!-- - For $j = 1, \ldots, J$: -->
 
-  - Update unnormalised weights $\tilde{w}_{n+1,j} = w_{n,j}\times \rho(\tilde{X}_{n+1,j}, X_{n,j})$
+<!--   - Compute incremental weight $\rho(\tilde{X}_{n+1,j}, X_{n,j}) = p(z_{n+1} \mid X_{n,j}) \, p(\tilde{X}_{n+1,j} \mid X_{n,j})/ {g(\tilde{X}_{n+1,j} \mid X_{n,j}, z_n)}$ -->
 
-  - Normalise $w_{n+1,j} = \tilde{w}_{n+1,j} / {\sum_{i=1}^{J} \tilde{w}_{n+1,i}}$
+<!--   - Update unnormalised weights $\tilde{w}_{n+1,j} = w_{n,j}\times \rho(\tilde{X}_{n+1,j}, X_{n,j})$ -->
 
-3. Resampling
+<!--   - Normalise $w_{n+1,j} = \tilde{w}_{n+1,j} / {\sum_{i=1}^{J} \tilde{w}_{n+1,i}}$ -->
 
-- Resample $\{X_{n+1,j}\}_{j=1}^J$ with replacement according to weights $\{w_{n+1,j}\}$.
+<!-- 3. Resampling -->
 
-- Set new particles: $X_{n+1,j} \leftarrow \tilde{X}_{n+1,a_j}$ where $a_j$ are sampled indices.
+<!-- - Resample $\{X_{n+1,j}\}_{j=1}^J$ with replacement according to weights $\{w_{n+1,j}\}$. -->
 
-- Reset weights $w_{n+1,j} = 1/J$
+<!-- - Set new particles: $X_{n+1,j} \leftarrow \tilde{X}_{n+1,a_j}$ where $a_j$ are sampled indices. -->
 
----
+<!-- - Reset weights $w_{n+1,j} = 1/J$ -->
 
-Like in [importance sampling](https://en.wikipedia.org/wiki/Importance_sampling) where we aim to set the proposal distribution as similar as the target distribution, we will choose the propagating kernel $g$ such that it gets us closer to the target filtered distribution. Therefore, we will use a Gaussian kernel $g$ with mean $\mu_n^F$ and covariance $\Sigma_n^F$ obtained from @eq-filtered-mean under zeroth- or first-order Taylor approximations of $f$.
+<!-- --- -->
+
+<!-- Like in [importance sampling](https://en.wikipedia.org/wiki/Importance_sampling) where we aim to set the proposal distribution as similar as the target distribution, we will choose the propagating kernel $g$ such that it gets us closer to the target filtered distribution. Therefore, we will use a Gaussian kernel $g$ with mean $\mu_n^F$ and covariance $\Sigma_n^F$ obtained from @eq-filtered-mean under zeroth- or first-order Taylor approximations of $f$. -->
 
 
 ## Example
