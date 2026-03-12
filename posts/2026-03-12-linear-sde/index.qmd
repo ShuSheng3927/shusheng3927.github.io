@@ -1,0 +1,130 @@
+---
+title: "[Derivation Scribbles] Exact Solution to a Multivariate OU Process"
+description: "Exact solution to a multivarite Ornstein-Uhlenbeck process."
+date: "12 Mar 2026"
+bibliography: references.bib
+categories:
+  - Derivation Scribbles
+  - Stochastic Calculus
+---
+
+Consider the linear SDE 
+
+$$
+dX_t = F X_t dt + L dB_t
+$$ 
+
+where $F, L$ are known constant matrices. This SDE can be considered as a multivariate version of the Ornstein-Uhlenbeck process. Below, we will solve this SDE and derive its exact transition density. 
+
+### Itô Lemma
+
+A key result we will be using is the [Itô lemma](https://en.wikipedia.org/wiki/Itô's_lemma), which we state below. Consider an SDE 
+
+$$
+dX_t = \mu(t, X_t) dt + \sigma(t,X_t) dB_t
+$$
+
+with drift function $\mu$ and volatility function $\sigma$. For a function $f(t, X_t)$ that depends (potentially) both $t$ and $X_t$, the Itô lemma states that
+
+$$
+df = \left[ \frac{\partial f}{\partial t} + (\nabla_x f)^T \mu + \frac{1}{2} \text{tr} [\sigma^T (\nabla_{xx} f) \sigma] \right] dt +  (\nabla_x f)^T \sigma  dB_t
+$$
+
+which is obtained by a Taylor expansion of $f$ and substitution of $dX_t$. 
+
+### Conditional Distribution
+
+Returning to solving the SDE, we notice first that if we consider a change-of-variable $Y_t := e^{-Ft} X_t$ with [matrix exponential](https://en.wikipedia.org/wiki/Matrix_exponential), applying Itô to $Y_t$ yields 
+
+$$
+dY_t = [- F e^{- Ft} X_t + e^{-F t} F X_t  ] dt +  e^{-F t} L dB_t = e^{-F t} L dB_t
+$$
+where the drift components cancel out as $F e^{-Ft} = e^{-Ft} F$. 
+
+So, integrating the above equation from $n$ to $n+h$ and substituting back $Y_t = e^{-Ft} X_t$ gives us 
+
+$$
+e^{-F(n+h)} X_{n+h} - e^{-Fn} X_n = \int_{n}^{n+h} e^{-Ft} L dB_t,
+$$
+
+which can be converted to the following form by multiplying $e^{F(n+h)}$ both sides 
+
+$$
+X_{n+h} = e^{Fh} X_n + \int_{n}^{n+h}  e^{F(n+h-t)} L dB_t.
+$$
+
+Therefore, we have the following exact transition density 
+
+$$
+\begin{split}
+X_{n+h} | X_n = x_n &\sim N(A_h x_n, Q_h) \\
+A_h &:= e^{Fh} \\
+Q_h &:= \int_{n}^{n+h} e^{F(n+h-t)} L L^T e^{F^T(n+h-t)} dt
+\end{split}
+$$
+
+where $Q_h$ is obtained using the [Itô isometry](https://en.wikipedia.org/wiki/Itô_isometry). While it is obvious how $A_h$ can be found, the calculation of $Q_h$ does not appear immediate. A nice way to compute $Q_h$ is presented below. 
+
+### Conditional Distribution Covariance Calculation
+
+Consider the auxiliary block matrix 
+
+$$
+K = \begin{bmatrix}
+F & LL^T \\
+0 & -F^T
+\end{bmatrix}
+$$
+
+and we are interested in its matrix exponential $\Phi(t) = e^{Kt}$ with entries 
+
+$$
+e^{Kt} =: \Phi(t) = \begin{bmatrix} \Phi_{11}(t) & \Phi_{12}(t) \\ 0 & \Phi_{22}(t) \end{bmatrix}.
+$$
+
+Since $\Phi$ is a matrix exponential, we know $\Phi'(t) = K \Phi(t)$, so 
+
+$$
+\begin{bmatrix} \Phi_{11}'(t) & \Phi_{12}'(t) \\ 0 & \Phi_{22}'(t) \end{bmatrix} = \begin{bmatrix}
+F & LL^T \\
+0 & -F^T
+\end{bmatrix} \begin{bmatrix} \Phi_{11}(t) & \Phi_{12}(t) \\ 0 & \Phi_{22}(t) \end{bmatrix}.
+$$
+
+Expanding out the matrix multiplication and matching the entries yield 
+
+$$
+\begin{split}
+\Phi_{11}' &= F \Phi_{11} \implies \Phi_{11} = e^{Ft} \\
+\Phi_{22}' &= -F^T \Phi_{22} \implies \Phi_{22} = e^{-F^Tt}\\
+\Phi_{12}' &= F \Phi_{12} + LL^T \Phi_{22}
+\end{split}
+$$
+
+where the first two lines are established by realising $\Phi_{11}(0) = \Phi_{22}(0) = I$. For the final line, we apply an integrating factor $e^{-Ft}$ so 
+
+$$
+\begin{split}
+\Phi_{12}' &= F \Phi_{12} + LL^T e^{-F^Tt} \\
+e^{-Ft} \Phi_{12}' - e^{-Ft} F \Phi_{12} &= e^{-Ft} LL^T e^{-F^Tt} \\
+\frac{d}{dt} [e^{-Ft} \Phi_{12}] &= e^{-Ft} LL^T e^{-F^Tt} \\
+\end{split}
+$$
+
+and integrating from $0$ to $h$ as well as using the initial condition $\Phi_{12}(0) = 0$ yields 
+
+$$
+\begin{split}
+e^{-Fh} \Phi_{12}(h)   &= \int_{0}^{h} e^{-Ft} LL^T e^{-F^Tt} dt \\
+\Phi_{12}(h) &= e^{Fh} \int_{n}^{n+h} e^{-F(t-n)} LL^T e^{-F^T(t-n)} dt \\
+\Phi_{12}(h) &=  \int_{n}^{n+h} e^{F(n+h-t)} LL^T e^{F^T(n+h-t)} dt \cdot e^{-F^Th} \\
+\Phi_{12}(h) &=  Q_h e^{-F^Th} =  Q_h \Phi_{22}(h). \\
+\end{split}
+$$
+
+Therefore, we have $Q_h = \Phi_{12}(h) \Phi^{-1}_{22}(h)$. The derivations above is often known as the Van Loan identity. 
+
+
+
+
+

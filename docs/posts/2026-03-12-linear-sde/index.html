@@ -7,10 +7,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Rui-Yang Zhang">
-<meta name="dcterms.date" content="2025-07-30">
-<meta name="description" content="For a Brownian motion path observed at fixed locations, upscale the resolution using conditioning using the fact that a Brownian motion is a Gaussian process.">
+<meta name="dcterms.date" content="2026-03-12">
+<meta name="description" content="Exact solution to a multivarite Ornstein-Uhlenbeck process.">
 
-<title>Rui-Yang Zhang - Upscale a Brownian Motion Path</title>
+<title>Rui-Yang Zhang - [Derivation Scribbles] Exact Solution to a Multivariate OU Process</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -121,15 +121,14 @@ ul.task-list li input[type="checkbox"] {
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Upscale a Brownian Motion Path</h1>
+      <h1 class="title">[Derivation Scribbles] Exact Solution to a Multivariate OU Process</h1>
                   <div>
         <div class="description">
-          For a Brownian motion path observed at fixed locations, upscale the resolution using conditioning using the fact that a Brownian motion is a Gaussian process.
+          Exact solution to a multivarite Ornstein-Uhlenbeck process.
         </div>
       </div>
                           <div class="quarto-categories">
-                <div class="quarto-category">Gaussian Process</div>
-                <div class="quarto-category">Sampling</div>
+                <div class="quarto-category">Derivation Scribbles</div>
                 <div class="quarto-category">Stochastic Calculus</div>
               </div>
                   </div>
@@ -148,7 +147,7 @@ ul.task-list li input[type="checkbox"] {
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">July 30, 2025</p>
+        <p class="date">March 12, 2026</p>
       </div>
     </div>
     
@@ -160,7 +159,15 @@ ul.task-list li input[type="checkbox"] {
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#itô-lemma" id="toc-itô-lemma" class="nav-link active" data-scroll-target="#itô-lemma">Itô Lemma</a></li>
+  <li><a href="#conditional-distribution" id="toc-conditional-distribution" class="nav-link" data-scroll-target="#conditional-distribution">Conditional Distribution</a></li>
+  <li><a href="#conditional-distribution-covariance-calculation" id="toc-conditional-distribution-covariance-calculation" class="nav-link" data-scroll-target="#conditional-distribution-covariance-calculation">Conditional Distribution Covariance Calculation</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content quarto-banner-title-block" id="quarto-document-content">
@@ -168,25 +175,96 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<p>Consider a fixed <a href="https://en.wikipedia.org/wiki/Wiener_process">Brownian motion</a> path <span class="math inline">\(\{W_t\}_{t \ge 0}\)</span> that we have made observations <span class="math inline">\(\{W_n\}_n\)</span> at times <span class="math inline">\(\{t_n\}_n\)</span>, we wish to upscale the observed path to more timestamps <span class="math inline">\(\{s_m\}_m\)</span> while making sure that it is the same Brownian motion path that we are simulating from.</p>
-<p>By definition, a Brownian motion has Gaussian increments <span class="math inline">\(W_{t+u} - W_t \sim N(0, u)\)</span> and the increments are independent of past values <span class="math inline">\(W_s\)</span> for <span class="math inline">\(s &lt; t\)</span>. It is straightforward also to view a Brownian motion as a Gaussian process (GP) with mean zero and kernel <span class="math inline">\(k_\text{BM}(W_s, W_t) = \min\{s, t\}\)</span>.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="./sampled_brownian_paths.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Sampled Brownian Motion Paths</figcaption>
-</figure>
-</div>
-<p>Leveraging this GP interpretation, the task of “upscaling” or “extrapolating” given observations of a Brownian path <span class="math inline">\(\{W_n\}_n\)</span> to additional timestamps <span class="math inline">\(\{s_m\}_m\)</span> would be equivalent to finding the <a href="https://shusheng3927.github.io/posts/2024-10-13-basic-GP-regression-formula/">posterior predictive distribution</a> at the additional timestamps <span class="math inline">\(\{s_m\}_m\)</span> where we condition on exact observations <span class="math inline">\(\{W_n\}_n\)</span>. In particular, to find <span class="math inline">\(\{W_{s_m}\}_m\)</span>, we can simply find the posterior predictive, then sample from it.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="./upscale_brownian_path.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Upscale Brownian Motion Paths</figcaption>
-</figure>
-</div>
-<p>To be fair, this is quite inefficient and I am not sure if there would be any use case for this particular way of upscaling Brownian paths. My original motivation was to simulate coupled Brownian paths for <a href="https://en.wikipedia.org/wiki/Multilevel_Monte_Carlo_method">multilevel Monte Carlo</a> layers, but for in such cases we could simply sample a Brownian path with the two timestamps aggregated i.e.&nbsp;<span class="math inline">\(\{t_n\}_n \cup \{s_m\}_m\)</span> and pick out the needed portions – the order won’t matter there. Doing this GP posterior predictive approach is much more computationally costly for obvious GP reasons, but oh well, thought this at least feels cool.</p>
-<p>The Python code is <a href="./brownian_up_resolution.py">here</a>.</p>
+<p>Consider the linear SDE</p>
+<p><span class="math display">\[
+dX_t = F X_t dt + L dB_t
+\]</span></p>
+<p>where <span class="math inline">\(F, L\)</span> are known constant matrices. This SDE can be considered as a multivariate version of the Ornstein-Uhlenbeck process. Below, we will solve this SDE and derive its exact transition density.</p>
+<section id="itô-lemma" class="level3">
+<h3 class="anchored" data-anchor-id="itô-lemma">Itô Lemma</h3>
+<p>A key result we will be using is the <a href="https://en.wikipedia.org/wiki/Itô's_lemma">Itô lemma</a>, which we state below. Consider an SDE</p>
+<p><span class="math display">\[
+dX_t = \mu(t, X_t) dt + \sigma(t,X_t) dB_t
+\]</span></p>
+<p>with drift function <span class="math inline">\(\mu\)</span> and volatility function <span class="math inline">\(\sigma\)</span>. For a function <span class="math inline">\(f(t, X_t)\)</span> that depends (potentially) both <span class="math inline">\(t\)</span> and <span class="math inline">\(X_t\)</span>, the Itô lemma states that</p>
+<p><span class="math display">\[
+df = \left[ \frac{\partial f}{\partial t} + (\nabla_x f)^T \mu + \frac{1}{2} \text{tr} [\sigma^T (\nabla_{xx} f) \sigma] \right] dt +  (\nabla_x f)^T \sigma  dB_t
+\]</span></p>
+<p>which is obtained by a Taylor expansion of <span class="math inline">\(f\)</span> and substitution of <span class="math inline">\(dX_t\)</span>.</p>
+</section>
+<section id="conditional-distribution" class="level3">
+<h3 class="anchored" data-anchor-id="conditional-distribution">Conditional Distribution</h3>
+<p>Returning to solving the SDE, we notice first that if we consider a change-of-variable <span class="math inline">\(Y_t := e^{-Ft} X_t\)</span> with <a href="https://en.wikipedia.org/wiki/Matrix_exponential">matrix exponential</a>, applying Itô to <span class="math inline">\(Y_t\)</span> yields</p>
+<p><span class="math display">\[
+dY_t = [- F e^{- Ft} X_t + e^{-F t} F X_t  ] dt +  e^{-F t} L dB_t = e^{-F t} L dB_t
+\]</span> where the drift components cancel out as <span class="math inline">\(F e^{-Ft} = e^{-Ft} F\)</span>.</p>
+<p>So, integrating the above equation from <span class="math inline">\(n\)</span> to <span class="math inline">\(n+h\)</span> and substituting back <span class="math inline">\(Y_t = e^{-Ft} X_t\)</span> gives us</p>
+<p><span class="math display">\[
+e^{-F(n+h)} X_{n+h} - e^{-Fn} X_n = \int_{n}^{n+h} e^{-Ft} L dB_t,
+\]</span></p>
+<p>which can be converted to the following form by multiplying <span class="math inline">\(e^{F(n+h)}\)</span> both sides</p>
+<p><span class="math display">\[
+X_{n+h} = e^{Fh} X_n + \int_{n}^{n+h}  e^{F(n+h-t)} L dB_t.
+\]</span></p>
+<p>Therefore, we have the following exact transition density</p>
+<p><span class="math display">\[
+\begin{split}
+X_{n+h} | X_n = x_n &amp;\sim N(A_h x_n, Q_h) \\
+A_h &amp;:= e^{Fh} \\
+Q_h &amp;:= \int_{n}^{n+h} e^{F(n+h-t)} L L^T e^{F^T(n+h-t)} dt
+\end{split}
+\]</span></p>
+<p>where <span class="math inline">\(Q_h\)</span> is obtained using the <a href="https://en.wikipedia.org/wiki/Itô_isometry">Itô isometry</a>. While it is obvious how <span class="math inline">\(A_h\)</span> can be found, the calculation of <span class="math inline">\(Q_h\)</span> does not appear immediate. A nice way to compute <span class="math inline">\(Q_h\)</span> is presented below.</p>
+</section>
+<section id="conditional-distribution-covariance-calculation" class="level3">
+<h3 class="anchored" data-anchor-id="conditional-distribution-covariance-calculation">Conditional Distribution Covariance Calculation</h3>
+<p>Consider the auxiliary block matrix</p>
+<p><span class="math display">\[
+K = \begin{bmatrix}
+F &amp; LL^T \\
+0 &amp; -F^T
+\end{bmatrix}
+\]</span></p>
+<p>and we are interested in its matrix exponential <span class="math inline">\(\Phi(t) = e^{Kt}\)</span> with entries</p>
+<p><span class="math display">\[
+e^{Kt} =: \Phi(t) = \begin{bmatrix} \Phi_{11}(t) &amp; \Phi_{12}(t) \\ 0 &amp; \Phi_{22}(t) \end{bmatrix}.
+\]</span></p>
+<p>Since <span class="math inline">\(\Phi\)</span> is a matrix exponential, we know <span class="math inline">\(\Phi'(t) = K \Phi(t)\)</span>, so</p>
+<p><span class="math display">\[
+\begin{bmatrix} \Phi_{11}'(t) &amp; \Phi_{12}'(t) \\ 0 &amp; \Phi_{22}'(t) \end{bmatrix} = \begin{bmatrix}
+F &amp; LL^T \\
+0 &amp; -F^T
+\end{bmatrix} \begin{bmatrix} \Phi_{11}(t) &amp; \Phi_{12}(t) \\ 0 &amp; \Phi_{22}(t) \end{bmatrix}.
+\]</span></p>
+<p>Expanding out the matrix multiplication and matching the entries yield</p>
+<p><span class="math display">\[
+\begin{split}
+\Phi_{11}' &amp;= F \Phi_{11} \implies \Phi_{11} = e^{Ft} \\
+\Phi_{22}' &amp;= -F^T \Phi_{22} \implies \Phi_{22} = e^{-F^Tt}\\
+\Phi_{12}' &amp;= F \Phi_{12} + LL^T \Phi_{22}
+\end{split}
+\]</span></p>
+<p>where the first two lines are established by realising <span class="math inline">\(\Phi_{11}(0) = \Phi_{22}(0) = I\)</span>. For the final line, we apply an integrating factor <span class="math inline">\(e^{-Ft}\)</span> so</p>
+<p><span class="math display">\[
+\begin{split}
+\Phi_{12}' &amp;= F \Phi_{12} + LL^T e^{-F^Tt} \\
+e^{-Ft} \Phi_{12}' - e^{-Ft} F \Phi_{12} &amp;= e^{-Ft} LL^T e^{-F^Tt} \\
+\frac{d}{dt} [e^{-Ft} \Phi_{12}] &amp;= e^{-Ft} LL^T e^{-F^Tt} \\
+\end{split}
+\]</span></p>
+<p>and integrating from <span class="math inline">\(0\)</span> to <span class="math inline">\(h\)</span> as well as using the initial condition <span class="math inline">\(\Phi_{12}(0) = 0\)</span> yields</p>
+<p><span class="math display">\[
+\begin{split}
+e^{-Fh} \Phi_{12}(h)   &amp;= \int_{0}^{h} e^{-Ft} LL^T e^{-F^Tt} dt \\
+\Phi_{12}(h) &amp;= e^{Fh} \int_{n}^{n+h} e^{-F(t-n)} LL^T e^{-F^T(t-n)} dt \\
+\Phi_{12}(h) &amp;=  \int_{n}^{n+h} e^{F(n+h-t)} LL^T e^{F^T(n+h-t)} dt \cdot e^{-F^Th} \\
+\Phi_{12}(h) &amp;=  Q_h e^{-F^Th} =  Q_h \Phi_{22}(h). \\
+\end{split}
+\]</span></p>
+<p>Therefore, we have <span class="math inline">\(Q_h = \Phi_{12}(h) \Phi^{-1}_{22}(h)\)</span>. The derivations above is often known as the Van Loan identity.</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

@@ -77,7 +77,7 @@ To construct the posterior dynamics -- which is also the ODE solutions -- we jus
 
 Unfortunately, we are often interested in nonlinear ODEs, which means $f$, and therefore $Z$, would be nonlinear, thus requiring either linearization (extended Kalman filter) or particle approximation (particle filter). 
 
-Below, we first present the general posterior update. In subsequent subsections, the extended Kalamn filter (EKF) and the partical filter approximations will be described. 
+Below, we first present the general posterior update. In subsequent subsections, the extended Kalamn filter (EKF) approximations will be described. The particle filter approach *would not* be covered here. 
 
 First, at uniform, discrete time steps $t_1, t_2, \ldots, t_k$ with stepsize $h$, we write $X_{t_n}$ as $X_n$ and have the following distributions for all $n$
 
@@ -117,6 +117,19 @@ $$ {#eq-filtered-mean}
 
 for the filtered mean and covariance. Again, it can be noticed that the linearity of (or lack there of) $f$ determines if the updates are analytic or not. 
 
+Finally, we will conduct the backward pass of smoothing. The commonly used Rauch-Tung-Striebel (RTS) smoother is provided by 
+
+$$
+\boxed{
+\begin{split}
+J_n &= \Sigma_n^F A_h^T (\Sigma_{n+1}^P)^{-1}\\
+\mu_n^S &= \mu_n^F + J_n (\mu_{n+1}^S - \mu_{n+1}^P) \\
+\Sigma_n^S &= \Sigma_n^F + J_n (\Sigma_{n+1}^S - \Sigma_{n+1}^P) J_n^T
+\end{split}}
+$$
+
+where we run backwards from $n = k-1, k-2, \ldots, 0$ and set the final time slice smoothing distribution to be identical to the filtering distribution, i.e. $\mu_k^S = \mu_k^F$ and $\Sigma_k^S = \Sigma_k^F$.
+
 ### Extended Kalman Filter 
 
 The [extended Kalman filter](https://en.wikipedia.org/wiki/Extended_Kalman_filter) is an extension of Kalman filter for nonlinear updates by approximating nonlinear updates by a linear proxy via Taylor's expansion. Here, the key nonlinearity is with $f(CX_n, t_n)$, which we approximate using either the zeroth-order or the first-order Taylor expansion of $X_n$ around $\mu_n^P$, i.e. 
@@ -127,9 +140,10 @@ $$
 
 for $J_f$ being the Jacobian of $y \mapsto f(y,t)$. The extended Kalman filter thus works by replacing the original $f$ with the above approximations. The resulting algorithms are termed **EK0** and **EK1** for zeroth- and first-order approximations respectively. 
 
-### Particle Filter 
 
-to be done. 
+<!-- ### Particle Filter  -->
+
+<!-- to be done.  -->
 
 <!-- The [particle filter](https://shusheng3927.github.io/files/intro_smc.pdf) approximate the various filtered and propagating distributions using the empirical distributions formed by a fixed number of samples (also known as particles). After initialising $J$ samples at time zero from the prior distribution, it gets propagated, assimilated (via likelihood-based weighting), resampled, and propagated again for each time step. While extended particle filter always produce errors in approximations, particle filter is unbiased and asymptotically exact when $J \to \infty$.  -->
 
@@ -209,7 +223,7 @@ to be done.
 
 ## Example
 
-Solutions to a Lotka-Volterra using EK0 and EK1 against the true solution approximated from an Euler with tiny stepsize. The (code)[./ek_ode_lotka_volterra.py] can be found here, using the [ProbNum](https://probnum.readthedocs.io/en/latest/index.html) python package. 
+Solutions to a Lotka-Volterra using EK0 and EK1 against the true solution approximated from an Euler with tiny stepsize. The [code](./ek_ode_lotka_volterra.py) can be found here, using the [ProbNum](https://probnum.readthedocs.io/en/latest/index.html) python package. 
  
 ![Lotka-Volterra solutions with EK0 and EK1.](./lotka_volterra.png)
 

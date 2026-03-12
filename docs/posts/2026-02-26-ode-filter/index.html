@@ -170,7 +170,6 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#data" id="toc-data" class="nav-link" data-scroll-target="#data">Data</a></li>
   <li><a href="#posterior" id="toc-posterior" class="nav-link" data-scroll-target="#posterior">Posterior</a></li>
   <li><a href="#extended-kalman-filter" id="toc-extended-kalman-filter" class="nav-link" data-scroll-target="#extended-kalman-filter">Extended Kalman Filter</a></li>
-  <li><a href="#particle-filter" id="toc-particle-filter" class="nav-link" data-scroll-target="#particle-filter">Particle Filter</a></li>
   </ul></li>
   <li><a href="#example" id="toc-example" class="nav-link" data-scroll-target="#example">Example</a></li>
   </ul>
@@ -229,7 +228,7 @@ Z_1, Z_2, \ldots, Z_k = 0, \quad CX_0 = y_0.
 <h3 class="anchored" data-anchor-id="posterior">Posterior</h3>
 <p>To construct the posterior dynamics – which is also the ODE solutions – we just need to assimilate the data into the prior dynamics. Notice that the prior dynamics is driven by a linear SDE, the assimilation can be obtained via a standard Kalman filter and smoother if the data are <em>linearly</em> dependent on the dynamics.</p>
 <p>Unfortunately, we are often interested in nonlinear ODEs, which means <span class="math inline">\(f\)</span>, and therefore <span class="math inline">\(Z\)</span>, would be nonlinear, thus requiring either linearization (extended Kalman filter) or particle approximation (particle filter).</p>
-<p>Below, we first present the general posterior update. In subsequent subsections, the extended Kalamn filter (EKF) and the partical filter approximations will be described.</p>
+<p>Below, we first present the general posterior update. In subsequent subsections, the extended Kalamn filter (EKF) approximations will be described. The particle filter approach <em>would not</em> be covered here.</p>
 <p>First, at uniform, discrete time steps <span class="math inline">\(t_1, t_2, \ldots, t_k\)</span> with stepsize <span class="math inline">\(h\)</span>, we write <span class="math inline">\(X_{t_n}\)</span> as <span class="math inline">\(X_n\)</span> and have the following distributions for all <span class="math inline">\(n\)</span></p>
 <p><span id="eq-state-space"><span class="math display">\[
 \boxed{
@@ -260,6 +259,16 @@ K_n &amp;= \text{Cov}[X_n, \dot{C}X_n - f(CX_n, t_n) ~|~ Z_{1:n-1}] S_n^{-1} \\
 \end{split}}
 \tag{2}\]</span></span></p>
 <p>for the filtered mean and covariance. Again, it can be noticed that the linearity of (or lack there of) <span class="math inline">\(f\)</span> determines if the updates are analytic or not.</p>
+<p>Finally, we will conduct the backward pass of smoothing. The commonly used Rauch-Tung-Striebel (RTS) smoother is provided by</p>
+<p><span class="math display">\[
+\boxed{
+\begin{split}
+J_n &amp;= \Sigma_n^F A_h^T (\Sigma_{n+1}^P)^{-1}\\
+\mu_n^S &amp;= \mu_n^F + J_n (\mu_{n+1}^S - \mu_{n+1}^P) \\
+\Sigma_n^S &amp;= \Sigma_n^F + J_n (\Sigma_{n+1}^S - \Sigma_{n+1}^P) J_n^T
+\end{split}}
+\]</span></p>
+<p>where we run backwards from <span class="math inline">\(n = k-1, k-2, \ldots, 0\)</span> and set the final time slice smoothing distribution to be identical to the filtering distribution, i.e.&nbsp;<span class="math inline">\(\mu_k^S = \mu_k^F\)</span> and <span class="math inline">\(\Sigma_k^S = \Sigma_k^F\)</span>.</p>
 </section>
 <section id="extended-kalman-filter" class="level3">
 <h3 class="anchored" data-anchor-id="extended-kalman-filter">Extended Kalman Filter</h3>
@@ -268,10 +277,8 @@ K_n &amp;= \text{Cov}[X_n, \dot{C}X_n - f(CX_n, t_n) ~|~ Z_{1:n-1}] S_n^{-1} \\
 f(CX_n, t_n) \approx f(C\mu_n^P, t_n) \quad \text{or} \quad f(CX_n, t_n) \approx f(C\mu_n^P, t_n) + J_f(C\mu_n^P, t_n) C(X_n - \mu_n^P)
 \]</span></p>
 <p>for <span class="math inline">\(J_f\)</span> being the Jacobian of <span class="math inline">\(y \mapsto f(y,t)\)</span>. The extended Kalman filter thus works by replacing the original <span class="math inline">\(f\)</span> with the above approximations. The resulting algorithms are termed <strong>EK0</strong> and <strong>EK1</strong> for zeroth- and first-order approximations respectively.</p>
-</section>
-<section id="particle-filter" class="level3">
-<h3 class="anchored" data-anchor-id="particle-filter">Particle Filter</h3>
-<p>to be done.</p>
+<!-- ### Particle Filter  -->
+<!-- to be done.  -->
 <!-- The [particle filter](https://shusheng3927.github.io/files/intro_smc.pdf) approximate the various filtered and propagating distributions using the empirical distributions formed by a fixed number of samples (also known as particles). After initialising $J$ samples at time zero from the prior distribution, it gets propagated, assimilated (via likelihood-based weighting), resampled, and propagated again for each time step. While extended particle filter always produce errors in approximations, particle filter is unbiased and asymptotically exact when $J \to \infty$.  -->
 <!-- We write the $J$ samples for $X_n$ as $X_{n,j}$ for $j = 1, 2, \ldots, J$. We consider a Markov kernel $g$ that propagates samples from $X_{n,j}$ to the next time step, i.e.  -->
 <!-- $$ -->
@@ -318,7 +325,7 @@ f(CX_n, t_n) \approx f(C\mu_n^P, t_n) \quad \text{or} \quad f(CX_n, t_n) \approx
 </section>
 <section id="example" class="level2">
 <h2 class="anchored" data-anchor-id="example">Example</h2>
-<p>Solutions to a Lotka-Volterra using EK0 and EK1 against the true solution approximated from an Euler with tiny stepsize. The (code)[./ek_ode_lotka_volterra.py] can be found here, using the <a href="https://probnum.readthedocs.io/en/latest/index.html">ProbNum</a> python package.</p>
+<p>Solutions to a Lotka-Volterra using EK0 and EK1 against the true solution approximated from an Euler with tiny stepsize. The <a href="./ek_ode_lotka_volterra.py">code</a> can be found here, using the <a href="https://probnum.readthedocs.io/en/latest/index.html">ProbNum</a> python package.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="./lotka_volterra.png" class="img-fluid figure-img"></p>
