@@ -19,7 +19,7 @@ about:
       href: files/cv.pdf
 ---
 
-I am currently a second year Computational Statistics and Machine Learning PhD student of [STOR-i CDT](https://www.lancaster.ac.uk/stor-i/) at Lancaster University and am supported by [ARC TIDE Hub](https://tide.edu.au) in Australia. My supervisors are [Henry Moss](https://henrymoss.github.io) and [David Leslie](https://www.lancaster.ac.uk/maths/people/david-leslie) at [Lancaster](https://www.lancaster.ac.uk/maths/), as well as [Lachlan Astfalck](https://astfalckl.github.io) and [Edward Cripps](https://research-repository.uwa.edu.au/en/persons/edward-cripps) at [UWA](https://www.uwa.edu.au/schools/physics-mathematics-computing/mathematics-and-stats). 
+I am currently a second year Computational Statistics and Machine Learning PhD student of [STOR-i CDT](https://www.lancaster.ac.uk/stor-i/) at Lancaster University and am supported by [ARC TIDE Hub](https://tide.edu.au) in Australia. My supervisors are [Henry Moss](https://henrymoss.github.io), [David Leslie](https://www.lancaster.ac.uk/maths/people/david-leslie), [Lachlan Astfalck](https://astfalckl.github.io) and [Edward Cripps](https://research-repository.uwa.edu.au/en/persons/edward-cripps).
 
 I am broadly interested in the decision aspect of Bayesian computational statistics and machine learning. In particular, my research focuses on developing **sequential Bayesian designs** -- such as active learning and Bayesian optimization -- for a wide range of application areas including *probabilistic numerics* and *ocean engineering*. I am also exploring what **post-Bayesian** ideas could offer for more robust, efficient decision-making. 
 
