@@ -1,0 +1,91 @@
+---
+title: "Some Properties of Expected Information Gain"
+description: "Predictive and parameter EIG, relationship with uncertainty sampling and BALD."
+date: "02 April 2026"
+bibliography: references.bib
+categories:
+  - Active Learning
+  - Gaussian Process
+---
+
+Consider the general active learning framework where we have a system of interest $f$ over a domain (identical to our search space too) $\mathcal{X}$ that we are trying to explore. We could model $f$ probabilistically (e.g. a Gaussian process) parameterised by $\theta$, so we would denote it interchangeably with $f$ or $f_\theta$. 
+
+We then consider a (fictitious) dataset $\mathcal{D} = \{X, y\}$ where $X$ is the collection of $n$ obeservation locations and $y$ are their corresponding observation values that are noisy versions of the truth, i.e. $y = f(X) + \varepsilon$, where $\varepsilon \sim N_n(0, \sigma^2 I)$.
+
+## Relationship between EIG of Parameter and Predictive Distribution
+
+The information gain about predictive distribution of $f$ from $\mathcal{D}$ is given by the following expression: 
+
+$$
+IG^{\text{pred}} = H[p(f)] - H[p(f | \mathcal{D})] = MI[f, \mathcal{D}] = H[p(\mathcal{D})] - H[p(\mathcal{D} | f)]
+$$
+
+for (differential) entropy $H$, mutual information $MI$, and $p$ denotes the probability distribution, where we applied the symmetric property of mutual information in the last equality. 
+
+On the otherhand, we can compute the information gain about the parameters $\theta$ from $\mathcal{D}$ as follows:
+
+$$
+IG^{\text{param}} = H[p(\theta)] - H[p(\theta | \mathcal{D})] = MI[\theta, \mathcal{D}] = H[p(\mathcal{D})] - H[p(\mathcal{D} | \theta)].
+$$
+
+Note that the first term of both $IG^{\text{pred}}$ and $IG^{\text{param}}$ is the same, so the difference between the two is in the second term. In particular, we have:
+
+$$
+p(\mathcal{D} | \theta) = \int p(\mathcal{D} | f) p(f | \theta) df
+$$
+
+and 
+
+$$
+H[p(\mathcal{D} | \theta)] = H[p(\mathcal{D}|f)] + MI(\mathcal{D}; f | \theta)
+$$
+
+following from the definition of (conditional) mutual information. Therefore, we can connect the $IG^{\text{pred}}$ and $IG^{\text{param}}$ as follows:
+
+$$
+IG^{\text{param}} = IG^{\text{pred}} - MI(\mathcal{D}; f | \theta).
+$$
+
+The expected version of information gain -- i.e. the expected information gain -- is just wrapping an integration around the expression with the posterior predictive distribution $p(y|X, f, \theta)$. So, predictive EIG and parameter EIG are closely related, with the parameter EIG further penalizes the effect of mutual information of data and model from the parameter $\theta$.
+
+Note that EIG of the parameter is also re-branded as Bayesian Active Learning by Disagreement (BALD) [@houlsby2011bayesian] in the machine learning literature 
+
+## Relationship between Predictive EIG and Uncertainty Sampling
+
+Notice that we have made no precise statements about $f$ above to show the connection between predictive EIG and uncertainty sampling. Now, we assume that $f$ is a Gaussian process with parameter $\theta$. We will show below how predictive EIG is related to uncertainty sampling (i.e. selecting the point with the highest predictive variance, also called Max-Var).
+
+Firstly, recall we have 
+
+$$
+IG^{\text{pred}} = H[p(\mathcal{D})] - H[p(\mathcal{D} | f)].
+$$ 
+
+The second term is merely the entropy of the Gaussian noise distribution as
+
+$$
+p(\mathcal{D}|f) =  p(y|X, f) p(X|f) = p(y|X, f) = N_n(y - f(X); 0, \sigma^2 I)
+$$
+
+since we assume the choice of input location $X$ is independent from $f$ and thus $p(X|f)$ is irrelevant. Therefore, $H[p(\mathcal{D} | f)]$ is just a constant irrelevant to the choice of $X$. Note that if we assume the noise is heteroscedastic, i.e. $\sigma^2$ is a function of $X$, then we could no longer drop the second term. 
+
+For the first term, we can do a similar derivation and notice that $p(\mathcal{D})$ is a Gaussian distribution with mean $\mu(X)$ and covariance $K(X, X) + \sigma^2 I$, where $K(X, X)$ is the covariance matrix of the Gaussian process evaluated at $X$. Therefore, we have
+
+$$
+H[p(\mathcal{D})] = \frac{1}{2} \log \det (K(X, X) + \sigma^2 I) + \text{constant}
+$$
+
+following the entropy of multivariate Gaussian formula. Thus, aggregating things together, we obtained 
+
+$$
+\begin{split}
+IG^{\text{pred}} &= \frac{1}{2} \log \det (K(X, X) + \sigma^2 I) - \frac{1}{2} \log \det (\sigma^2 I) + \text{constant} \\
+&= \frac{1}{2} \log \det (I + \sigma^{-2} K(X, X)) + \text{constant}.
+\end{split}
+$$
+
+In the special case where $X$ only has one point, i.e. $X = x$, we have $K(X, X) = k(x, x)$, which is the predictive variance of the Gaussian process at $x$. Therefore, we have obtained that expected information gain about the predictive distribution of $f$ from a single observation at $x$ is a monotone transformation of the predictive variance at $x$, thus the two approaches of active learning with maximising predictive EIG and uncertainty sampling are equivalent. 
+
+A reference for this derivation can be Section 8.4 of @krause2025probabilistic.
+
+## References
+
