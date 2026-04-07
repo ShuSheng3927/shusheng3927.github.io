@@ -21,11 +21,13 @@ about:
 
 I am currently a second year Computational Statistics and Machine Learning PhD student of [STOR-i CDT](https://www.lancaster.ac.uk/stor-i/) at Lancaster University and am supported by [ARC TIDE Hub](https://tide.edu.au) in Australia. My supervisors are [Henry Moss](https://henrymoss.github.io), [David Leslie](https://www.lancaster.ac.uk/maths/people/david-leslie), [Lachlan Astfalck](https://astfalckl.github.io) and [Edward Cripps](https://research-repository.uwa.edu.au/en/persons/edward-cripps).
 
-I am broadly interested in the decision aspect of Bayesian computational statistics and machine learning. In particular, my research focuses on developing **sequential Bayesian designs** -- such as active learning and Bayesian optimization -- for a wide range of application areas including *probabilistic numerics* and *ocean engineering*. I am also exploring what **post-Bayesian** ideas could offer for more robust, efficient decision-making. 
+I am broadly interested in the decision-making aspect of Bayesian computational statistics and machine learning. In particular, my research focuses on developing **sequential Bayesian designs** -- such as active learning and Bayesian optimization -- for application areas including *probabilistic numerics* and *ocean engineering*. I am also exploring what **post-Bayesian** ideas could offer for more robust and efficient decision-making. 
 
 Previously, I did BSc Mathematics and Statistical Science at [UCL](https://www.ucl.ac.uk/maths/) where I was mentored by [Sam Livingstone](https://samueljlivingstone.wixsite.com/webpage) and received a [Royal Statistical Society](https://rss.org.uk) Award. 
 
 ### News
+
+- [Apr 26] Received a [Visting Fellowship](https://oates.work/visiting-fellowships) from [Chris Oates](https://oates.work) to work on post-Bayesian methods. Supported by the Leverhulme Trust.
 
 - [Feb 26] Presented [BALLAST](https://arxiv.org/abs/2509.26005) at [AI Across Scale workshop](https://www.newton.ac.uk/event/rclw05/) in Newton Institute, Cambridge. The recording of my talk can be found [here](https://youtu.be/lggo0HE9ALM?si=y0zkR8x47QUDaN2_).
 
