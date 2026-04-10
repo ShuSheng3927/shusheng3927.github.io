@@ -27,6 +27,8 @@ Previously, I did BSc Mathematics and Statistical Science at [UCL](https://www.u
 
 ### News
 
+- [Jun 26] Will attend [MCQMC 2026](https://maths.ed.ac.uk/events/mcqmc-2026) and speak at the special session "Sampling and Approximation for Random Fields". 
+
 - [Apr 26] Received a [Visting Fellowship](https://oates.work/visiting-fellowships) from [Chris Oates](https://oates.work) to work on post-Bayesian methods. Supported by the Leverhulme Trust.
 
 - [Feb 26] Presented [BALLAST](https://arxiv.org/abs/2509.26005) at [AI Across Scale workshop](https://www.newton.ac.uk/event/rclw05/) in Newton Institute, Cambridge. The recording of my talk can be found [here](https://youtu.be/lggo0HE9ALM?si=y0zkR8x47QUDaN2_).
