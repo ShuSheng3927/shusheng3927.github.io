@@ -51,3 +51,5 @@ title: "Notes & Slides"
 1. [LLM for Research](files/llm_for_research_Rui.pdf)
 
 2. [Double Descent](files/double_descent.pptx)
+
+3. [Wasserstein Gradient Flow](files/wgf_slides.pdf)
