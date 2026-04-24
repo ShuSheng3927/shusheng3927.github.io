@@ -29,18 +29,18 @@ Previously, I did BSc Mathematics and Statistical Science at [UCL](https://www.u
 
 - [Jun 26] Will attend the Manchester Workshop on Bayesian Experimental Design. 
 
-- [Jun 26] Will attend [MCQMC 2026](https://maths.ed.ac.uk/events/mcqmc-2026) and speak at the special session "Sampling and Approximation for Random Fields". 
+- [Jun 26] Will attend [MCQMC 2026](https://maths.ed.ac.uk/events/mcqmc-2026) and speak at the special session "Sampling and Approximation for Random Fields". Supported by [ProbAI Hub](https://www.probai.uk). 
 
-- [May 26] Will visit [Søren Hauberg](https://www2.compute.dtu.dk/~sohau/)'s group in Denmark with [Moss](https://henrymoss.github.io) lab. 
+- [May 26] Will visit [Søren Hauberg](https://www2.compute.dtu.dk/~sohau/)'s group in Denmark with [Moss](https://henrymoss.github.io) lab. Supported by [MARS](https://www.lancaster.ac.uk/mathematics-for-ai-in-real-world-systems/). 
 
-- [Apr 26] Received a [Visting Fellowship](https://oates.work/visiting-fellowships) from [Chris Oates](https://oates.work) to work on post-Bayesian methods. Supported by the Leverhulme Trust.
+- [Apr 26] Received a [Visting Fellowship](https://oates.work/visiting-fellowships) from [Chris Oates](https://oates.work) to work on post-Bayesian methods. Supported by the [Leverhulme Trust](https://www.leverhulme.ac.uk).
 
 <details>
 <summary><strong>Older News</strong></summary>
 
-- [Feb 26] Presented [BALLAST](https://arxiv.org/abs/2509.26005) at [AI Across Scale workshop](https://www.newton.ac.uk/event/rclw05/) in Newton Institute, Cambridge. The recording of my talk can be found [here](https://youtu.be/lggo0HE9ALM?si=y0zkR8x47QUDaN2_).
+- [Feb 26] Presented [BALLAST](https://arxiv.org/abs/2509.26005) at [AI Across Scale workshop](https://www.newton.ac.uk/event/rclw05/) in Newton Institute, Cambridge. The recording of my talk can be found [here](https://youtu.be/lggo0HE9ALM?si=y0zkR8x47QUDaN2_). Supported by the [Newton Institute](https://www.newton.ac.uk). 
 
-- [Jan 26] Presented [BALLAST](https://arxiv.org/abs/2509.26005) at the STOR-i Annual Conference in Lancaster and the Irish CRT Winter Symposium in Dublin.   
+- [Jan 26] Presented [BALLAST](https://arxiv.org/abs/2509.26005) at the STOR-i Annual Conference in Lancaster and the Irish CRT Winter Symposium in Dublin. Supported by [STOR-i](https://www.lancaster.ac.uk/stor-i/).
 
 - [Dec 25] Our paper [Skew-symmetric schemes for stochastic differential equations with non-Lipschitz drift](https://arxiv.org/abs/2405.14373) has been accepted in the [IMA Journal of Numerical Analysis](https://academic.oup.com/imajna)! This is joint work with [Yuga Iguchi](https://www.yugaiguchi.com), [Sam Livingstone](https://samueljlivingstone.wixsite.com/webpage), [Nik Nüsken](https://www.kcl.ac.uk/people/nikolas-nusken), and [Giorgos Vasdekis](https://sites.google.com/view/giorgosvasdekis/home). 
 
@@ -54,7 +54,7 @@ Previously, I did BSc Mathematics and Statistical Science at [UCL](https://www.u
 
 - [Jul 25] Awarded the [PGR Citizenship Prize](https://www.lancaster.ac.uk/stor-i/about-us/news/joint-pgr-citizenship-award-for-stor-i-student) with [Andreas](https://uk.linkedin.com/in/andreas-makris-41868b225) by the School of Mathematical Sciences for setting up the [LAI reading group](https://lai-reading-group.github.io). 
 
-- [Jun 25] Conducted a week-long research visit at UCL with [Yuga](https://www.yugaiguchi.com), [Sam](https://samueljlivingstone.wixsite.com/webpage), and [Giorgos](https://sites.google.com/view/giorgosvasdekis/home); sponsored by the [Heilbronn Institute](http://heilbronn.ac.uk).
+- [Jun 25] Conducted a week-long research visit at UCL with [Yuga](https://www.yugaiguchi.com), [Sam](https://samueljlivingstone.wixsite.com/webpage), and [Giorgos](https://sites.google.com/view/giorgosvasdekis/home). Supported by the [Heilbronn Institute](http://heilbronn.ac.uk).
 
 - [Mar 25] Did several outreach talks to sixth form students in Lancashire (Lancaster, Blackpool, and Southport) on decision and game theories -- giving back to the community. Supported by [STOR-i](https://www.lancaster.ac.uk/stor-i/), especially [Wendy](https://www.lancaster.ac.uk/stor-i/about-us/people/wendy-shimmin) and [Kate](https://www.lancaster.ac.uk/sci-tech/about-us/people/kate-haywood)! 
 
@@ -64,7 +64,7 @@ Previously, I did BSc Mathematics and Statistical Science at [UCL](https://www.u
 
 - [Nov 24] Visited UWA in Perth, Australia for a month; sponsored by [ARC TIDE Hub](https://tide.edu.au). Nice sunny break from the damp English winter. 
 
-- [Sep 24] Co-organised the [BayesAI workshop](https://bayesaiworkshop.github.io); sponsored by [STOR-i](https://www.lancaster.ac.uk/stor-i/) and [ProbAI](https://www.probai.uk). 
+- [Sep 24] Co-organised the [BayesAI workshop](https://bayesaiworkshop.github.io). Supported by [STOR-i](https://www.lancaster.ac.uk/stor-i/) and [ProbAI](https://www.probai.uk). 
 
 </details>
 
