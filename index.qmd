@@ -33,7 +33,9 @@ Previously, I did BSc Mathematics and Statistical Science at [UCL](https://www.u
 
 - [May 26] Will visit [Søren Hauberg](https://www2.compute.dtu.dk/~sohau/)'s group in Denmark with [Moss](https://henrymoss.github.io) lab. Supported by [MARS](https://www.lancaster.ac.uk/mathematics-for-ai-in-real-world-systems/). 
 
-- [Apr 26] [BALLAST](https://arxiv.org/abs/2509.26005) accepted at [ICML](https://icml.cc). 
+- [May 26] Will visit [Chris Oates](https://oates.work)' group to initialise the visiting fellowship.
+
+- [Apr 26] [BALLAST](https://arxiv.org/abs/2509.26005) accepted at [ICML](https://icml.cc). Planning to attend the conference in Seoul!
 
 - [Apr 26] Received a [Visting Fellowship](https://oates.work/visiting-fellowships) from [Chris Oates](https://oates.work) to work on post-Bayesian methods. Supported by the [Leverhulme Trust](https://www.leverhulme.ac.uk).
 
