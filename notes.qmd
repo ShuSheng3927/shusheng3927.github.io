@@ -53,3 +53,5 @@ title: "Notes & Slides"
 2. [Double Descent](files/double_descent.pptx)
 
 3. [Wasserstein Gradient Flow](files/wgf_slides.pdf)
+
+4. [Sequential Data Acquisition](files/seq_data_acq_zhang.pdf)
