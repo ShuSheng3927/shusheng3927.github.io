@@ -305,7 +305,7 @@
     "href": "research.html",
     "title": "Research",
     "section": "",
-    "text": "I am broadly interested in the decision aspects of Bayesian computational statistics and machine learning. In particular, my research focuses on developing sequential Bayesian designs – such as active learning and Bayesian optimization – for a wide range of application areas including probabilistic numerics and ocean engineering. I am also exploring what post-Bayesian ideas could offer for more robust, efficient decision-making."
+    "text": "I am broadly interested in the decision aspects of Bayesian computational statistics and machine learning. In particular, my research focuses on developing sequential Bayesian designs – such as active learning and Bayesian optimization – for a wide range of application areas including probabilistic numerics and ocean engineering. I am also exploring what post-Bayesian ideas could offer for more robust, efficient decision-making. Often times a Gaussian process is the default emulator model class for systems of interest in decision-making, so much of my research is also dedicated to devising scalable Gaussian process inference and understanding their properties."
   },
   {
     "objectID": "research.html#publication",
