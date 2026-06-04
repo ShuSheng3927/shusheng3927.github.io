@@ -27,16 +27,20 @@ Previously, I did BSc Mathematics and Statistical Science at [UCL](https://www.u
 
 ### News
 
+- [Oct 26] Visited [Chris Oates](https://oates.work)' group to for the visiting fellowship. 
+
+- [Sep 26] Will attend the [Newcastle Sampling Workshop](https://sites.google.com/view/newcastle-non-equilibrium-samp/home).
+
 - [Jul 26] Will attend [ICML](https://icml.cc) in Seoul.
 
-- [Jun 26] Will attend the Manchester Workshop on Bayesian Experimental Design. 
+- [Jun 26] Will attend the [Manchester Workshop on Bayesian Experimental Design](https://sites.google.com/view/bayesianexperimentaldesign). 
 
 - [Jun 26] Will attend [MCQMC 2026](https://maths.ed.ac.uk/events/mcqmc-2026) and speak at the special session "Sampling and Approximation for Random Fields". Supported by [ProbAI Hub](https://www.probai.uk). 
 
-- [May 26] Will visit [Søren Hauberg](https://www2.compute.dtu.dk/~sohau/)'s group in Denmark with [Moss](https://henrymoss.github.io) lab. Supported by [MARS](https://www.lancaster.ac.uk/mathematics-for-ai-in-real-world-systems/). 
-
 <details>
 <summary><strong>Older News</strong></summary>
+
+- [May 26] Visited [Søren Hauberg](https://www2.compute.dtu.dk/~sohau/)'s group in Denmark with [Moss](https://henrymoss.github.io) lab. Supported by [MARS](https://www.lancaster.ac.uk/mathematics-for-ai-in-real-world-systems/). 
 
 - [May 26] Visited [Chris Oates](https://oates.work)' group to initialise the visiting fellowship. 
 
