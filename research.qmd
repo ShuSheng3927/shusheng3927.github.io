@@ -14,7 +14,7 @@ Oftentimes, a **Gaussian process** is the default emulator model class for syste
 
 ### Publications and Workshop Papers
 
-- Zhang, R. Y., Astfalck, L. C., Cripps, E. J., and Leslie, D. S., Moss, H. B. (2026). *BALLAST: Bayesian Active Learning with Look-ahead Amendment for Sea-drifter Trajectories under Spatio-Temporal Vector Fields.* **International Conference on Machine Learning (ICML)**. [[arxiv]](https://arxiv.org/abs/2509.26005) [[code]](https://github.com/ShuSheng3927/BALLAST) [[talk]](https://youtu.be/lggo0HE9ALM?si=y0zkR8x47QUDaN2_)
+- Zhang, R. Y., Astfalck, L. C., Cripps, E. J., and Leslie, D. S., Moss, H. B. (2026). *BALLAST: Bayesian Active Learning with Look-ahead Amendment for Sea-drifter Trajectories under Spatio-Temporal Vector Fields.* **International Conference on Machine Learning (ICML)**. [[arxiv]](https://arxiv.org/abs/2509.26005) [[code]](https://github.com/ShuSheng3927/BALLAST) [[talk]](https://youtu.be/lggo0HE9ALM?si=y0zkR8x47QUDaN2_) [[poster]](files/BALLAST_poster.pdf)
 
 - Iguchi, Y., Livingstone, S., Nüsken, N., Vasdekis, G., & Zhang, R. Y. (2026). *Skew-symmetric schemes for stochastic differential equations with non-Lipschitz drift: an unadjusted Barker algorithm.* **IMA Journal of Numeical Analysis**. [[arxiv]](https://arxiv.org/abs/2405.14373) [[paper]](https://doi.org/10.1093/imanum/draf147) [[code]](https://github.com/ShuSheng3927/skew_symmetric_SDE) 
 

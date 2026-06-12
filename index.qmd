@@ -35,10 +35,10 @@ Previously, I did BSc Mathematics and Statistical Science at [UCL](https://www.u
 
 - [Jun 26] Will attend the [Manchester Workshop on Bayesian Experimental Design](https://sites.google.com/view/bayesianexperimentaldesign). 
 
-- [Jun 26] Will attend [MCQMC 2026](https://maths.ed.ac.uk/events/mcqmc-2026) and speak at the special session "Sampling and Approximation for Random Fields". Supported by [ProbAI Hub](https://www.probai.uk). 
-
 <details>
 <summary><strong>Older News</strong></summary>
+
+- [Jun 26] Attended [MCQMC 2026](https://maths.ed.ac.uk/events/mcqmc-2026) and spoke at the special session "Sampling and Approximation for Random Fields". Supported by [ProbAI Hub](https://www.probai.uk). 
 
 - [May 26] Visited [Søren Hauberg](https://www2.compute.dtu.dk/~sohau/)'s group in Denmark with [Moss](https://henrymoss.github.io) lab. Supported by [MARS](https://www.lancaster.ac.uk/mathematics-for-ai-in-real-world-systems/). 
 
