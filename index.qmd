@@ -33,8 +33,6 @@ Previously, I did BSc Mathematics and Statistical Science at [UCL](https://www.u
 
 - [Jul 26] Will attend [ICML](https://icml.cc) in Seoul.
 
-- [Jun 26] Will attend the [Manchester Workshop on Bayesian Experimental Design](https://sites.google.com/view/bayesianexperimentaldesign). 
-
 <details>
 <summary><strong>Older News</strong></summary>
 
