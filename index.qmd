@@ -33,6 +33,8 @@ Previously, I did BSc Mathematics and Statistical Science at [UCL](https://www.u
 
 - [Jul 26] Will attend [ICML](https://icml.cc) in Seoul.
 
+- [Jun 26] ArXived [VaSE](https://arxiv.org/abs/2606.31063).
+
 <details>
 <summary><strong>Older News</strong></summary>
 
