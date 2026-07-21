@@ -31,6 +31,8 @@ Previously, I did BSc Mathematics and Statistical Science at [UCL](https://www.u
 
 - [Sep 26] Will attend the [Newcastle Sampling Workshop](https://sites.google.com/view/newcastle-non-equilibrium-samp/home).
 
+- [Jul 26] ArXived [pathwise skew-symmetric scheme](https://arxiv.org/abs/2607.17735).
+
 - [Jul 26] Attended [ICML](https://icml.cc) in Seoul.
 
 - [Jun 26] ArXived [VaSE](https://arxiv.org/abs/2606.31063).

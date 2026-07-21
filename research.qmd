@@ -12,7 +12,9 @@ Oftentimes, a **Gaussian process** is the default emulator model class for syste
       
 ### Preprints
 
-- Zhang, R. Y., Astfalck, L. C., Cripps, E. J., and Leslie, D. S., Moss, H. B. (2026). *Dynamic Gaussian Processes and the Vanilla-SPDE Exchange * **ArXiv**. [[arxiv]](https://arxiv.org/abs/2606.31063) 
+- Iguchi, Y., Livingstone, S., Vasdekis, G., & Zhang, R. Y. (2026). *Pathwise skew-symmetric discretisation for SDEs with superlinear drift.* **ArXiv**. [[arxiv]](https://arxiv.org/abs/2607.17735) [[code]](https://github.com/ShuSheng3927/skew_symmetric_pathwise) 
+
+- Zhang, R. Y., Astfalck, L. C., Cripps, E. J., and Leslie, D. S., Moss, H. B. (2026). *Dynamic Gaussian Processes and the Vanilla-SPDE Exchange.* **ArXiv**. [[arxiv]](https://arxiv.org/abs/2606.31063) 
 
 
 ### Publications and Workshop Papers
