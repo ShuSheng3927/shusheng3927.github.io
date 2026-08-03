@@ -12,17 +12,13 @@ title: "Resources"
 
 - [UCL Fundamentals of Statistical Machine Learning](https://fsml-ucl.github.io)
 
-- [GP Seminar Series](https://gp-seminar-series.github.io)
-
-
 ### Organisations
 
 - [Prob_AI Hub](https://www.probai.uk)
 
 - [STOR-i](https://www.lancaster.ac.uk/stor-i/)
 
-- [TIDE](https://tide.edu.au)
-
+- [MARS](https://www.lancaster.ac.uk/mathematics-for-ai-in-real-world-systems/)
 
 ## Links
 

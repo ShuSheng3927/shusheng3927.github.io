@@ -19,11 +19,32 @@ about:
       href: files/cv.pdf
 ---
 
-I am currently a second year Computational Statistics and Machine Learning PhD student of [STOR-i CDT](https://www.lancaster.ac.uk/stor-i/) at Lancaster University and am supported by [ARC TIDE Hub](https://tide.edu.au) in Australia. My supervisors are [Henry Moss](https://henrymoss.github.io), [David Leslie](https://www.lancaster.ac.uk/maths/people/david-leslie), [Lachlan Astfalck](https://astfalckl.github.io) and [Edward Cripps](https://research-repository.uwa.edu.au/en/persons/edward-cripps).
+I am currently a third year Computational Statistics and Machine Learning PhD student of [STOR-i CDT](https://www.lancaster.ac.uk/stor-i/) at Lancaster University and am supported by [ARC TIDE Hub](https://tide.edu.au) in Australia. My supervisors are [Henry Moss](https://henrymoss.github.io), [David Leslie](https://www.lancaster.ac.uk/maths/people/david-leslie), [Lachlan Astfalck](https://astfalckl.github.io) and [Edward Cripps](https://research-repository.uwa.edu.au/en/persons/edward-cripps).
 
-I am broadly interested in the decision-making aspect of Bayesian computational statistics and machine learning. In particular, my research focuses on developing **sequential Bayesian designs** -- such as active learning and Bayesian optimization -- for application areas including *probabilistic numerics* and *ocean engineering*. I am also exploring what **post-Bayesian** ideas could offer for more robust and efficient decision-making. 
+I am broadly interested in the Bayesian decision-making. In particular, my research focuses on developing **sequential Bayesian designs** -- such as active learning and Bayesian optimization -- for application areas including *probabilistic numerics* and *ocean engineering*. 
+
+I am also exploring what **post-Bayesian** ideas could offer for more robust and efficient decision-making, as well as what **diffusion models** could bring as more expressive and flexible priors. 
 
 Previously, I did BSc Mathematics and Statistical Science at [UCL](https://www.ucl.ac.uk/maths/) where I was mentored by [Sam Livingstone](https://samueljlivingstone.wixsite.com/webpage) and received a [Royal Statistical Society](https://rss.org.uk) Award. 
+
+<div style="
+border: 2px solid currentColor;
+border-radius: 8px;
+background-color: #fafafa;
+padding: 2px 8px;
+margin: 0.6em 0;
+text-align: center;
+">
+
+<p style="margin:0;color:darkgreen">
+<strong>
+Check out
+<a href="https://chris-nemeth.github.io" style="color:darkgreen;text-decoration:underline;">Chris Nemeth</a>'s
+<a href="https://chris-nemeth.github.io/sampling-gallery/" style="color:darkgreen;text-decoration:underline;">Sampling Gallery</a>!!
+</strong>
+</p>
+
+</div>
 
 ### News
 
@@ -33,12 +54,12 @@ Previously, I did BSc Mathematics and Statistical Science at [UCL](https://www.u
 
 - [Jul 26] ArXived [pathwise skew-symmetric scheme](https://arxiv.org/abs/2607.17735).
 
+<details>
+<summary><strong>Older News</strong></summary>
+
 - [Jul 26] Attended [ICML](https://icml.cc) in Seoul.
 
 - [Jun 26] ArXived [VaSE](https://arxiv.org/abs/2606.31063).
-
-<details>
-<summary><strong>Older News</strong></summary>
 
 - [Jun 26] Attended [MCQMC 2026](https://maths.ed.ac.uk/events/mcqmc-2026) and spoke at the special session "Sampling and Approximation for Random Fields". Supported by [ProbAI Hub](https://www.probai.uk). 
 
@@ -79,5 +100,6 @@ Previously, I did BSc Mathematics and Statistical Science at [UCL](https://www.u
 - [Sep 24] Co-organised the [BayesAI workshop](https://bayesaiworkshop.github.io). Supported by [STOR-i](https://www.lancaster.ac.uk/stor-i/) and [ProbAI](https://www.probai.uk). 
 
 </details>
+
 
 ![Adapted from [Adrien](https://adriencorenflos.github.io/)'s [codes](https://t.co/1qWXSqgKoz).](./CSML.gif)

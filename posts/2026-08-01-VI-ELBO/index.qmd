@@ -47,4 +47,4 @@ so maximising the ELBO w.r.t. the variational parameters $\phi$ is equivalent to
 
 ![Approximation Comparison for VI (isotropic Gaussian and RealNVP) and MCMC on the Banana Posterior](banana_vi.png)
 
-![Approximation Comparison for VI (isotropic Gaussian and RealNVP) and MCMC on the Multimodal Posterior](banana_vi.png)
+![Approximation Comparison for VI (isotropic Gaussian and RealNVP) and MCMC on the Multimodal Posterior](multimodal_vi.png)
