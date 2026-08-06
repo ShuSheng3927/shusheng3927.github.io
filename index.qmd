@@ -25,6 +25,8 @@ I am broadly interested in the Bayesian decision-making. In particular, my resea
 
 I am also exploring what **post-Bayesian** ideas could offer for more robust and efficient decision-making, as well as what **diffusion models** could bring as more expressive and flexible priors. 
 
+While at Lancaster, I set up and have been quite involved in the [Lancaster AI Reading Group](https://lai-reading-group.github.io), a weekly reading group focusing on topics related to AI, such as diffusion models, reinforcement learning, and geometric deep learning. This group is supported by the [ProbAI Hub](https://www.probai.uk). 
+
 Previously, I did BSc Mathematics and Statistical Science at [UCL](https://www.ucl.ac.uk/maths/) where I was mentored by [Sam Livingstone](https://samueljlivingstone.wixsite.com/webpage) and received a [Royal Statistical Society](https://rss.org.uk) Award. 
 
 <div style="
