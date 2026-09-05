@@ -54,7 +54,7 @@ Check out
 
 - [Sep 26] Will attend the [MARS Annual Symposium 2026](https://www.lancaster.ac.uk/mathematics-for-ai-in-real-world-systems/mars-annual-symposium/). 
 
-- [Sep 26] Will attend the [Newcastle Sampling Workshop](https://sites.google.com/view/newcastle-non-equilibrium-samp/home).
+- [Sep 26] Attended the [Newcastle Sampling Workshop](https://sites.google.com/view/newcastle-non-equilibrium-samp/home) and presented [VaSE](https://arxiv.org/abs/2606.31063).
 
 - [Jul 26] ArXived [pathwise skew-symmetric scheme](https://arxiv.org/abs/2607.17735).
 
