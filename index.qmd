@@ -19,7 +19,7 @@ about:
       href: files/cv.pdf
 ---
 
-I am currently a third year Computational Statistics and Machine Learning PhD student of [STOR-i CDT](https://www.lancaster.ac.uk/stor-i/) at Lancaster University and am supported by [ARC TIDE Hub](https://tide.edu.au) in Australia. My supervisors are [Henry Moss](https://henrymoss.github.io), [David Leslie](https://www.lancaster.ac.uk/maths/people/david-leslie), [Lachlan Astfalck](https://astfalckl.github.io) and [Edward Cripps](https://research-repository.uwa.edu.au/en/persons/edward-cripps).
+I am currently a final year Computational Statistics and Machine Learning PhD student of [STOR-i CDT](https://www.lancaster.ac.uk/stor-i/) at Lancaster University and am supported by [ARC TIDE Hub](https://tide.edu.au) in Australia. My supervisors are [Henry Moss](https://henrymoss.github.io), [David Leslie](https://www.lancaster.ac.uk/maths/people/david-leslie), [Lachlan Astfalck](https://astfalckl.github.io) and [Edward Cripps](https://research-repository.uwa.edu.au/en/persons/edward-cripps).
 
 I am broadly interested in the Bayesian decision-making. In particular, my research focuses on developing **sequential Bayesian designs** -- such as active learning and Bayesian optimization -- for application areas including *probabilistic numerics* and *ocean engineering*. 
 
@@ -52,7 +52,7 @@ Check out
 
 - [Oct 26] Will visit [Chris Oates](https://oates.work)' group for the visiting fellowship. 
 
-- [Sep 26] Will attend the [MARS Annual Symposium 2026](https://www.lancaster.ac.uk/mathematics-for-ai-in-real-world-systems/mars-annual-symposium/). 
+- [Sep 26] Attended the [MARS Annual Symposium 2026](https://www.lancaster.ac.uk/mathematics-for-ai-in-real-world-systems/mars-annual-symposium/) and presented [BALLAST](https://arxiv.org/abs/2509.26005). 
 
 - [Sep 26] Attended the [Newcastle Sampling Workshop](https://sites.google.com/view/newcastle-non-equilibrium-samp/home) and presented [VaSE](https://arxiv.org/abs/2606.31063).
 
