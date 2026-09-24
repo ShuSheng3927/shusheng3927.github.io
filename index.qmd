@@ -50,6 +50,8 @@ Check out
 
 ### News
 
+- [Oct 26] Will attend the [ISBA BayesAI Workshop](https://workshops.inf.ed.ac.uk/ml/bayesai/) in Edinburgh. 
+
 - [Oct 26] Will visit [Chris Oates](https://oates.work)' group for the visiting fellowship. 
 
 - [Sep 26] Attended the [MARS Annual Symposium 2026](https://www.lancaster.ac.uk/mathematics-for-ai-in-real-world-systems/mars-annual-symposium/) and presented [BALLAST](https://arxiv.org/abs/2509.26005). 
