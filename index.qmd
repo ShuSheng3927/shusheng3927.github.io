@@ -40,9 +40,8 @@ text-align: center;
 
 <p style="margin:0;color:darkgreen">
 <strong>
-Check out
-<a href="https://chris-nemeth.github.io" style="color:darkgreen;text-decoration:underline;">Chris Nemeth</a>'s
-<a href="https://chris-nemeth.github.io/sampling-gallery/" style="color:darkgreen;text-decoration:underline;">Sampling Gallery</a>!!
+Check out our
+<a href="https://bayesiandesign.github.io/seminar/" style="color:darkgreen;text-decoration:underline;">BEDAL Seminar Series</a>!!
 </strong>
 </p>
 
