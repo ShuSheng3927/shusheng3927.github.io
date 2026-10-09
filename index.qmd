@@ -19,7 +19,7 @@ about:
       href: files/cv.pdf
 ---
 
-I am currently a final year Computational Statistics and Machine Learning PhD student of [STOR-i CDT](https://www.lancaster.ac.uk/stor-i/) at Lancaster University and am supported by [ARC TIDE Hub](https://tide.edu.au) in Australia. My supervisors are [Henry Moss](https://henrymoss.github.io), [David Leslie](https://www.lancaster.ac.uk/maths/people/david-leslie), [Lachlan Astfalck](https://astfalckl.github.io) and [Edward Cripps](https://research-repository.uwa.edu.au/en/persons/edward-cripps).
+I am currently a final year Computational Statistics and Machine Learning PhD student of [STOR-i CDT](https://www.lancaster.ac.uk/stor-i/) at Lancaster University supervised by  [Henry Moss](https://henrymoss.github.io) and [David Leslie](https://www.lancaster.ac.uk/maths/people/david-leslie), as a part of Moss' [MADD group](https://henrymoss.github.io/#team). I am also supported by [ARC TIDE Hub](https://tide.edu.au) in Australia and collaborating with [Lachlan Astfalck](https://astfalckl.github.io) and [Edward Cripps](https://research-repository.uwa.edu.au/en/persons/edward-cripps).
 
 I am broadly interested in the Bayesian decision-making. In particular, my research focuses on developing **sequential Bayesian designs** -- such as active learning and Bayesian optimization -- for application areas including *probabilistic numerics* and *ocean engineering*. 
 
@@ -51,7 +51,9 @@ Check out our
 
 - [Oct 26] Will attend the [ISBA BayesAI Workshop](https://workshops.inf.ed.ac.uk/ml/bayesai/) in Edinburgh. 
 
-- [Oct 26] Will visit [Chris Oates](https://oates.work)' group for the visiting fellowship. 
+- [Oct 26] ArXived [BOLD](https://arxiv.org/abs/2610.11984) for Bayesian shape optimisation.
+
+- [Oct 26] Visiting [Chris Oates](https://oates.work)' group for the visiting fellowship. 
 
 - [Sep 26] Attended the [MARS Annual Symposium 2026](https://www.lancaster.ac.uk/mathematics-for-ai-in-real-world-systems/mars-annual-symposium/) and presented [BALLAST](https://arxiv.org/abs/2509.26005). 
 
