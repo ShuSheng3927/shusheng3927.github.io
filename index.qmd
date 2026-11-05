@@ -53,11 +53,13 @@ Check out our
 
 ### News
 
-- [Oct 26] Will attend the [ISBA BayesAI Workshop](https://workshops.inf.ed.ac.uk/ml/bayesai/) in Edinburgh. 
+- [Nov 26] Will attend the UCL focused workshop on predictively oriented posteriors in London 
+
+- [Oct 26] Attended the [ISBA BayesAI Workshop](https://workshops.inf.ed.ac.uk/ml/bayesai/) in Edinburgh. 
 
 - [Oct 26] ArXived [BOLD](https://arxiv.org/abs/2610.11984) for Bayesian shape optimisation.
 
-- [Oct 26] Visiting [Chris Oates](https://oates.work)' group for the visiting fellowship. 
+- [Oct 26] Visited [Chris Oates](https://oates.work)' group for the visiting fellowship. 
 
 <details>
 <summary><strong>Older News</strong></summary>
