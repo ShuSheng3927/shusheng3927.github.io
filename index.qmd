@@ -23,9 +23,7 @@ I am currently a final year Computational Statistics and Machine Learning PhD st
 
 My PhD is additionally supported by [ARC TIDE Hub](https://tide.edu.au) in Australia and collaborating with [Lachlan Astfalck](https://astfalckl.github.io) and [Edward Cripps](https://research-repository.uwa.edu.au/en/persons/edward-cripps).
 
-I am broadly interested in the Bayesian decision-making. In particular, my research focuses on developing **sequential Bayesian designs** -- such as active learning and Bayesian optimization -- for application areas including *probabilistic numerics* and *ocean engineering*. 
-
-I am also exploring what **post-Bayesian** ideas could offer for more robust and efficient decision-making, as well as what **diffusion models** could bring as more expressive and flexible priors. 
+I am broadly interested in the Bayesian decision-making. In particular, my research focuses on developing **sequential Bayesian designs** -- such as active learning and Bayesian optimization -- for application areas including *probabilistic numerics* and *ocean engineering*. I am also exploring what **post-Bayesian** ideas could offer for more robust and efficient decision-making.
 
 I am currently co-organsing the [Bayesian Experimental Design and Active Learning Seminar Series](https://bayesiandesign.github.io/seminar/) with friends and colleagues from Manchester and Oxford. 
 
@@ -53,7 +51,7 @@ Check out our
 
 ### News
 
-- [Nov 26] Will attend the UCL focused workshop on predictively oriented posteriors in London 
+- [Nov 26] Attended the UCL focused workshop on predictively oriented posteriors in London 
 
 - [Oct 26] Attended the [ISBA BayesAI Workshop](https://workshops.inf.ed.ac.uk/ml/bayesai/) in Edinburgh. 
 

@@ -2,9 +2,7 @@
 title: "Research"
 ---
 
-I am broadly interested in the Bayesian decision-making. In particular, my research focuses on developing **sequential Bayesian designs** -- such as active learning and Bayesian optimization -- for application areas including *probabilistic numerics* and *ocean engineering*. 
-
-I am also exploring what **post-Bayesian** ideas could offer for more robust and efficient decision-making, as well as what **diffusion models** could bring as more expressive and flexible priors. 
+I am broadly interested in the Bayesian decision-making. In particular, my research focuses on developing **sequential Bayesian designs** -- such as active learning and Bayesian optimization -- for application areas including *probabilistic numerics* and *ocean engineering*. I am also exploring what **post-Bayesian** ideas could offer for more robust and efficient decision-making.
 
 Oftentimes, a **Gaussian process** is the default emulator model class for systems of interest in decision-making, so some of my research is also dedicated to devising scalable and robust Gaussian process inference.
 
