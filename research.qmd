@@ -1,10 +1,13 @@
 ---
 title: "Research"
 ---
+I am broadly interested in **uncertainty quantification** and **decision-making under uncertainty**. Bayesian statistics provides a principled framework for updating our beliefs about probabilistic models in light of observed data, while Bayesian decision theory uses these updated beliefs to guide decisions under uncertainty.
 
-I am broadly interested in the Bayesian decision-making. In particular, my research focuses on developing **sequential Bayesian designs** -- such as active learning and Bayesian optimization -- for application areas including *probabilistic numerics* and *ocean engineering*. I am also exploring what **post-Bayesian** ideas could offer for more robust and efficient decision-making.
+A central theme of my research is **sequential data acquisition**, including *active learning* and *Bayesian optimisation*, where we iteratively decide what data to collect next to achieve a particular learning or decision-making objective. These methods rely on quantifying uncertainty about the systems we wish to learn or optimise. My work in this area spans applications in *oceanography* [[1](https://openreview.net/pdf?id=sKjBnOQwtO), [2](https://arxiv.org/abs/2509.26005)] and *engineering* [[3](https://arxiv.org/abs/2610.11984)].
 
-Oftentimes, a **Gaussian process** is the default emulator model class for systems of interest in decision-making, so some of my research is also dedicated to devising scalable and robust Gaussian process inference.
+**Gaussian processes** are a versatile class of probabilistic models for quantifying uncertainty and are widely used in sequential data acquisition. Their computational and statistical properties therefore play an important role in the efficiency of these methods. Some of my research focuses on developing *scalable* methods for Gaussian process inference [[4](https://arxiv.org/abs/2606.31063)].
+
+More fundamentally, I am also exploring questions about uncertainty quantification itself, particularly from Bayesian and **post-Bayesian** perspectives. I am interested in understanding how different approaches to inference quantify uncertainty, how reliable these uncertainties are under model misspecification, and what implications they have for subsequent decision-making.
 
 ## Publication
 

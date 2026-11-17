@@ -23,7 +23,7 @@ I am currently a final year Computational Statistics and Machine Learning PhD st
 
 My PhD is additionally supported by [ARC TIDE Hub](https://tide.edu.au) in Australia and collaborating with [Lachlan Astfalck](https://astfalckl.github.io) and [Edward Cripps](https://research-repository.uwa.edu.au/en/persons/edward-cripps).
 
-I am broadly interested in the Bayesian decision-making. In particular, my research focuses on developing **sequential Bayesian designs** -- such as active learning and Bayesian optimization -- for application areas including *probabilistic numerics* and *ocean engineering*. I am also exploring what **post-Bayesian** ideas could offer for more robust and efficient decision-making.
+I am broadly interested in **uncertainty quantification** and **decision-making under uncertainty**. In particular, my research focuses on developing **sequential Bayesian designs** for applications including *oceanography* and *engineering*. More fundamentally, I am exploring how Bayesian and **post-Bayesian** approaches can provide reliable uncertainty quantification and inform better decision-making.
 
 I am currently co-organsing the [Bayesian Experimental Design and Active Learning Seminar Series](https://bayesiandesign.github.io/seminar/) with friends and colleagues from Manchester and Oxford. 
 
