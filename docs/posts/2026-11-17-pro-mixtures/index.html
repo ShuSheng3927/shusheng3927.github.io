@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Rui-Yang Zhang">
+<meta name="dcterms.date" content="2026-11-17">
+<meta name="description" content="Compare and contrast PrO posteriors and Bayesian mixtures.">
+
+<title>Predictively Oriented Posteriors and Bayesian Mixture Models – Rui-Yang Zhang</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../rui.svg" rel="icon" type="image/svg+xml">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-158031087360bce0ff56dc785ce39e06.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../rui.svg" alt="" class="navbar-logo light-content">
+    <img src="../../rui.svg" alt="" class="navbar-logo dark-content">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Rui-Yang Zhang</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../research.html"> 
+<span class="menu-text">Research</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../notes.html"> 
+<span class="menu-text">Notes &amp; Slides</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../resources.html"> 
+<span class="menu-text">Resources</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../blog.html"> 
+<span class="menu-text">Blog</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Predictively Oriented Posteriors and Bayesian Mixture Models</h1>
+                  <div>
+        <div class="description">
+          Compare and contrast PrO posteriors and Bayesian mixtures.
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">Post-Bayesian</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Rui-Yang Zhang </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">November 17, 2026</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#mixture-distributions-and-bayesian-mixture-models" id="toc-mixture-distributions-and-bayesian-mixture-models" class="nav-link active" data-scroll-target="#mixture-distributions-and-bayesian-mixture-models">Mixture Distributions and Bayesian Mixture Models</a></li>
+  <li><a href="#pro-as-a-potentially-infinite-mixture" id="toc-pro-as-a-potentially-infinite-mixture" class="nav-link" data-scroll-target="#pro-as-a-potentially-infinite-mixture">PrO as a Potentially Infinite Mixture</a></li>
+  <li><a href="#finite-particle-pro-and-tempered-bayesian-mixtures" id="toc-finite-particle-pro-and-tempered-bayesian-mixtures" class="nav-link" data-scroll-target="#finite-particle-pro-and-tempered-bayesian-mixtures">Finite-Particle PrO and Tempered Bayesian Mixtures</a></li>
+  <li><a href="#mixtures-of-experts-and-pro" id="toc-mixtures-of-experts-and-pro" class="nav-link" data-scroll-target="#mixtures-of-experts-and-pro">Mixtures of Experts and PrO</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+<section id="mixture-distributions-and-bayesian-mixture-models" class="level2">
+<h2 class="anchored" data-anchor-id="mixture-distributions-and-bayesian-mixture-models">Mixture Distributions and Bayesian Mixture Models</h2>
+<p>A <strong>mixture distribution</strong> is any probability distribution obtained by averaging a family of component distributions against a mixing measure <span class="math inline">\(Q\in\mathcal P(\Theta)\)</span>. Given a parametric family <span class="math inline">\(\{p_\theta(y\mid x):\theta\in\Theta\}\)</span>, we write</p>
+<p><span class="math display">\[
+p_Q(y\mid x)=\int_\Theta p_\theta(y\mid x)\,Q(d\theta).
+\]</span></p>
+<p>When <span class="math inline">\(Q=\sum_{k=1}^K w_k\delta_{\theta_k}\)</span>, this becomes a <strong>finite mixture distribution</strong>,</p>
+<p><span class="math display">\[
+p_Q(y\mid x)=\sum_{k=1}^K w_kp_{\theta_k}(y\mid x),
+\qquad
+w_k\geq0,\quad\sum_{k=1}^K w_k=1.
+\]</span></p>
+<p>When <span class="math inline">\(Q\)</span> has infinitely many support points, the representation is an <strong>infinite mixture</strong>. The mixing measure may be discrete or continuous. These terms describe the mathematical representation of a probability distribution, without specifying how <span class="math inline">\(Q\)</span> is estimated.</p>
+<p>A <strong>mixture model</strong>, by contrast, is a statistical model that explicitly uses such a mixture representation to describe the data-generating distribution. A <strong>Bayesian mixture model</strong> additionally places priors on the unknown mixing weights and component parameters <span class="citation" data-cites="richardson1997bayesian">(<a href="#ref-richardson1997bayesian" role="doc-biblioref">Richardson and Green 1997</a>)</span>. For instance, for <span class="math inline">\(K\)</span> components, let <span class="math inline">\(\Pi\)</span> be a prior distribution on the component parameter space <span class="math inline">\(\Theta\)</span>, and let <span class="math inline">\(\boldsymbol\alpha=(\alpha_1,\ldots,\alpha_K)\)</span> contain positive concentration parameters. A common specification is</p>
+<p><span class="math display">\[
+\boldsymbol w\sim\operatorname{Dirichlet}(\boldsymbol\alpha),
+\qquad
+\theta_k\overset{\mathrm{iid}}{\sim}\Pi,
+\]</span></p>
+<p>The component parameters <span class="math inline">\(\theta_k\)</span> are independent draws from <span class="math inline">\(\Pi\)</span>, while the Dirichlet prior governs the nonnegative weights. Given observations <span class="math inline">\(\mathcal D\)</span>, Bayesian inference produces a joint posterior <span class="math inline">\(p(\boldsymbol w,\theta_{1:K}\mid\mathcal D)\)</span> through the mixture likelihood. In contrast, <strong>Bayesian nonparametric mixtures</strong> may place a prior on the entire mixing measure, such as <span class="math inline">\(Q\sim\operatorname{DP}(\gamma,\Pi)\)</span>, where <span class="math inline">\(\gamma&gt;0\)</span> controls concentration and <span class="math inline">\(\Pi\)</span> is the base distribution <span class="citation" data-cites="ferguson1973bayesian">(<a href="#ref-ferguson1973bayesian" role="doc-biblioref">Ferguson 1973</a>)</span>. A Dirichlet-process draw is almost surely discrete, with countably many potential atoms; it is not generally a continuous mixing density.</p>
+<p>Importantly, <strong>a mixture distribution is not necessarily the predictive distribution of a Bayesian mixture model</strong>. Even ordinary Bayesian model averaging produces a mixture distribution by integrating over a posterior, without requiring that the original likelihood be specified as a mixture model.</p>
+</section>
+<section id="pro-as-a-potentially-infinite-mixture" class="level2">
+<h2 class="anchored" data-anchor-id="pro-as-a-potentially-infinite-mixture">PrO as a Potentially Infinite Mixture</h2>
+<p>The <strong>predictively oriented posterior (PrO)</strong> <span class="citation" data-cites="mclatchie2025pro">(<a href="#ref-mclatchie2025pro" role="doc-biblioref">McLatchie et al. 2025</a>)</span> is a probability measure <span class="math inline">\(Q_n^\dagger\)</span> on the original parameter space <span class="math inline">\(\Theta\)</span>, defined through the optimisation</p>
+<p><span class="math display">\[
+Q_n^\dagger
+=
+\operatorname*{arg\,min}_{Q\in\mathcal P(\Theta)}
+\left\{
+-\frac{\lambda_n}{n}
+\sum_{i=1}^n\log p_Q(y_i\mid x_i)
++
+\mathrm{KL}(Q\Vert\Pi)
+\right\},
+\]</span></p>
+<p>where</p>
+<p><span class="math display">\[
+p_Q(y\mid x)=\int_\Theta p_\theta(y\mid x)\,Q(d\theta).
+\]</span></p>
+<p>Consequently, <strong>the PrO posterior predictive is a mixture distribution</strong>, potentially involving infinitely many components. More precisely, PrO optimises over mixing measures rather than fixing the number of components in advance. For a non-atomic prior <span class="math inline">\(\Pi\)</span>, finite KL divergence requires <span class="math inline">\(Q\ll\Pi\)</span>, so the optimal mixing measure may be continuous.</p>
+<p>However, PrO is not a Bayesian mixture model in the conventional generative sense. It does not specify a mixture likelihood with a prior over its unknown mixing measure. Instead, it constructs a distribution over the original model parameters by directly optimising predictive performance, subject to KL regularisation.</p>
+<p>This is the distinction emphasised in Section 4.3 of <span class="citation" data-cites="mclatchie2025pro">McLatchie et al. (<a href="#ref-mclatchie2025pro" role="doc-biblioref">2025</a>)</span>. The mathematical representation of the PrO predictive is a mixture, but its inferential construction and interpretation differ from conventional Bayesian mixture modelling.</p>
+<p>Under the logarithmic score, PrO is also closely related to <strong>KL-regularised nonparametric maximum likelihood estimation of mixing distributions</strong>. Indeed, without the KL penalty, its empirical objective reduces to the classical nonparametric mixture likelihood problem studied by <span class="citation" data-cites="kiefer1956consistency">Kiefer and Wolfowitz (<a href="#ref-kiefer1956consistency" role="doc-biblioref">1956</a>)</span> and <span class="citation" data-cites="lindsay1983geometry">Lindsay (<a href="#ref-lindsay1983geometry" role="doc-biblioref">1983</a>)</span>. The KL penalty is the additional regularisation in PrO; these classical references establish the unregularised mixture-likelihood connection, rather than the precise PrO regulariser.</p>
+</section>
+<section id="finite-particle-pro-and-tempered-bayesian-mixtures" class="level2">
+<h2 class="anchored" data-anchor-id="finite-particle-pro-and-tempered-bayesian-mixtures">Finite-Particle PrO and Tempered Bayesian Mixtures</h2>
+<p>The connection becomes more explicit in the finite-particle approximation developed in <span class="citation" data-cites="mclatchie2026mcmc">McLatchie et al. (<a href="#ref-mclatchie2026mcmc" role="doc-biblioref">2026</a>)</span>.</p>
+<p>Consider <span class="math inline">\(m\)</span> particles <span class="math inline">\(\theta_1,\ldots,\theta_m\)</span> and their empirical measure</p>
+<p><span class="math display">\[
+\widehat Q_m=\frac1m\sum_{j=1}^m\delta_{\theta_j}.
+\]</span></p>
+<p>For any fixed particle configuration, the associated predictive distribution is an equally weighted finite mixture,</p>
+<p><span class="math display">\[
+p_{\widehat Q_m}(y\mid x)
+=
+\frac1m\sum_{j=1}^m p_{\theta_j}(y\mid x).
+\]</span></p>
+<p>The equal weights <span class="math inline">\(1/m\)</span> belong to the <strong>empirical particle measure</strong>, not to a general PrO mixing measure. More precisely, if <span class="math inline">\(\widehat Q_m\Rightarrow Q\)</span> and <span class="math inline">\(\theta\mapsto p_\theta(y\mid x)\)</span> is bounded and continuous, then</p>
+<p><span class="math display">\[
+\frac1m\sum_{j=1}^m p_{\theta_j}(y\mid x)\longrightarrow\int_\Theta p_\theta(y\mid x)\,Q(d\theta).
+\]</span></p>
+<p>Thus, uniformly weighted particles can approximate a highly non-uniform, even continuous, mixing measure through their spatial concentration. Unlike the Bayesian finite mixture above, the particle approximation fixes all component weights at <span class="math inline">\(1/m\)</span>; it does not assign them a Dirichlet prior.</p>
+<p>The authors construct a Gibbs distribution over the joint particle space <span class="math inline">\(\Theta^m\)</span>:</p>
+<p><span class="math display">\[
+q_{n,m}(\theta_{1:m})
+\propto
+\prod_{i=1}^n
+\left[
+\frac1m\sum_{j=1}^m
+p_{\theta_j}(y_i\mid x_i)
+\right]^{m\lambda_n/n}
+\prod_{j=1}^m\pi(\theta_j).
+\]</span></p>
+<p>This distribution is <strong>exactly a tempered Bayesian posterior for an equally weighted finite mixture model</strong>, with independent component priors and likelihood tempering parameter <span class="math inline">\(\alpha=m\lambda_n/n\)</span>. When <span class="math inline">\(\alpha=1\)</span>, it coincides with ordinary Bayesian inference under that mixture model.</p>
+<p>It is important to distinguish three objects here: the random empirical mixing measure <span class="math inline">\(\widehat Q_m\)</span>, the joint Gibbs distribution <span class="math inline">\(Q_{n,m}\)</span> over particle configurations, and its one-particle marginal</p>
+<p><span class="math display">\[
+\overline Q_{n,m}
+=
+\mathbb E_{Q_{n,m}}[\widehat Q_m].
+\]</span></p>
+<p>The latter approximates the original PrO posterior. Under the conditions in <span class="citation" data-cites="mclatchie2026mcmc">McLatchie et al. (<a href="#ref-mclatchie2026mcmc" role="doc-biblioref">2026</a>)</span>,</p>
+<p><span class="math display">\[
+\mathrm{KL}(\overline Q_{n,m}\Vert Q_n^\dagger)
+\lesssim\frac{\lambda_n}{m}.
+\]</span></p>
+<p>Thus, <strong>finite-particle PrO admits an exact interpretation through tempered Bayesian inference under a finite mixture model</strong>, while its one-particle marginal converges to the original PrO posterior as <span class="math inline">\(m\to\infty\)</span>.</p>
+<p>This does not mean that PrO is simply an ordinary Bayesian infinite mixture model. In particular, the tempering parameter increases with <span class="math inline">\(m\)</span> when <span class="math inline">\(n\)</span> and <span class="math inline">\(\lambda_n\)</span> are fixed.</p>
+</section>
+<section id="mixtures-of-experts-and-pro" class="level2">
+<h2 class="anchored" data-anchor-id="mixtures-of-experts-and-pro">Mixtures of Experts and PrO</h2>
+<p>A <strong>mixture of experts (MoE)</strong> <span class="citation" data-cites="jacobs1991adaptive jordan1994hierarchical">(<a href="#ref-jacobs1991adaptive" role="doc-biblioref">Jacobs et al. 1991</a>; <a href="#ref-jordan1994hierarchical" role="doc-biblioref">Jordan and Jacobs 1994</a>)</span> is a conditional mixture model in which the mixing weights depend on the input <span class="math inline">\(x\)</span>. A finite MoE has the form</p>
+<p><span class="math display">\[
+p(y\mid x)
+=
+\sum_{k=1}^K w_k(x)p_{\theta_k}(y\mid x),
+\]</span></p>
+<p>where <span class="math inline">\(w_k(x)\geq0\)</span> and <span class="math inline">\(\sum_{k=1}^K w_k(x)=1\)</span>. The functions <span class="math inline">\(w_k(x)\)</span> are called <em>gating functions</em>, and allow different components to specialise in different regions of the input space.</p>
+<p>The important distinction is between <strong>global mixing</strong> and <strong>input-dependent mixing</strong>. In a conventional conditional mixture with fixed weights, the same mixing measure is used for every <span class="math inline">\(x\)</span>, even though the component densities themselves depend on <span class="math inline">\(x\)</span>. In an MoE, the mixing measure varies with <span class="math inline">\(x\)</span>.</p>
+<p>Standard PrO uses a globally shared mixing measure,</p>
+<p><span class="math display">\[
+p_Q(y\mid x)
+=
+\int_\Theta p_\theta(y\mid x)\,Q(d\theta),
+\]</span></p>
+<p>and is therefore not an MoE in the usual sense.</p>
+
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-ferguson1973bayesian" class="csl-entry" role="listitem">
+Ferguson, Thomas S. 1973. <span>“A Bayesian Analysis of Some Nonparametric Problems.”</span> <em>The Annals of Statistics</em> 1 (2): 209–30.
+</div>
+<div id="ref-jacobs1991adaptive" class="csl-entry" role="listitem">
+Jacobs, Robert A., Michael I. Jordan, Steven J. Nowlan, and Geoffrey E. Hinton. 1991. <span>“Adaptive Mixtures of Local Experts.”</span> <em>Neural Computation</em> 3 (1): 79–87.
+</div>
+<div id="ref-jordan1994hierarchical" class="csl-entry" role="listitem">
+Jordan, Michael I., and Robert A. Jacobs. 1994. <span>“Hierarchical Mixtures of Experts and the EM Algorithm.”</span> <em>Neural Computation</em> 6 (2): 181–214.
+</div>
+<div id="ref-kiefer1956consistency" class="csl-entry" role="listitem">
+Kiefer, Jack, and Jacob Wolfowitz. 1956. <span>“Consistency of the Maximum Likelihood Estimator in the Presence of Infinitely Many Incidental Parameters.”</span> <em>The Annals of Mathematical Statistics</em> 27 (4): 887–906. <a href="https://doi.org/10.1214/aoms/1177728066">https://doi.org/10.1214/aoms/1177728066</a>.
+</div>
+<div id="ref-lindsay1983geometry" class="csl-entry" role="listitem">
+Lindsay, Bruce G. 1983. <span>“The Geometry of Mixture Likelihoods: A General Theory.”</span> <em>The Annals of Statistics</em> 11 (1): 86–94.
+</div>
+<div id="ref-mclatchie2025pro" class="csl-entry" role="listitem">
+McLatchie, Yann, Badr-Eddine Chérief-Abdellatif, David T. Frazier, and Jeremias Knoblauch. 2025. <em>Predictively Oriented Posteriors</em>. <a href="https://arxiv.org/abs/2510.01915">https://arxiv.org/abs/2510.01915</a>.
+</div>
+<div id="ref-mclatchie2026mcmc" class="csl-entry" role="listitem">
+McLatchie, Yann, Louis Sharrock, David T. Frazier, and Jeremias Knoblauch. 2026. <em>Markov Chain Monte Carlo for Predictively Oriented Posteriors</em>. <a href="https://arxiv.org/abs/2610.01818">https://arxiv.org/abs/2610.01818</a>.
+</div>
+<div id="ref-richardson1997bayesian" class="csl-entry" role="listitem">
+Richardson, Sylvia, and Peter J. Green. 1997. <span>“On Bayesian Analysis of Mixtures with an Unknown Number of Components.”</span> <em>Journal of the Royal Statistical Society: Series B</em> 59 (4): 731–92.
+</div>
+</div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

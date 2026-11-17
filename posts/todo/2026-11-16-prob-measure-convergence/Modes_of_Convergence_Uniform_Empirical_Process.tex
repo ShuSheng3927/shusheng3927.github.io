@@ -1,0 +1,901 @@
+
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
+
+\documentclass[
+  11pt,
+  a4paper,
+  notitlepage
+]{report}
+
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp}
+\else
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+
+\usepackage{lmodern}
+
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+
+\IfFileExists{microtype.sty}{
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath}
+}{}
+
+\makeatletter
+\@ifundefined{KOMAClassName}{
+  \IfFileExists{parskip.sty}{
+    \usepackage{parskip}
+  }{
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}
+  }
+}{
+  \KOMAoptions{parskip=half}
+}
+\makeatother
+
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{longtable,booktabs,array}
+\usepackage{calc}
+\usepackage{etoolbox}
+
+\makeatletter
+\patchcmd\longtable{\par}
+  {\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+
+\IfFileExists{footnotehyper.sty}{
+  \usepackage{footnotehyper}
+}{
+  \usepackage{footnote}
+}
+\makesavenoteenv{longtable}
+
+\setlength{\emergencystretch}{3em}
+
+\providecommand{\tightlist}{
+  \setlength{\itemsep}{0pt}
+  \setlength{\parskip}{0pt}
+}
+
+% Number chapters, sections, and subsections
+\setcounter{secnumdepth}{5}
+
+% Only display chapters in the table of contents
+\setcounter{tocdepth}{1}
+
+\ifLuaTeX
+  \usepackage{selnolig}
+\fi
+
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{}
+\urlstyle{same}
+
+\hypersetup{
+  pdftitle={Modes of Convergence of Probability Measures:
+    A Uniform Empirical-Process Case Study},
+  pdfauthor={Rui-Yang Zhang},
+  colorlinks=true,
+  linkcolor={blue},
+  filecolor={Maroon},
+  citecolor={Blue},
+  urlcolor={blue},
+  pdfcreator={LaTeX via pandoc}
+}
+
+% ================================================
+% TABLE OF CONTENTS WITHOUT PAGE BREAK
+% ================================================
+
+\makeatletter
+\renewcommand{\tableofcontents}{%
+  \section*{\contentsname}%
+  \@starttoc{toc}%
+}
+\makeatother
+
+% ================================================
+% TITLE
+% ================================================
+
+\title{Modes of Convergence of Probability Measures:
+A Uniform Empirical-Process Case Study}
+\author{Rui-Yang Zhang}
+\date{November 2026}
+
+\begin{document}
+
+\maketitle
+
+% ================================================
+% ABSTRACT
+% ================================================
+
+\begin{abstract}
+Different notions of convergence of probability measures formalise
+different ways in which distributions become close. We review weak,
+Wasserstein-2, total variation, and the two directions of
+Kullback--Leibler convergence, together with the integral probability
+metric viewpoint and maximum mean discrepancy. Using i.i.d. observations
+from the uniform distribution on $[0,1]$, we compare the raw empirical
+measure with a regularised histogram estimator. The former converges
+weakly, in Wasserstein-2, and in maximum mean discrepancy, but remains
+maximally separated in total variation and has infinite KL divergence in
+both directions. The histogram converges in every considered mode. We
+conclude by comparing the relative strengths of these modes, paying
+particular attention to the role of compact support.
+\end{abstract}
+
+% ================================================
+% TABLE OF CONTENTS
+% ================================================
+
+\vspace{0.5em}
+\tableofcontents
+
+
+\chapter{Notions of Convergence}\label{notions-of-convergence}
+
+Let \(P_n\) and \(P\) be probability measures on a metric space
+\((\Theta,d)\), with \(P\) the intended limit. Different notions of
+convergence specify which discrepancies between \(P_n\) and \(P\) must
+vanish. Unless otherwise specified, convergence below refers to a
+deterministic sequence of measures; in the empirical-process example,
+the resulting assertions will hold almost surely.
+
+\section{Weak Convergence}\label{weak-convergence}
+
+We write \(P_n\Rightarrow P\) if \[
+\int f\,dP_n\longrightarrow\int f\,dP
+\] for every bounded continuous function \(f:\Theta\to\mathbb R\). Weak
+convergence requires agreement in the expectations of continuous
+observables, but not necessarily in the probability of every measurable
+event.
+
+\section{Total Variation Convergence}\label{total-variation-convergence}
+
+The total variation distance is \[
+d_{\mathrm{TV}}(P,Q)=\sup_{A\in\mathcal B(\Theta)}|P(A)-Q(A)|.
+\] When \(P\) and \(Q\) have densities \(p,q\) with respect to a common
+measure, \[
+d_{\mathrm{TV}}(P,Q)=\frac12\int|p-q|.
+\] Thus \(d_{\mathrm{TV}}(P_n,P)\to0\) requires uniform agreement across
+all measurable event probabilities.
+
+\section{Forward and Reverse KL
+Convergence}\label{forward-and-reverse-kl-convergence}
+
+For \(P\ll Q\), define \[
+D_{\mathrm{KL}}(P\|Q)=\int\log\left(\frac{dP}{dQ}\right)dP,
+\] and set the divergence to \(+\infty\) otherwise. We distinguish the
+two directions \[
+D_{\mathrm{KL}}(P_n\|P)\to0
+\qquad\text{and}\qquad
+D_{\mathrm{KL}}(P\|P_n)\to0.
+\] We call these \emph{forward} and \emph{reverse} KL convergence,
+respectively, relative to the fixed target \(P\) (these labels are not
+universal). Both control relative density discrepancies, but they are
+not equivalent in general.
+
+\section{Wasserstein-2 Convergence}\label{wasserstein-2-convergence}
+
+For probability measures with finite second moments, \[
+W_2(P,Q)^2=\inf_{\gamma\in\Gamma(P,Q)}
+\int_{\Theta\times\Theta}d(x,y)^2\,d\gamma(x,y),
+\] where \(\Gamma(P,Q)\) is the set of couplings with marginals \(P\)
+and \(Q\). Wasserstein-2 convergence, \(W_2(P_n,P)\to0\), requires that
+mass can be transported between the distributions at vanishing mean
+squared cost. On \(\mathbb R^d\), it is equivalent to weak convergence
+together with convergence of second moments.
+
+\section{Integral Probability Metrics and
+MMD}\label{integral-probability-metrics-and-mmd}
+
+An integral probability metric (IPM) associated with a function class
+\(\mathcal F\) is \[
+d_{\mathcal F}(P,Q)=\sup_{f\in\mathcal F}
+\left|\int f\,dP-\int f\,dQ\right|.
+\] Total variation is an IPM with \(\mathcal F=\{f:0\le f\le1\}\), while
+Wasserstein-1 corresponds to 1-Lipschitz functions (under the usual
+moment assumptions). The \textbf{maximum mean discrepancy} (MMD) uses
+the unit ball of a reproducing kernel Hilbert space \(\mathcal H_k\): \[
+\operatorname{MMD}_k(P,Q)
+=\sup_{\|f\|_{\mathcal H_k}\le1}|P f-Q f|.
+\] In our case study we use the Gaussian kernel
+\(k_\sigma(x,y)=\exp\{-(x-y)^2/(2\sigma^2)\}\) with fixed \(\sigma>0\).
+Its MMD metrises weak convergence on \([0,1]\). KL and Wasserstein-2 are
+not, in general, IPMs.
+
+\chapter{A Uniform Empirical-Process Case
+Study}\label{a-uniform-empirical-process-case-study}
+
+Suppose \[
+X_1,X_2,\ldots\overset{\mathrm{iid}}{\sim}P=\operatorname{Unif}[0,1],
+\qquad p(x)=1\quad (x\in[0,1]).
+\] The \textbf{raw empirical measure} and empirical cumulative
+distribution function (CDF) are \[
+\widehat P_n=\frac1n\sum_{i=1}^n\delta_{X_i},
+\qquad
+F_n(x)=\frac1n\sum_{i=1}^n\mathbf1\{X_i\le x\}.
+\] The target CDF is \(F(x)=x\) for \(x\in[0,1]\). We first analyse
+\(\widehat P_n\) and then introduce a smoothed counterpart
+\(\widetilde P_n\). This distinction is essential: the raw empirical
+distribution is discrete even when the target is continuous.
+
+\section{A Smoothed Empirical Measure and a Central
+Estimate}\label{a-smoothed-empirical-measure-and-a-central-estimate}
+
+Let \(J_n=\lfloor n^{1/4}\rfloor\) and partition \([0,1]\) into \(J_n\)
+equal bins \(B_{1,n},\ldots,B_{J_n,n}\), with endpoint conventions
+chosen to form a partition. Define the bin counts \[
+N_{j,n}=\sum_{i=1}^n\mathbf1\{X_i\in B_{j,n}\}.
+\] We add one pseudocount per bin and define a \textbf{regularised
+histogram density} by \[
+\boxed{
+\widetilde p_n(x)=\frac{J_n(N_{j,n}+1)}{n+J_n},
+\qquad x\in B_{j,n}.
+}
+\] The corresponding measure is
+\(\widetilde P_n(dx)=\widetilde p_n(x)\,dx\). It is normalised and
+strictly positive. If \(H_n\) denotes the histogram obtained by
+spreading each empirical atom uniformly over its bin, then \[
+\widetilde P_n=\frac{n}{n+J_n}H_n
++\frac{J_n}{n+J_n}P.
+\] The second term is a vanishing uniform component, which prevents
+zero-density bins.
+
+Our central estimate is \[
+\boxed{\delta_n:=\|\widetilde p_n-1\|_\infty
+=O_{\mathrm{a.s.}}\!\left(n^{-1/4}\sqrt{\log n}\right)\longrightarrow0.}
+\] To verify it, write \(\Delta_n=\|F_n-F\|_\infty\). The
+Dvoretzky--Kiefer--Wolfowitz (DKW) inequality and Borel--Cantelli give
+\[
+\Delta_n=O_{\mathrm{a.s.}}\!\left(\sqrt{\frac{\log n}{n}}\right).
+\] For every bin, \(|N_{j,n}/n-1/J_n|\le2\Delta_n\). Since the uniform
+population histogram has density exactly one, \[
+\begin{aligned}
+\delta_n
+&=\max_{1\le j\le J_n}
+\left|\frac{J_nN_{j,n}-n}{n+J_n}\right|\\
+&\le\frac{2nJ_n}{n+J_n}\Delta_n
+\le2J_n\Delta_n.
+\end{aligned}
+\] Because \(J_n\asymp n^{1/4}\), this tends to zero almost surely.
+Unlike a non-uniform target, the uniform distribution incurs no
+histogram approximation bias; only the empirical bin fluctuations
+remain.
+
+\section{Weak Convergence}\label{weak-convergence-1}
+
+For the raw empirical measure, Glivenko--Cantelli gives \[
+\Delta_n=\sup_{x\in\mathbb R}|F_n(x)-F(x)|
+\overset{\mathrm{a.s.}}{\longrightarrow}0.
+\] Uniform CDF convergence implies weak convergence, and therefore \[
+\boxed{\widehat P_n\Rightarrow P\qquad\mathrm{a.s.}}
+\] Equivalently, the strong law gives
+\(n^{-1}\sum_i f(X_i)\to\mathbb E_Pf(X)\) for bounded continuous \(f\);
+the CDF argument supplies a common almost-sure event.
+
+For the smoothed measure, let \(f\) be bounded and continuous, and
+define its modulus of continuity by
+\(\omega_f(h)=\sup_{|x-y|\le h}|f(x)-f(y)|\). Spreading an observation
+uniformly within its bin changes \(f\) by at most \(\omega_f(1/J_n)\).
+From the mixture representation, \[
+\left|\int f\,d\widetilde P_n-\int f\,d\widehat P_n\right|
+\le\omega_f(1/J_n)
++\frac{2J_n}{n+J_n}\|f\|_\infty\longrightarrow0.
+\] Together with \(\widehat P_n\Rightarrow P\) this yields \[
+\boxed{\widetilde P_n\Rightarrow P\qquad\mathrm{a.s.}}
+\] The proof relies only on the empirical-process law of large numbers
+and the fact that smoothing becomes negligible for continuous
+observables.
+
+\section{Wasserstein-2 Convergence}\label{wasserstein-2-convergence-1}
+
+On \([0,1]\), \(|x-y|^2\le|x-y|\); hence \(W_2^2(Q,R)\le W_1(Q,R)\). In
+one dimension, \[
+W_1(\widehat P_n,P)=\int_0^1|F_n(x)-x|\,dx
+\le\Delta_n.
+\] It follows that \[
+\boxed{W_2(\widehat P_n,P)\le\sqrt{\Delta_n}
+\longrightarrow0\qquad\mathrm{a.s.}}
+\] For \(\widetilde P_n\), we construct an explicit coupling with
+\(\widehat P_n\). With probability \(n/(n+J_n)\), pair a randomly
+selected observation with a uniform point in its own bin, whose distance
+is at most \(1/J_n\). Otherwise, pair a randomly selected observation
+with an independent uniform point in \([0,1]\), whose distance is at
+most one. Consequently, \[
+W_2^2(\widetilde P_n,\widehat P_n)
+\le\frac1{J_n^2}+\frac{J_n}{n+J_n}.
+\] The triangle inequality then gives \[
+\boxed{
+W_2(\widetilde P_n,P)
+\le\left(\frac1{J_n^2}+\frac{J_n}{n+J_n}\right)^{1/2}
++W_2(\widehat P_n,P)\longrightarrow0
+\quad\mathrm{a.s.}}
+\] Here the crucial ingredient is control of the transportation
+distance, rather than control of density ratios.
+
+\section{Total Variation
+Convergence}\label{total-variation-convergence-1}
+
+Let \(A_n=\{X_1,\ldots,X_n\}\). For every finite sample,
+\(\widehat P_n(A_n)=1\) whereas \(P(A_n)=0\) almost surely. Thus \[
+\boxed{d_{\mathrm{TV}}(\widehat P_n,P)=1
+\qquad\text{for every }n\ \mathrm{a.s.}}
+\] In contrast, \(\widetilde P_n\) and \(P\) have Lebesgue densities,
+and \[
+\begin{aligned}
+d_{\mathrm{TV}}(\widetilde P_n,P)
+&=\frac12\int_0^1|\widetilde p_n(x)-1|\,dx\\
+&\le\frac12\delta_n\longrightarrow0.
+\end{aligned}
+\] Therefore \[
+\boxed{d_{\mathrm{TV}}(\widetilde P_n,P)\longrightarrow0
+\qquad\mathrm{a.s.}}
+\] Smoothing removes the discrete-versus-continuous singularity, and
+uniform density control is more than sufficient for TV convergence.
+
+\section{Forward KL Convergence}\label{forward-kl-convergence}
+
+Since \(\widehat P_n\) assigns mass to points to which \(P\) assigns
+none, \(\widehat P_n\not\ll P\). Consequently, \[
+\boxed{D_{\mathrm{KL}}(\widehat P_n\|P)=+\infty
+\qquad\text{for every }n\ \mathrm{a.s.}}
+\] For the histogram, use \(D_{\mathrm{KL}}(Q\|R)\le\chi^2(Q\|R)\) and
+\(p\equiv1\): \[
+\begin{aligned}
+D_{\mathrm{KL}}(\widetilde P_n\|P)
+&\le\int_0^1\frac{(\widetilde p_n(x)-1)^2}{1}\,dx\\
+&\le\delta_n^2\longrightarrow0.
+\end{aligned}
+\] Hence \[
+\boxed{D_{\mathrm{KL}}(\widetilde P_n\|P)\longrightarrow0
+\qquad\mathrm{a.s.}}
+\] The fixed reference density is bounded away from zero, so an absolute
+density error also controls the relative error entering forward KL.
+
+\section{Reverse KL Convergence}\label{reverse-kl-convergence}
+
+Because \(P\) is nonatomic while \(\widehat P_n\) is supported on
+finitely many points, \(P\not\ll\widehat P_n\), giving \[
+\boxed{D_{\mathrm{KL}}(P\|\widehat P_n)=+\infty
+\qquad\text{for every }n\ \mathrm{a.s.}}
+\] For the histogram, the pseudocounts ensure \(\widetilde p_n>0\) for
+every \(n\). Moreover, \(\delta_n\to0\) implies that eventually
+\(\widetilde p_n(x)\ge1/2\) uniformly. Thus \[
+\begin{aligned}
+D_{\mathrm{KL}}(P\|\widetilde P_n)
+&\le\int_0^1\frac{(1-\widetilde p_n(x))^2}{\widetilde p_n(x)}\,dx\\
+&\le2\delta_n^2\longrightarrow0.
+\end{aligned}
+\] We conclude that \[
+\boxed{D_{\mathrm{KL}}(P\|\widetilde P_n)\longrightarrow0
+\qquad\mathrm{a.s.}}
+\] Unlike forward KL, this bound requires control of the \emph{estimated
+density in the denominator}. The positive pseudocounts guarantee finite
+reverse KL at every \(n\), and uniform consistency supplies the eventual
+lower bound.
+
+\section{Maximum Mean Discrepancy
+Convergence}\label{maximum-mean-discrepancy-convergence}
+
+Fix a Gaussian kernel \(k_\sigma\) and let
+\(\varphi(x)=k_\sigma(x,\cdot)\in\mathcal H_{k_\sigma}\). The empirical
+MMD is the Hilbert-space norm \[
+\operatorname{MMD}_{k_\sigma}(\widehat P_n,P)
+=\left\|\frac1n\sum_{i=1}^n\varphi(X_i)
+-\mathbb E_P\varphi(X)\right\|_{\mathcal H_{k_\sigma}}.
+\] Since \(\|\varphi(x)\|_{\mathcal H_{k_\sigma}}^2=k_\sigma(x,x)=1\),
+the Hilbert-space strong law of large numbers gives \[
+\boxed{\operatorname{MMD}_{k_\sigma}(\widehat P_n,P)
+\longrightarrow0\qquad\mathrm{a.s.}}
+\] For the smoothed measure, the reproducing property gives
+\(\|f\|_\infty\le1\) whenever \(\|f\|_{\mathcal H_{k_\sigma}}\le1\).
+Hence \[
+\operatorname{MMD}_{k_\sigma}(\widetilde P_n,P)
+\le\int_0^1|\widetilde p_n(x)-1|\,dx
+\le\delta_n\longrightarrow0.
+\] Thus both measures converge in Gaussian-kernel MMD, even though the
+raw empirical measure fails to converge in TV or either KL direction.
+
+\chapter{Relative Strengths of the Convergences}
+\label{relative-strengths-of-the-convergences}
+
+We now compare the modes of convergence introduced in
+Chapter 1. Our main objective is to understand which notions
+imply others, why these implications hold, and under what
+additional assumptions stronger conclusions may be obtained.
+
+\section{General Implications}
+\label{general-implications}
+
+Let $P_n$ and $P$ be probability measures on a Polish
+metric space $(\Theta,d)$. In general, the notions of
+convergence considered here are only partially ordered:
+some implications hold universally, while others require
+additional assumptions on the distributions or the
+underlying space.
+
+\subsection{KL Convergence Implies Total Variation Convergence}
+
+Recall Pinsker's inequality:
+\[
+d_{\mathrm{TV}}(Q,P)
+\leq
+\sqrt{\frac{1}{2}D_{\mathrm{KL}}(Q\|P)}.
+\]
+Since total variation is symmetric, we may interchange
+the two arguments to obtain
+\[
+d_{\mathrm{TV}}(Q,P)
+\leq
+\sqrt{\frac{1}{2}D_{\mathrm{KL}}(P\|Q)}.
+\]
+Consequently, convergence in either direction of KL
+implies total variation convergence:
+\[
+\boxed{
+\begin{aligned}
+D_{\mathrm{KL}}(P_n\|P)\to0
+&\implies d_{\mathrm{TV}}(P_n,P)\to0,\\
+D_{\mathrm{KL}}(P\|P_n)\to0
+&\implies d_{\mathrm{TV}}(P_n,P)\to0.
+\end{aligned}
+}
+\]
+
+The converse does not generally hold. Total variation
+controls absolute discrepancies in event probabilities,
+whereas KL additionally penalises large relative density
+discrepancies. A density can be close to another in
+$L^1$ while differing by an arbitrarily large factor
+on a sufficiently small region.
+
+Furthermore, the two directions of KL convergence are
+incomparable: neither implies the other. We provide
+explicit examples in Section~3.2.
+
+\subsection{Total Variation Implies Weak Convergence}
+
+Recall the variational characterisation
+\[
+d_{\mathrm{TV}}(P_n,P)
+=
+\frac12
+\sup_{\|f\|_\infty\leq1}
+\left|
+\int f\,dP_n-\int f\,dP
+\right|.
+\]
+For any bounded measurable function $f$, it follows that
+\[
+\left|
+\int f\,dP_n-\int f\,dP
+\right|
+\leq
+2\|f\|_\infty d_{\mathrm{TV}}(P_n,P).
+\]
+Thus, if $d_{\mathrm{TV}}(P_n,P)\to0$, then
+\[
+\int f\,dP_n\longrightarrow\int f\,dP
+\]
+for every bounded measurable $f$. In particular,
+this holds for every bounded continuous function,
+which is precisely the definition of weak convergence.
+Therefore,
+\[
+\boxed{
+d_{\mathrm{TV}}(P_n,P)\to0
+\implies P_n\Rightarrow P.
+}
+\]
+
+The converse fails because weak convergence only
+tests bounded continuous functions, whereas total
+variation controls all bounded measurable functions.
+In particular, weak convergence cannot necessarily
+distinguish between probability masses located at
+two arbitrarily close but distinct points.
+
+\subsection{Wasserstein-2 Implies Weak Convergence}
+
+For probability measures with finite second moments,
+we have
+\[
+W_1(P_n,P)\leq W_2(P_n,P).
+\]
+By the Kantorovich--Rubinstein duality,
+\[
+W_1(P_n,P)
+=
+\sup_{\operatorname{Lip}(f)\leq1}
+\left|
+\int f\,dP_n-\int f\,dP
+\right|.
+\]
+Consequently, $W_2(P_n,P)\to0$ implies convergence
+of expectations for every bounded Lipschitz function.
+Since bounded Lipschitz functions characterise weak
+convergence on Polish spaces, we obtain
+\[
+\boxed{
+W_2(P_n,P)\to0
+\implies P_n\Rightarrow P.
+}
+\]
+
+However, Wasserstein-2 convergence is stronger than
+weak convergence on unbounded spaces. In fact,
+for probability measures on $\mathbb R^d$ with
+finite second moments,
+\[
+\boxed{
+W_2(P_n,P)\to0
+\iff
+\begin{cases}
+P_n\Rightarrow P,\\
+\displaystyle
+\int\|x\|^2\,dP_n(x)
+\to
+\int\|x\|^2\,dP(x).
+\end{cases}
+}
+\]
+Thus, $W_2$ convergence additionally requires
+convergence of second moments. Weak convergence
+alone does not control the contribution of a
+vanishing amount of probability mass escaping
+arbitrarily far from the origin.
+
+\subsection{Incomparability of Wasserstein and TV/KL}
+
+An important distinction is that Wasserstein
+distances depend on the geometry of the underlying
+space, whereas TV and KL are insensitive to the
+distance between individual points.
+
+For example, consider
+\[
+P_n=\delta_{1/n},
+\qquad P=\delta_0.
+\]
+Clearly,
+\[
+W_2(P_n,P)=\frac1n\longrightarrow0,
+\]
+but
+\[
+d_{\mathrm{TV}}(P_n,P)=1
+\]
+for every $n$. Therefore, Wasserstein-2 convergence
+does not imply TV convergence, even on compact spaces.
+
+The converse also fails on unbounded spaces.
+Indeed, even convergence in both directions of KL
+need not imply Wasserstein-2 convergence.
+
+To illustrate this, consider probability measures
+on the positive integers, equipped with the usual
+Euclidean distance. Let
+\[
+P(\{k\})=\frac{C}{k^4},
+\qquad k=1,2,\ldots,
+\]
+where $C$ is the normalising constant, and define
+\[
+P_n=
+\left(1-\frac1{n^2}\right)P
++\frac1{n^2}\delta_n,
+\qquad n\geq2.
+\]
+By convexity of KL in its first argument,
+\[
+\begin{aligned}
+D_{\mathrm{KL}}(P_n\|P)
+&\leq
+\frac1{n^2}
+D_{\mathrm{KL}}(\delta_n\|P)\\
+&=
+\frac1{n^2}\log\frac1{P(\{n\})}\\
+&=
+O\left(\frac{\log n}{n^2}\right)
+\longrightarrow0.
+\end{aligned}
+\]
+Moreover, since
+$P_n\geq(1-n^{-2})P$, we have
+\[
+D_{\mathrm{KL}}(P\|P_n)
+\leq-\log(1-n^{-2})\longrightarrow0.
+\]
+Thus both KL divergences vanish.
+
+However, writing $m_2=\mathbb E_P[X^2]$, we obtain
+\[
+\begin{aligned}
+\mathbb E_{P_n}[X^2]
+&=
+\left(1-\frac1{n^2}\right)m_2
++\frac1{n^2}n^2\\
+&\longrightarrow m_2+1.
+\end{aligned}
+\]
+The second moments therefore fail to converge to
+that of $P$, implying
+\[
+W_2(P_n,P)\not\longrightarrow0.
+\]
+
+This example demonstrates that KL convergence,
+despite being stronger than TV convergence, does
+not necessarily provide the moment control required
+for Wasserstein convergence.
+
+\subsection{Maximum Mean Discrepancy and Weak Convergence}
+
+Recall that MMD is an integral probability metric
+associated with the unit ball of a reproducing kernel
+Hilbert space $\mathcal H_k$:
+\[
+\operatorname{MMD}_k(P,Q)
+=
+\sup_{\|f\|_{\mathcal H_k}\leq1}
+|Pf-Qf|.
+\]
+
+Suppose $k(x,x)\leq K$ uniformly. By the reproducing
+property,
+\[
+\|f\|_\infty\leq\sqrt K
+\qquad
+\text{whenever }\|f\|_{\mathcal H_k}\leq1.
+\]
+Therefore,
+\[
+\boxed{
+\operatorname{MMD}_k(P,Q)
+\leq2\sqrt K\,d_{\mathrm{TV}}(P,Q).
+}
+\]
+Hence TV convergence implies MMD convergence
+for every bounded kernel.
+
+For the Gaussian kernel on $\mathbb R^d$,
+\[
+k_\sigma(x,y)
+=
+\exp\left\{
+-\frac{\|x-y\|^2}{2\sigma^2}
+\right\},
+\]
+MMD also metrises weak convergence:
+\[
+\boxed{
+\operatorname{MMD}_{k_\sigma}(P_n,P)\to0
+\iff P_n\Rightarrow P.
+}
+\]
+
+This equivalence is specific to sufficiently rich
+kernels and does not hold for arbitrary choices
+of $k$. In particular, merely requiring a kernel
+to distinguish probability measures does not
+always ensure that its MMD metrises weak convergence.
+
+\section{The Simplified Hierarchy on $[0,1]$}
+\label{the-simplified-hierarchy-on-01}
+
+The relationships become substantially simpler
+when all probability measures are supported on a
+compact metric space.
+
+Suppose $(\Theta,d)$ has finite diameter $D$.
+By the maximal coupling characterisation of
+total variation, we can construct a coupling
+$(X,Y)$ of $P$ and $Q$ such that
+\[
+\mathbb P(X\neq Y)=d_{\mathrm{TV}}(P,Q).
+\]
+Since $d(X,Y)\leq D$, it follows that
+\[
+\begin{aligned}
+W_2^2(P,Q)
+&\leq\mathbb E[d(X,Y)^2]\\
+&\leq D^2\mathbb P(X\neq Y)\\
+&=D^2d_{\mathrm{TV}}(P,Q).
+\end{aligned}
+\]
+Consequently,
+\[
+\boxed{
+d_{\mathrm{TV}}(P_n,P)\to0
+\implies W_2(P_n,P)\to0.
+}
+\]
+
+Furthermore, compact support ensures convergence
+of all finite-order moments under weak convergence.
+Therefore, for every finite $p\geq1$,
+\[
+W_p(P_n,P)\to0
+\iff P_n\Rightarrow P.
+\]
+
+In particular, on $[0,1]$, the modes considered
+in this note satisfy the hierarchy
+\[
+\boxed{
+\begin{gathered}
+D_{\mathrm{KL}}(P_n\|P)\to0
+\quad\text{or}\quad
+D_{\mathrm{KL}}(P\|P_n)\to0
+\\[5pt]
+\Downarrow
+\\[5pt]
+d_{\mathrm{TV}}(P_n,P)\to0
+\\[5pt]
+\Downarrow
+\\[5pt]
+W_2(P_n,P)\to0
+\quad\Longleftrightarrow\quad
+P_n\Rightarrow P
+\\[5pt]
+\Longleftrightarrow
+\\[5pt]
+\operatorname{MMD}_{k_\sigma}(P_n,P)\to0.
+\end{gathered}
+}
+\]
+Here $k_\sigma$ denotes the fixed Gaussian kernel
+considered in Chapter 2.
+
+Importantly, the two KL convergence statements
+at the top of the hierarchy remain incomparable,
+even on $[0,1]$. To see this, let
+$P=\operatorname{Unif}[0,1]$.
+
+First, consider the density
+\[
+q_n(x)=
+\begin{cases}
+e^{-n^2}, & x\in[0,1/n],\\[3pt]
+\displaystyle
+\frac{1-e^{-n^2}/n}{1-1/n},
+& x\in(1/n,1].
+\end{cases}
+\]
+Writing $Q_n(dx)=q_n(x)\,dx$, one can verify that
+\[
+D_{\mathrm{KL}}(Q_n\|P)\to0,
+\]
+whereas
+\[
+D_{\mathrm{KL}}(P\|Q_n)\to\infty.
+\]
+The reverse KL diverges because $q_n$ becomes
+exponentially small on a shrinking interval.
+
+Conversely, let $\eta_n=e^{-n^2}$ and consider
+\[
+r_n(x)
+=
+1-\frac1n+
+\frac{1}{n\eta_n}
+\mathbf1_{[0,\eta_n]}(x).
+\]
+This is also a probability density on $[0,1]$.
+Writing $R_n(dx)=r_n(x)\,dx$, we have
+\[
+D_{\mathrm{KL}}(P\|R_n)\to0,
+\]
+but
+\[
+D_{\mathrm{KL}}(R_n\|P)\to\infty.
+\]
+Here the forward KL diverges because $r_n$
+develops an increasingly concentrated density spike.
+
+Both sequences nevertheless converge to $P$ in
+total variation. Thus TV convergence is strictly
+weaker than either KL convergence, and neither
+direction of KL dominates the other.
+
+Finally, the implication from TV to Wasserstein-2
+is also strict, as demonstrated by the raw empirical
+measure in Chapter 2: it converges in $W_2$ while
+remaining at TV distance one from the target.
+
+\section{Conclusions from the Case Study}
+\label{conclusions-from-the-case-study}
+
+The empirical-process example illustrates how the
+abstract hierarchy translates into concrete
+statistical convergence results.
+
+\begin{center}
+\small
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{@{}lcc@{}}
+\toprule
+Mode
+& Raw empirical measure
+& Smoothed histogram\\
+\midrule
+Weak
+& Converges & Converges\\
+Wasserstein-2
+& Converges & Converges\\
+Total variation
+& Distance always $1$ & Converges\\
+Forward KL
+& Always $+\infty$ & Converges\\
+Reverse KL
+& Always $+\infty$ & Converges\\
+Gaussian MMD
+& Converges & Converges\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+All convergence statements in the table hold
+almost surely.
+
+The fundamental distinction between the raw
+empirical measure and the smoothed histogram is
+their measure-theoretic structure. Although the
+empirical measure approximates the target in the
+weak and Wasserstein senses, its discrete support
+prevents convergence in TV or either KL direction.
+
+Smoothing resolves this singularity. Moreover,
+the uniform consistency of the histogram density,
+together with its eventual positive lower bound,
+provides sufficient control to establish
+convergence in both KL directions.
+
+We conclude with two observations. First,
+the strength of a convergence result depends
+on the class of discrepancies it controls:
+TV concerns event probabilities, KL concerns
+relative densities, and Wasserstein distances
+additionally reflect the geometry of probability
+mass. Second, the hierarchy depends on the
+properties of the underlying space. Compact
+support makes weak and Wasserstein convergence
+equivalent, while on unbounded spaces additional
+moment or transport assumptions are generally
+required to relate them.
+
+\section{References}\label{references}
+
+\begin{itemize}
+\tightlist
+\item
+  Billingsley, P. (1999). \emph{Convergence of Probability Measures},
+  2nd ed.~Wiley.
+\item
+  van der Vaart, A. W. (1998). \emph{Asymptotic Statistics}. Cambridge
+  University Press.
+\item
+  Villani, C. (2009). \emph{Optimal Transport: Old and New}. Springer.
+\item
+  Gretton, A., Borgwardt, K. M., Rasch, M. J., Schoelkopf, B., and
+  Smola, A. (2012). A kernel two-sample test. \emph{Journal of Machine
+  Learning Research}, 13, 723--773.
+\end{itemize}
+
+\end{document}

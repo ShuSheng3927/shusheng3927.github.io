@@ -1,0 +1,152 @@
+---
+title: "Predictively Oriented Posteriors and Bayesian Mixture Models"
+description: "Compare and contrast PrO posteriors and Bayesian mixtures."
+date: "17 November 2026"
+bibliography: mixture_references.bib
+categories:
+  - Post-Bayesian
+---
+
+## Mixture Distributions and Bayesian Mixture Models
+
+A **mixture distribution** is any probability distribution obtained by averaging a family of component distributions against a mixing measure $Q\in\mathcal P(\Theta)$. Given a parametric family $\{p_\theta(y\mid x):\theta\in\Theta\}$, we write
+
+$$
+p_Q(y\mid x)=\int_\Theta p_\theta(y\mid x)\,Q(d\theta).
+$$
+
+When $Q=\sum_{k=1}^K w_k\delta_{\theta_k}$, this becomes a **finite mixture distribution**,
+
+$$
+p_Q(y\mid x)=\sum_{k=1}^K w_kp_{\theta_k}(y\mid x),
+\qquad
+w_k\geq0,\quad\sum_{k=1}^K w_k=1.
+$$
+
+When $Q$ has infinitely many support points, the representation is an **infinite mixture**. The mixing measure may be discrete or continuous. These terms describe the mathematical representation of a probability distribution, without specifying how $Q$ is estimated.
+
+A **mixture model**, by contrast, is a statistical model that explicitly uses such a mixture representation to describe the data-generating distribution. A **Bayesian mixture model** additionally places priors on the unknown mixing weights and component parameters [@richardson1997bayesian]. For instance, for $K$ components, let $\Pi$ be a prior distribution on the component parameter space $\Theta$, and let $\boldsymbol\alpha=(\alpha_1,\ldots,\alpha_K)$ contain positive concentration parameters. A common specification is
+
+$$
+\boldsymbol w\sim\operatorname{Dirichlet}(\boldsymbol\alpha),
+\qquad
+\theta_k\overset{\mathrm{iid}}{\sim}\Pi,
+$$
+
+The component parameters $\theta_k$ are independent draws from $\Pi$, while the Dirichlet prior governs the nonnegative weights. Given observations $\mathcal D$, Bayesian inference produces a joint posterior $p(\boldsymbol w,\theta_{1:K}\mid\mathcal D)$ through the mixture likelihood. In contrast, **Bayesian nonparametric mixtures** may place a prior on the entire mixing measure, such as $Q\sim\operatorname{DP}(\gamma,\Pi)$, where $\gamma>0$ controls concentration and $\Pi$ is the base distribution [@ferguson1973bayesian]. A Dirichlet-process draw is almost surely discrete, with countably many potential atoms; it is not generally a continuous mixing density.
+
+Importantly, **a mixture distribution is not necessarily the predictive distribution of a Bayesian mixture model**. Even ordinary Bayesian model averaging produces a mixture distribution by integrating over a posterior, without requiring that the original likelihood be specified as a mixture model.
+
+## PrO as a Potentially Infinite Mixture
+
+The **predictively oriented posterior (PrO)** [@mclatchie2025pro] is a probability measure $Q_n^\dagger$ on the original parameter space $\Theta$, defined through the optimisation
+
+$$
+Q_n^\dagger
+=
+\operatorname*{arg\,min}_{Q\in\mathcal P(\Theta)}
+\left\{
+-\frac{\lambda_n}{n}
+\sum_{i=1}^n\log p_Q(y_i\mid x_i)
++
+\mathrm{KL}(Q\Vert\Pi)
+\right\},
+$$
+
+where
+
+$$
+p_Q(y\mid x)=\int_\Theta p_\theta(y\mid x)\,Q(d\theta).
+$$
+
+Consequently, **the PrO posterior predictive is a mixture distribution**, potentially involving infinitely many components. More precisely, PrO optimises over mixing measures rather than fixing the number of components in advance. For a non-atomic prior $\Pi$, finite KL divergence requires $Q\ll\Pi$, so the optimal mixing measure may be continuous.
+
+However, PrO is not a Bayesian mixture model in the conventional generative sense. It does not specify a mixture likelihood with a prior over its unknown mixing measure. Instead, it constructs a distribution over the original model parameters by directly optimising predictive performance, subject to KL regularisation.
+
+This is the distinction emphasised in Section 4.3 of @mclatchie2025pro. The mathematical representation of the PrO predictive is a mixture, but its inferential construction and interpretation differ from conventional Bayesian mixture modelling.
+
+Under the logarithmic score, PrO is also closely related to **KL-regularised nonparametric maximum likelihood estimation of mixing distributions**. Indeed, without the KL penalty, its empirical objective reduces to the classical nonparametric mixture likelihood problem studied by @kiefer1956consistency and @lindsay1983geometry. The KL penalty is the additional regularisation in PrO; these classical references establish the unregularised mixture-likelihood connection, rather than the precise PrO regulariser.
+
+## Finite-Particle PrO and Tempered Bayesian Mixtures
+
+The connection becomes more explicit in the finite-particle approximation developed in @mclatchie2026mcmc.
+
+Consider $m$ particles $\theta_1,\ldots,\theta_m$ and their empirical measure
+
+$$
+\widehat Q_m=\frac1m\sum_{j=1}^m\delta_{\theta_j}.
+$$
+
+For any fixed particle configuration, the associated predictive distribution is an equally weighted finite mixture,
+
+$$
+p_{\widehat Q_m}(y\mid x)
+=
+\frac1m\sum_{j=1}^m p_{\theta_j}(y\mid x).
+$$
+
+The equal weights $1/m$ belong to the **empirical particle measure**, not to a general PrO mixing measure. More precisely, if $\widehat Q_m\Rightarrow Q$ and $\theta\mapsto p_\theta(y\mid x)$ is bounded and continuous, then
+
+$$
+\frac1m\sum_{j=1}^m p_{\theta_j}(y\mid x)\longrightarrow\int_\Theta p_\theta(y\mid x)\,Q(d\theta).
+$$
+
+Thus, uniformly weighted particles can approximate a highly non-uniform, even continuous, mixing measure through their spatial concentration. Unlike the Bayesian finite mixture above, the particle approximation fixes all component weights at $1/m$; it does not assign them a Dirichlet prior.
+
+The authors construct a Gibbs distribution over the joint particle space $\Theta^m$:
+
+$$
+q_{n,m}(\theta_{1:m})
+\propto
+\prod_{i=1}^n
+\left[
+\frac1m\sum_{j=1}^m
+p_{\theta_j}(y_i\mid x_i)
+\right]^{m\lambda_n/n}
+\prod_{j=1}^m\pi(\theta_j).
+$$
+
+This distribution is **exactly a tempered Bayesian posterior for an equally weighted finite mixture model**, with independent component priors and likelihood tempering parameter $\alpha=m\lambda_n/n$. When $\alpha=1$, it coincides with ordinary Bayesian inference under that mixture model.
+
+It is important to distinguish three objects here: the random empirical mixing measure $\widehat Q_m$, the joint Gibbs distribution $Q_{n,m}$ over particle configurations, and its one-particle marginal
+
+$$
+\overline Q_{n,m}
+=
+\mathbb E_{Q_{n,m}}[\widehat Q_m].
+$$
+
+The latter approximates the original PrO posterior. Under the conditions in @mclatchie2026mcmc,
+
+$$
+\mathrm{KL}(\overline Q_{n,m}\Vert Q_n^\dagger)
+\lesssim\frac{\lambda_n}{m}.
+$$
+
+Thus, **finite-particle PrO admits an exact interpretation through tempered Bayesian inference under a finite mixture model**, while its one-particle marginal converges to the original PrO posterior as $m\to\infty$.
+
+This does not mean that PrO is simply an ordinary Bayesian infinite mixture model. In particular, the tempering parameter increases with $m$ when $n$ and $\lambda_n$ are fixed.
+
+## Mixtures of Experts and PrO
+
+A **mixture of experts (MoE)** [@jacobs1991adaptive; @jordan1994hierarchical] is a conditional mixture model in which the mixing weights depend on the input $x$. A finite MoE has the form
+
+$$
+p(y\mid x)
+=
+\sum_{k=1}^K w_k(x)p_{\theta_k}(y\mid x),
+$$
+
+where $w_k(x)\geq0$ and $\sum_{k=1}^K w_k(x)=1$. The functions $w_k(x)$ are called *gating functions*, and allow different components to specialise in different regions of the input space.
+
+The important distinction is between **global mixing** and **input-dependent mixing**. In a conventional conditional mixture with fixed weights, the same mixing measure is used for every $x$, even though the component densities themselves depend on $x$. In an MoE, the mixing measure varies with $x$.
+
+Standard PrO uses a globally shared mixing measure,
+
+$$
+p_Q(y\mid x)
+=
+\int_\Theta p_\theta(y\mid x)\,Q(d\theta),
+$$
+
+and is therefore not an MoE in the usual sense. 
