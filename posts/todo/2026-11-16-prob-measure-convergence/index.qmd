@@ -1,9 +1,0 @@
----
-title: "[Derivation Scribbles] Convergences of Probability Measures"
-description: "Compare and contrast different notions of convergence for probability measures."
-date: "16 November 2026"
-bibliography: references.bib
-categories:
-  - Derivation Scribbles
----
-
