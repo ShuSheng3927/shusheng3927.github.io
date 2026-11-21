@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Rui-Yang Zhang">
+<meta name="dcterms.date" content="2026-11-21">
+<meta name="description" content="Derive Catoni’s PAC-Bayes bound, obtain its Gibbs minimiser, and distinguish the resulting risk guarantee from predictive and inferential optimality.">
+
+<title>[Derivation Scribbles] Gibbs Posteriors as Empirical PAC-Bayes Bound Minimisers – Rui-Yang Zhang</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../rui.svg" rel="icon" type="image/svg+xml">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-158031087360bce0ff56dc785ce39e06.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../rui.svg" alt="" class="navbar-logo light-content">
+    <img src="../../rui.svg" alt="" class="navbar-logo dark-content">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Rui-Yang Zhang</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../research.html"> 
+<span class="menu-text">Research</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../notes.html"> 
+<span class="menu-text">Notes &amp; Slides</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../resources.html"> 
+<span class="menu-text">Resources</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../blog.html"> 
+<span class="menu-text">Blog</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">[Derivation Scribbles] Gibbs Posteriors as Empirical PAC-Bayes Bound Minimisers</h1>
+                  <div>
+        <div class="description">
+          Derive Catoni’s PAC-Bayes bound, obtain its Gibbs minimiser, and distinguish the resulting risk guarantee from predictive and inferential optimality.
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">Post-Bayesian</div>
+                <div class="quarto-category">Derivation Scribbles</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Rui-Yang Zhang </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">November 21, 2026</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul class="collapse">
+  <li><a href="#roadmap" id="toc-roadmap" class="nav-link active" data-scroll-target="#roadmap">Roadmap</a></li>
+  <li><a href="#pac-bayes-motivation" id="toc-pac-bayes-motivation" class="nav-link" data-scroll-target="#pac-bayes-motivation">PAC-Bayes Motivation</a></li>
+  <li><a href="#donsker-and-varadhans-lemma" id="toc-donsker-and-varadhans-lemma" class="nav-link" data-scroll-target="#donsker-and-varadhans-lemma">Donsker and Varadhan’s Lemma</a></li>
+  <li><a href="#catonis-pac-bayes-bound" id="toc-catonis-pac-bayes-bound" class="nav-link" data-scroll-target="#catonis-pac-bayes-bound">Catoni’s PAC-Bayes Bound</a></li>
+  <li><a href="#gibbs-posteriors-as-bound-minimisers" id="toc-gibbs-posteriors-as-bound-minimisers" class="nav-link" data-scroll-target="#gibbs-posteriors-as-bound-minimisers">Gibbs Posteriors as Bound Minimisers</a></li>
+  <li><a href="#how-else-to-obtain-gibbs-posteriors" id="toc-how-else-to-obtain-gibbs-posteriors" class="nav-link" data-scroll-target="#how-else-to-obtain-gibbs-posteriors">How Else to Obtain Gibbs Posteriors?</a></li>
+  <li><a href="#auxiliary-lemmas" id="toc-auxiliary-lemmas" class="nav-link" data-scroll-target="#auxiliary-lemmas">Auxiliary Lemmas</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+<section id="roadmap" class="level2">
+<h2 class="anchored" data-anchor-id="roadmap">Roadmap</h2>
+<p>A Gibbs posterior can be obtained by minimising an empirical PAC-Bayes bound. We derive the additive, bounded-loss version of Catoni’s bound presented in <span class="citation" data-cites="alquier2024pacbayes">Alquier (<a href="#ref-alquier2024pacbayes" role="doc-biblioref">2024</a>, Theorem 2.1 and Corollary 2.3)</span>, which attributes this argument to <span class="citation" data-cites="catoni2003adaptive">Catoni (<a href="#ref-catoni2003adaptive" role="doc-biblioref">2003</a>)</span>. Donsker and Varadhan’s variational formula appears twice: first to obtain a bound valid simultaneously over distributions, then to identify its Gibbs minimiser. A short oracle inequality clarifies what this optimisation achieves; the final sections distinguish Gibbs risk from mixture risk and compare alternative foundations.</p>
+</section>
+<section id="pac-bayes-motivation" class="level2">
+<h2 class="anchored" data-anchor-id="pac-bayes-motivation">PAC-Bayes Motivation</h2>
+<section id="setup" class="level3">
+<h3 class="anchored" data-anchor-id="setup">Setup</h3>
+<p>Consider regression with covariates <span class="math inline">X\in\mathcal X</span> and a real-valued response <span class="math inline">Y\in\mathbb R</span>. Let <span class="math inline">S=((X_1,Y_1),\ldots,(X_n,Y_n))\sim P^n</span> be an independent and identically distributed training sample from their joint distribution <span class="math inline">P</span>. Let <span class="math inline">\{f_\theta:\mathcal X\to\mathbb R:\theta\in\Theta\}</span> be a family of predictors on a measurable parameter space <span class="math inline">\Theta</span>, and let <span class="math inline">\ell(\widehat y,y)</span> measure prediction loss. Assume that <span class="math inline">(\theta,x,y)\mapsto\ell(f_\theta(x),y)</span> is jointly measurable and takes values in <span class="math inline">[0,C]</span>, where <span class="math inline">0&lt;C&lt;\infty</span>. Define</p>
+<p><span class="math display">
+R(\theta)=\mathbb E_{(X,Y)\sim P}[\ell(f_\theta(X),Y)],
+\qquad
+r_S(\theta)=\frac1n\sum_{i=1}^n\ell(f_\theta(X_i),Y_i).
+</span></p>
+<p>For squared loss <span class="math inline">\ell(\widehat y,y)=(\widehat y-y)^2</span>, the bounded-loss assumption holds, for example, when both outcomes and predictions lie in <span class="math inline">[-M,M]</span>, in which case <span class="math inline">C=4M^2</span>. The theorem below does not cover unrestricted squared-loss regression without further assumptions.</p>
+<p>For a probability measure <span class="math inline">\rho\in\mathcal P(\Theta)</span>, write</p>
+<p><span class="math display">
+R(\rho)=\mathbb E_{\theta\sim\rho}[R(\theta)],
+\qquad
+r_S(\rho)=\mathbb E_{\theta\sim\rho}[r_S(\theta)].
+</span></p>
+<p>Fix a probability measure <span class="math inline">\pi</span> independently of <span class="math inline">S</span>. This <strong>prior</strong> is a reference measure; the argument does not require it to describe beliefs about a true parameter. We use</p>
+<p><span class="math display">
+\mathrm{KL}(\rho\Vert\pi)
+=\int_\Theta\log\left(\frac{d\rho}{d\pi}\right)d\rho
+</span></p>
+<p>when <span class="math inline">\rho\ll\pi</span>, and set it to <span class="math inline">+\infty</span> otherwise. Absolute continuity alone does not guarantee finite KL.</p>
+<p>After observing <span class="math inline">S</span>, a learning rule may select a distribution <span class="math inline">\rho_S</span> measurably. Conditional on <span class="math inline">S</span>, <span class="math inline">R(\rho_S)</span> is the expected loss of drawing <span class="math inline">\theta\sim\rho_S</span>, predicting <span class="math inline">Y</span> by <span class="math inline">f_\theta(X)</span>, and evaluating the loss on an independent test pair <span class="math inline">(X,Y)\sim P</span>. Drawing once and reusing that predictor gives the same expected risk, averaged over the initial draw. It does not make every draw equally good.</p>
+<p>A PAC-Bayes guarantee has the form</p>
+<p><span class="math display">
+\mathbb P_S\bigl(R(\rho_S)\leq B(S,\rho_S)\bigr)\geq1-\delta.
+</span></p>
+<p>The probability concerns repeated <strong>training samples</strong>. Prediction randomness and test-data randomness have already been averaged inside <span class="math inline">R(\rho_S)</span>. Thus <span class="math inline">1-\delta</span> is neither posterior credibility nor the probability that an individual posterior draw has small risk.</p>
+</section>
+<section id="empirical-v.s.-oracle-bounds" class="level3">
+<h3 class="anchored" data-anchor-id="empirical-v.s.-oracle-bounds">Empirical v.s. Oracle Bounds</h3>
+<p>An <strong>empirical bound</strong> controls <span class="math inline">R(\rho_S)</span> by sample-dependent quantities, such as empirical risk and KL. It provides a numerical certificate when those quantities can be evaluated, and an objective for choosing <span class="math inline">\rho_S</span>. An <strong>oracle bound</strong> compares <span class="math inline">R(\rho_S)</span> with unknown population risks of competing distributions, plus a complexity penalty. It describes statistical performance relative to a benchmark, rather than a directly evaluable certificate. We obtain both below.</p>
+</section>
+</section>
+<section id="donsker-and-varadhans-lemma" class="level2">
+<h2 class="anchored" data-anchor-id="donsker-and-varadhans-lemma">Donsker and Varadhan’s Lemma</h2>
+<p>For bounded measurable <span class="math inline">h:\Theta\to\mathbb R</span>, the variational formula is <span class="citation" data-cites="donsker1976asymptotic alquier2024pacbayes">(<a href="#ref-donsker1976asymptotic" role="doc-biblioref">Donsker and Varadhan 1976</a>; <a href="#ref-alquier2024pacbayes" role="doc-biblioref">Alquier 2024</a>, Lemma 2.2)</span></p>
+<p><span id="eq-dv"><span class="math display">
+\log\mathbb E_\pi[e^h]
+=\sup_{\rho\in\mathcal P(\Theta)}
+\left\{\mathbb E_\rho[h]-\mathrm{KL}(\rho\Vert\pi)\right\}.
+\tag{1}</span></span></p>
+<p>The unique maximiser is the exponential tilt <span class="math inline">\pi_h</span>, defined by</p>
+<p><span class="math display">
+\frac{d\pi_h}{d\pi}(\theta)
+=\frac{e^{h(\theta)}}{\mathbb E_\pi[e^h]}.
+</span></p>
+<p><strong>Proof.</strong> Boundedness of <span class="math inline">h</span> makes the normaliser positive and finite, and makes <span class="math inline">\pi_h</span> equivalent to <span class="math inline">\pi</span>. For every <span class="math inline">\rho</span> with finite <span class="math inline">\mathrm{KL}(\rho\Vert\pi)</span>, the density ratio satisfies</p>
+<p><span class="math display">
+\frac{d\rho}{d\pi_h}
+=\frac{d\rho/d\pi}{d\pi_h/d\pi}
+=\frac{d\rho}{d\pi}\frac{\mathbb E_\pi[e^h]}{e^h}.
+</span></p>
+<p>Taking its logarithm and then averaging under <span class="math inline">\rho</span> gives</p>
+<p><span class="math display">
+\begin{aligned}
+\mathrm{KL}(\rho\Vert\pi_h)
+&amp;=\mathbb E_\rho\left[
+\log\frac{d\rho}{d\pi}-h+\log\mathbb E_\pi[e^h]
+\right]\\
+&amp;=\mathrm{KL}(\rho\Vert\pi)-\mathbb E_\rho[h]
++\log\mathbb E_\pi[e^h].
+\end{aligned}
+</span></p>
+<p>To see the rearrangement explicitly, move <span class="math inline">\mathbb E_\rho[h]</span> to the left and <span class="math inline">\mathrm{KL}(\rho\Vert\pi_h)</span> to the right, then subtract <span class="math inline">\mathrm{KL}(\rho\Vert\pi)</span>:</p>
+<p><span class="math display">
+\begin{aligned}
+\mathbb E_\rho[h]-\mathrm{KL}(\rho\Vert\pi)
+&amp;=\log\mathbb E_\pi[e^h]-\mathrm{KL}(\rho\Vert\pi_h)\\
+&amp;\leq\log\mathbb E_\pi[e^h].
+\end{aligned}
+</span></p>
+<p>The last inequality uses nonnegativity of KL. Its right-hand side does not depend on <span class="math inline">\rho</span>, so it bounds the supremum in <a href="#eq-dv" class="quarto-xref">Equation&nbsp;1</a> from above. To show that this bound is attained, take <span class="math inline">\rho=\pi_h</span>: then <span class="math inline">\mathrm{KL}(\pi_h\Vert\pi_h)=0</span>, and the displayed inequality becomes equality. Hence the supremum equals <span class="math inline">\log\mathbb E_\pi[e^h]</span>, and its unique maximiser is <span class="math inline">\pi_h</span>, since KL vanishes only when its two measures agree. Measures with infinite KL contribute <span class="math inline">-\infty</span> to the supremum and cannot improve it.</p>
+<p>The formula converts a prior exponential average into a supremum over distributions, with KL measuring the cost of changing measure.</p>
+</section>
+<section id="catonis-pac-bayes-bound" class="level2">
+<h2 class="anchored" data-anchor-id="catonis-pac-bayes-bound">Catoni’s PAC-Bayes Bound</h2>
+<p><strong>Theorem (additive Hoeffding–Catoni bound).</strong> Fix <span class="math inline">\lambda&gt;0</span> and <span class="math inline">\delta\in(0,1)</span> before observing <span class="math inline">S</span>. Under the setup above, with probability at least <span class="math inline">1-\delta</span>, simultaneously for every <span class="math inline">\rho\in\mathcal P(\Theta)</span>,</p>
+<p><span id="eq-catoni"><span class="math display">
+R(\rho)
+\leq
+\underbrace{
+r_S(\rho)+\frac{\mathrm{KL}(\rho\Vert\pi)+\log(1/\delta)}{\lambda}
++\frac{\lambda C^2}{8n}
+}_{B_{\lambda,\delta}(S,\rho)}.
+\tag{2}</span></span></p>
+<p>We use the additive bounded-loss form. The name <em>Catoni bound</em> is also used for other, sharper formulations, particularly for binary losses.</p>
+<section id="complete-derivation" class="level3">
+<h3 class="anchored" data-anchor-id="complete-derivation">Complete Derivation</h3>
+<p><strong>1. Hoeffding controls a fixed parameter.</strong> For fixed <span class="math inline">\theta</span>, put <span class="math inline">U_i=R(\theta)-\ell(f_\theta(X_i),Y_i)</span>. These variables are independent, centred, and lie in an interval of width <span class="math inline">C</span>. Applying the exponential-moment lemma in the auxiliary section with <span class="math inline">t=\lambda/n</span> gives</p>
+<p><span class="math display">
+\begin{aligned}
+\mathbb E_S e^{\lambda[R(\theta)-r_S(\theta)]}
+&amp;=\prod_{i=1}^n\mathbb E_S e^{(\lambda/n)U_i}\\
+&amp;\leq\prod_{i=1}^n e^{\lambda^2C^2/(8n^2)}
+=e^{\lambda^2C^2/(8n)}.
+\end{aligned}
+</span></p>
+<p><strong>2. Integrate under the prior and apply Tonelli.</strong> The exponential is nonnegative and jointly measurable. Since <span class="math inline">\pi</span> is fixed independently of the sample, Tonelli’s theorem gives</p>
+<p><span class="math display">
+\mathbb E_S\mathbb E_\pi
+e^{\lambda(R-r_S)}
+=\mathbb E_\pi\mathbb E_S
+e^{\lambda(R-r_S)}
+\leq e^{\lambda^2C^2/(8n)}.
+</span></p>
+<p><strong>3. Use DV to make the statement uniform.</strong> For each realised sample, apply <a href="#eq-dv" class="quarto-xref">Equation&nbsp;1</a> with the bounded function <span class="math inline">h_S(\theta)=\lambda[R(\theta)-r_S(\theta)]</span>. Define</p>
+<p><span class="math display">
+\begin{aligned}
+V(S)
+&amp;=\sup_\rho\left\{
+\lambda[R(\rho)-r_S(\rho)]-\mathrm{KL}(\rho\Vert\pi)
+\right\}-\frac{\lambda^2C^2}{8n}\\
+&amp;=\log\mathbb E_\pi e^{\lambda(R-r_S)}
+-\frac{\lambda^2C^2}{8n}.
+\end{aligned}
+</span></p>
+<p>The second expression also establishes measurability of the supremum. Step 2 now reads <span class="math inline">\mathbb E_S[e^{V(S)}]\leq1</span>.</p>
+<p><strong>4. Apply Markov’s inequality to the exponential.</strong> This is the Chernoff bounding technique:</p>
+<p><span class="math display">
+\mathbb P_S\bigl(V(S)&gt;\log(1/\delta)\bigr)
+=\mathbb P_S\bigl(e^{V(S)}&gt;1/\delta\bigr)
+\leq\delta\mathbb E_S[e^{V(S)}]
+\leq\delta.
+</span></p>
+<p>On the complementary event, every term in the supremum is at most <span class="math inline">\log(1/\delta)+\lambda^2C^2/(8n)</span>. Rearranging and dividing by <span class="math inline">\lambda</span> proves <a href="#eq-catoni" class="quarto-xref">Equation&nbsp;2</a>. The inequality is vacuous for infinite KL.</p>
+<p>There is one event on which the bound holds for <strong>all</strong> <span class="math inline">\rho</span>. Consequently we may substitute a data-dependent <span class="math inline">\rho_S</span> on that event. Applying a fixed-parameter concentration inequality directly to a fitted parameter would not justify this step.</p>
+</section>
+</section>
+<section id="gibbs-posteriors-as-bound-minimisers" class="level2">
+<h2 class="anchored" data-anchor-id="gibbs-posteriors-as-bound-minimisers">Gibbs Posteriors as Bound Minimisers</h2>
+<section id="dv-strikes-again" class="level3">
+<h3 class="anchored" data-anchor-id="dv-strikes-again">DV Strikes Again</h3>
+<p>For fixed <span class="math inline">\lambda</span>, the only terms in <a href="#eq-catoni" class="quarto-xref">Equation&nbsp;2</a> depending on <span class="math inline">\rho</span> are</p>
+<p><span class="math display">
+F_\lambda(\rho)
+=r_S(\rho)+\frac1\lambda\mathrm{KL}(\rho\Vert\pi).
+</span></p>
+<p>Apply <a href="#eq-dv" class="quarto-xref">Equation&nbsp;1</a> with <span class="math inline">h=-\lambda r_S</span>. Writing <span class="math inline">Z_\lambda(S)=\mathbb E_\pi[e^{-\lambda r_S}]</span>, we obtain</p>
+<p><span id="eq-gibbs"><span class="math display">
+\inf_\rho F_\lambda(\rho)
+=-\frac1\lambda\log Z_\lambda(S),
+\qquad
+\frac{d\widehat\rho_\lambda}{d\pi}(\theta)
+=\frac{e^{-\lambda r_S(\theta)}}{Z_\lambda(S)}.
+\tag{3}</span></span></p>
+<p>This <strong>Gibbs posterior</strong> exists because <span class="math inline">e^{-\lambda C}\leq Z_\lambda(S)\leq1</span>. More explicitly, the same KL calculation gives</p>
+<p><span class="math display">
+F_\lambda(\rho)
+=-\frac1\lambda\log Z_\lambda(S)
++\frac1\lambda\mathrm{KL}(\rho\Vert\widehat\rho_\lambda).
+</span></p>
+<p>Thus <span class="math inline">\widehat\rho_\lambda</span> is the unique minimiser over all probability measures. Substitution into the simultaneous bound yields, with probability at least <span class="math inline">1-\delta</span>,</p>
+<p><span id="eq-certificate"><span class="math display">
+\begin{aligned}
+R(\widehat\rho_\lambda)
+&amp;\leq\inf_\rho B_{\lambda,\delta}(S,\rho)\\
+&amp;=-\frac1\lambda\log Z_\lambda(S)
++\frac{\lambda C^2}{8n}
++\frac{\log(1/\delta)}{\lambda}.
+\end{aligned}
+\tag{4}</span></span></p>
+<p>Our convention puts <span class="math inline">\lambda</span> on the <strong>average</strong> loss. If the update is written <span class="math inline">\rho(d\theta)\propto\exp\{-\eta\sum_i\ell(f_\theta(X_i),Y_i)\}\pi(d\theta)</span>, then <span class="math inline">\lambda=n\eta</span>.</p>
+</section>
+<section id="what-does-minimising-the-bound-establish" class="level3">
+<h3 class="anchored" data-anchor-id="what-does-minimising-the-bound-establish">What does Minimising the Bound Establish?</h3>
+<p>Changing <span class="math inline">\rho</span> changes both sides of <a href="#eq-catoni" class="quarto-xref">Equation&nbsp;2</a>. Nevertheless, uniformity makes the optimisation valid: the selected distribution has risk bounded by the smallest available certificate. It does <strong>not</strong> follow that <span class="math inline">\widehat\rho_\lambda</span> minimises <span class="math inline">R(\rho)</span>, or even <span class="math inline">r_S(\rho)</span> alone; it minimises the KL-regularised empirical objective <span class="math inline">F_\lambda</span>.</p>
+<p>For example, valid upper bounds <span class="math inline">R(\rho_1)=0.10\leq0.50</span> and <span class="math inline">R(\rho_2)=0.20\leq0.30</span> would favour <span class="math inline">\rho_2</span> when minimising the certificate, despite its larger risk. An oracle inequality supplies the missing comparison with population performance.</p>
+</section>
+<section id="a-simple-oracle-inequality" class="level3">
+<h3 class="anchored" data-anchor-id="a-simple-oracle-inequality">A Simple Oracle Inequality</h3>
+<p>The following is <span class="citation" data-cites="alquier2024pacbayes">Alquier (<a href="#ref-alquier2024pacbayes" role="doc-biblioref">2024</a>, Theorem 4.2, Section 4.1.2, p.&nbsp;233)</span>, written in our notation. We give a short proof by applying the empirical bound in both directions; the source gives the same argument on pp.&nbsp;233–235.</p>
+<p>Under the same assumptions, for fixed <span class="math inline">\lambda&gt;0</span>, with probability at least <span class="math inline">1-\delta</span>,</p>
+<p><span id="eq-oracle"><span class="math display">
+R(\widehat\rho_\lambda)
+\leq\inf_{\rho\in\mathcal P(\Theta)}
+\left\{R(\rho)+\frac{2\mathrm{KL}(\rho\Vert\pi)}{\lambda}\right\}
++\frac{\lambda C^2}{4n}
++\frac{2\log(2/\delta)}{\lambda}.
+\tag{5}</span></span></p>
+<p><strong>Proof.</strong> Apply <a href="#eq-catoni" class="quarto-xref">Equation&nbsp;2</a> with failure probability <span class="math inline">\delta/2</span>, both to <span class="math inline">\ell</span> and to the bounded loss <span class="math inline">\widetilde\ell(\widehat y,y)=C-\ell(\widehat y,y)</span>. For this second loss, population and empirical risks are <span class="math inline">C-R(\rho)</span> and <span class="math inline">C-r_S(\rho)</span>, so rearranging its bound gives an upper bound on <span class="math inline">r_S(\rho)-R(\rho)</span>. A union bound gives, simultaneously for every finite-KL <span class="math inline">\rho</span>,</p>
+<p><span class="math display">
+R(\rho)\leq r_S(\rho)+\frac{\mathrm{KL}(\rho\Vert\pi)}{\lambda}+a,
+\qquad
+r_S(\rho)\leq R(\rho)+\frac{\mathrm{KL}(\rho\Vert\pi)}{\lambda}+a,
+</span></p>
+<p>where <span class="math inline">a=\lambda C^2/(8n)+\log(2/\delta)/\lambda</span>. Therefore, for every such comparator <span class="math inline">\rho</span>,</p>
+<p><span class="math display">
+\begin{aligned}
+R(\widehat\rho_\lambda)
+&amp;\leq F_\lambda(\widehat\rho_\lambda)+a\\
+&amp;\leq F_\lambda(\rho)+a\\
+&amp;\leq R(\rho)+\frac{2\mathrm{KL}(\rho\Vert\pi)}{\lambda}+2a.
+\end{aligned}
+</span></p>
+<p>Take the infimum over <span class="math inline">\rho</span> to conclude. This elementary argument prioritises clarity over sharp constants.</p>
+<p>Unlike <a href="#eq-certificate" class="quarto-xref">Equation&nbsp;4</a>, <a href="#eq-oracle" class="quarto-xref">Equation&nbsp;5</a> contains unknown comparator risks. For any fixed finite-KL comparator, choosing <span class="math inline">\lambda</span> proportional to <span class="math inline">\sqrt n</span> makes the remainder vanish at order <span class="math inline">n^{-1/2}</span>, with <span class="math inline">C</span> and <span class="math inline">\delta</span> fixed. Comparing with a best individual parameter may need an approximation argument: a point mass has infinite KL under a non-atomic prior. Risk control alone also does not establish calibrated credible regions.</p>
+</section>
+</section>
+<section id="how-else-to-obtain-gibbs-posteriors" class="level2">
+<h2 class="anchored" data-anchor-id="how-else-to-obtain-gibbs-posteriors">How Else to Obtain Gibbs Posteriors?</h2>
+<p>The same exponential form has distinct foundations:</p>
+<ul>
+<li><strong>Coherent generalised Bayesian updating.</strong> <span class="citation" data-cites="bissiri2016general">Bissiri et al. (<a href="#ref-bissiri2016general" role="doc-biblioref">2016</a>)</span> minimise expected cumulative loss plus <span class="math inline">\mathrm{KL}(\rho\Vert\pi)</span>. Their framework motivates KL through consistency between sequential and joint updates. With a fixed loss scale <span class="math inline">\eta</span>, updating by <span class="math inline">\eta\ell_1</span> and then <span class="math inline">\eta\ell_2</span> multiplies the prior by <span class="math inline">e^{-\eta(\ell_1+\ell_2)}</span>, yielding the Gibbs form with <span class="math inline">\lambda=n\eta</span>. The coherence justification is within their stated framework; it is not a claim about every possible updating rule.</li>
+<li><strong>Optimal information processing.</strong> <span class="citation" data-cites="zellner1988optimal">Zellner (<a href="#ref-zellner1988optimal" role="doc-biblioref">1988</a>)</span> derives ordinary Bayes by balancing specified input and output information. Up to terms constant in <span class="math inline">\rho</span>, the criterion is <span class="math inline">\mathrm{KL}(\rho\Vert\pi)-\mathbb E_\rho\log L_S(\theta)</span>, whose minimiser is proportional to <span class="math inline">L_S\pi</span>. Replacing <span class="math inline">-\log L_S</span> by a scaled loss gives the same Gibbs variational problem; this loss-based extension should be distinguished from Zellner’s original likelihood argument.</li>
+<li><strong>Likelihood tempering.</strong> For probabilistic regression, using conditional log loss <span class="math inline">-\log p_\theta(y\mid x)</span> gives <span class="math inline">d\widehat\rho_\lambda/d\pi\propto\prod_i p_\theta(Y_i\mid X_i)^{\lambda/n}</span>. Ordinary Bayes based on this conditional likelihood is the special case <span class="math inline">\lambda=n</span>. This algebraic identity needs a positive finite normaliser, not the bounded-loss assumption used for the PAC guarantee.</li>
+</ul>
+<p>These arguments justify the construction for different purposes. None alone establishes optimal mixture prediction or frequentist coverage of posterior credible regions.</p>
+</section>
+<section id="auxiliary-lemmas" class="level2">
+<h2 class="anchored" data-anchor-id="auxiliary-lemmas">Auxiliary Lemmas</h2>
+<section id="nonnegativity-of-kl" class="level3">
+<h3 class="anchored" data-anchor-id="nonnegativity-of-kl">Nonnegativity of KL</h3>
+<p>For <span class="math inline">\rho\ll\pi</span>, put <span class="math inline">q=d\rho/d\pi</span>. Since <span class="math inline">u\log u-u+1\geq0</span> for <span class="math inline">u\geq0</span>, with equality only at <span class="math inline">u=1</span>,</p>
+<p><span class="math display">
+\mathrm{KL}(\rho\Vert\pi)
+=\int(q\log q-q+1)d\pi\geq0.
+</span></p>
+<p>Equality holds precisely when <span class="math inline">q=1</span> <span class="math inline">\pi</span>-almost everywhere, that is, <span class="math inline">\rho=\pi</span>.</p>
+</section>
+<section id="hoeffdings-exponential-moment-lemma" class="level3">
+<h3 class="anchored" data-anchor-id="hoeffdings-exponential-moment-lemma">Hoeffding’s exponential-moment lemma</h3>
+<p>If a real random variable <span class="math inline">U\in[a,b]</span> almost surely, then, for every <span class="math inline">t\in\mathbb R</span>,</p>
+<p><span class="math display">
+\mathbb E e^{t(U-\mathbb EU)}
+\leq e^{t^2(b-a)^2/8}.
+</span></p>
+<p>This is the exponential-moment form underlying Hoeffding’s inequality <span class="citation" data-cites="hoeffding1963probability">(<a href="#ref-hoeffding1963probability" role="doc-biblioref">Hoeffding 1963</a>)</span>.</p>
+<p><strong>Proof.</strong> Let <span class="math inline">K(t)=\log\mathbb E e^{t(U-\mathbb EU)}</span>. Boundedness permits differentiation under the expectation. We have <span class="math inline">K(0)=K'(0)=0</span>, and <span class="math inline">K''(t)=\operatorname{Var}_t(U)</span> under the exponential tilt. Any distribution on <span class="math inline">[a,b]</span> satisfies</p>
+<p><span class="math display">
+\operatorname{Var}(U)
+=\inf_c\mathbb E(U-c)^2
+\leq\mathbb E\left(U-\frac{a+b}{2}\right)^2
+\leq\frac{(b-a)^2}{4}.
+</span></p>
+<p>Taylor’s formula therefore yields</p>
+<p><span class="math display">
+K(t)=t^2\int_0^1(1-s)K''(st)ds
+\leq\frac{t^2(b-a)^2}{8}.
+</span></p>
+<p>Exponentiating proves the claim. For independent <span class="math inline">U_i\in[a_i,b_i]</span>, multiplication of moment bounds gives</p>
+<p><span class="math display">
+\mathbb E\exp\left\{t\sum_{i=1}^n(U_i-\mathbb EU_i)\right\}
+\leq\exp\left\{\frac{t^2}{8}\sum_{i=1}^n(b_i-a_i)^2\right\}.
+</span></p>
+</section>
+<section id="markov-and-the-chernoff-bounding-technique" class="level3">
+<h3 class="anchored" data-anchor-id="markov-and-the-chernoff-bounding-technique">Markov and the Chernoff bounding technique</h3>
+<p>For <span class="math inline">W\geq0</span> and <span class="math inline">u&gt;0</span>, <span class="math inline">W\geq u\mathbf1\{W\geq u\}</span> implies <span class="math inline">\mathbb P(W\geq u)\leq\mathbb EW/u</span>. Applying this to <span class="math inline">W=e^{tV}</span> gives, for any <span class="math inline">t&gt;0</span> with finite exponential moment,</p>
+<p><span class="math display">
+\mathbb P(V\geq s)\leq e^{-ts}\mathbb E[e^{tV}].
+</span></p>
+<p>Taking the infimum over <span class="math inline">t&gt;0</span> is Chernoff’s technique. For fixed <span class="math inline">\theta</span>, Hoeffding’s moment bound gives</p>
+<p><span class="math display">
+\mathbb P_S\bigl(R(\theta)-r_S(\theta)\geq s\bigr)
+\leq\inf_{t&gt;0}\exp\left\{\frac{t^2C^2}{8n}-ts\right\}
+=\exp\left\{-\frac{2ns^2}{C^2}\right\},
+\qquad s&gt;0,
+</span></p>
+<p>where the minimiser is <span class="math inline">t=4ns/C^2</span>. The PAC-Bayes proof instead applies the exponential Markov step after prior integration and DV, which is what allows selection of <span class="math inline">\rho</span> from the data.</p>
+</section>
+</section>
+<section id="references" class="level2">
+<h2 class="anchored" data-anchor-id="references">References</h2>
+<div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-alquier2024pacbayes" class="csl-entry" role="listitem">
+Alquier, Pierre. 2024. <span>“User-Friendly Introduction to <span>PAC-Bayes</span> Bounds.”</span> <em>Foundations and Trends in Machine Learning</em> 17 (2): 174–303. <a href="https://doi.org/10.1561/2200000100">https://doi.org/10.1561/2200000100</a>.
+</div>
+<div id="ref-bissiri2016general" class="csl-entry" role="listitem">
+Bissiri, P. G., C. C. Holmes, and S. G. Walker. 2016. <span>“A General Framework for Updating Belief Distributions.”</span> <em>Journal of the Royal Statistical Society: Series B (Statistical Methodology)</em> 78 (5): 1103–30. <a href="https://doi.org/10.1111/rssb.12158">https://doi.org/10.1111/rssb.12158</a>.
+</div>
+<div id="ref-catoni2003adaptive" class="csl-entry" role="listitem">
+Catoni, Olivier. 2003. <em>A <span>PAC-Bayesian</span> Approach to Adaptive Classification</em>. Preprint No. 840. Laboratoire de Probabilités et Modèles Aléatoires, Universités Paris VI et Paris VII.
+</div>
+<div id="ref-donsker1976asymptotic" class="csl-entry" role="listitem">
+Donsker, M. D., and S. R. S. Varadhan. 1976. <span>“Asymptotic Evaluation of Certain <span>Markov</span> Process Expectations for Large Time—<span>III</span>.”</span> <em>Communications on Pure and Applied Mathematics</em> 29 (4): 389–461. <a href="https://doi.org/10.1002/cpa.3160290405">https://doi.org/10.1002/cpa.3160290405</a>.
+</div>
+<div id="ref-hoeffding1963probability" class="csl-entry" role="listitem">
+Hoeffding, Wassily. 1963. <span>“Probability Inequalities for Sums of Bounded Random Variables.”</span> <em>Journal of the American Statistical Association</em> 58 (301): 13–30. <a href="https://doi.org/10.1080/01621459.1963.10500830">https://doi.org/10.1080/01621459.1963.10500830</a>.
+</div>
+<div id="ref-zellner1988optimal" class="csl-entry" role="listitem">
+Zellner, Arnold. 1988. <span>“Optimal Information Processing and <span>Bayes</span>’s Theorem.”</span> <em>The American Statistician</em> 42 (4): 278–80. <a href="https://doi.org/10.1080/00031305.1988.10475585">https://doi.org/10.1080/00031305.1988.10475585</a>.
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
